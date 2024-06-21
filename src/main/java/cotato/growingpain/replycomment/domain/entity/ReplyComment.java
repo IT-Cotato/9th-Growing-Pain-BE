@@ -53,7 +53,7 @@ public class ReplyComment extends BaseTimeEntity {
     @JsonIgnore
     private Comment comment;
 
-    @OneToMany(mappedBy = "reply_comment")
+    @OneToMany(mappedBy = "replyComment")
     @JsonIgnore
     private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
 }
