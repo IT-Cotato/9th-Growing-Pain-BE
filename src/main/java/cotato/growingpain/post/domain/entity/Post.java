@@ -3,8 +3,11 @@ package cotato.growingpain.post.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.member.domain.Member;
+import cotato.growingpain.post.PostCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +20,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
@@ -38,10 +42,12 @@ public class Post extends BaseTimeEntity {
     private String imageUrl;
 
     @Column(name = "post_category")
-    private String category;
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'카테고리'")
+    private PostCategory category;
 
     private int likeCount = 0;
-    
+
     private boolean deleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
