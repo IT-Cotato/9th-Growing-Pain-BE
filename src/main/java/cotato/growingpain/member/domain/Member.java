@@ -37,9 +37,14 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_field")
     private String field;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_belong")
     private MemberBelong belong;
 
+    @Column(name = "member_belong_detail")
+    private String belongDetail;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_job")
     private MemberJob job;
 
