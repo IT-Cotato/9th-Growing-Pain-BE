@@ -4,6 +4,8 @@ import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.security.oauth.AuthProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,17 +33,15 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_email")
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_field")
-    private MemberField field;
+    private String field;
 
     @Column(name = "member_belong")
     private MemberBelong belong;
 
     @Column(name = "member_job")
     private MemberJob job;
-
-    @Column(name = "profile_link")
-    private String profileLink;
 
     @Column(name = "oauth_id")
     private String oauthId;
