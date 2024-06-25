@@ -1,9 +1,11 @@
-package cotato.growingpain.member.domain;
+package cotato.growingpain.member.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
+import cotato.growingpain.member.domain.MemberBelong;
+import cotato.growingpain.member.domain.MemberJob;
 import cotato.growingpain.security.oauth.AuthProvider;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

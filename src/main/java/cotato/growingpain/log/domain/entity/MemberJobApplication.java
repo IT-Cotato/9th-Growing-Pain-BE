@@ -1,11 +1,16 @@
 package cotato.growingpain.log.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.member.domain.Member;
+import cotato.growingpain.log.domain.ApplicationType;
+import cotato.growingpain.log.domain.Result;
+import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,6 +18,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberJobApplication extends BaseTimeEntity {
     /* -------------------------------------------- */
@@ -27,7 +33,7 @@ public class MemberJobApplication extends BaseTimeEntity {
     /* -------------------------------------------- */
     @Enumerated(EnumType.STRING)
     @Column(name = "applicaton_type")
-    private ApplicationType applicationTypep;
+    private ApplicationType applicationType;
 
     @Column(name = "place")
     private String place;
@@ -36,7 +42,7 @@ public class MemberJobApplication extends BaseTimeEntity {
     @Column(name = "result")
     private Result result;
 
-    @Lob
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "submission_status")
@@ -69,6 +75,40 @@ public class MemberJobApplication extends BaseTimeEntity {
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JsonIgnore
     private Member member;
+
+    /* -------------------------------------------- */
+    /* ----------------- Functions ---------------- */
+    /* -------------------------------------------- */
+    @Builder
+    public MemberJobApplication(
+            ApplicationType applicationType,
+            String place,
+            Result result,
+            String content,
+            boolean submissionStatus,
+            String companyName,
+            String jobPart,
+            String jobPostLink,
+            LocalDateTime applicationStartDate,
+            LocalDateTime applicationCloseDate,
+            Member member
+    ) {
+        // Relation Column
+        this.member = member;
+
+        // Information Column
+        this.applicationType = applicationType;
+        this.place = place;
+        this.result = result;
+        this.content = content;
+        this.submissionStatus = submissionStatus;
+        this.companyName = companyName;
+        this.jobPart = jobPart;
+        this.jobPostLink = jobPostLink;
+        this.applicationStartDate = applicationStartDate;
+        this.applicationCloseDate = applicationCloseDate;
+    }
 
 }
