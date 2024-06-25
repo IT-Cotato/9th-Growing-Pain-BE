@@ -3,7 +3,7 @@ package cotato.growingpain.replycomment.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.member.domain.Member;
+import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.post.domain.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
