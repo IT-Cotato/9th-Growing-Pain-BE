@@ -3,7 +3,6 @@ package cotato.growingpain.log.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.ActivityType;
-import cotato.growingpain.log.domain.ApplicationType;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

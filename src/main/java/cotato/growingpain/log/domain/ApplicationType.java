@@ -1,5 +1,4 @@
-package cotato.growingpain.log.domain.entity;
-
+package cotato.growingpain.log.domain;
 
 import lombok.Getter;
 
