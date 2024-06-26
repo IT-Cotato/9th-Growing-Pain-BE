@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
-import cotato.growingpain.member.domain.MemberBelong;
 import cotato.growingpain.member.domain.MemberJob;
 import cotato.growingpain.security.oauth.AuthProvider;
 import jakarta.persistence.*;
@@ -41,10 +40,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_belong")
-    private MemberBelong belong;
-
-    @Column(name = "member_belong_detail")
-    private String belongDetail;
+    private String belong;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_job")
