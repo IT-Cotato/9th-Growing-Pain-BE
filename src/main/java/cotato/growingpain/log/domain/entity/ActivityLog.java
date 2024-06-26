@@ -47,7 +47,7 @@ public class ActivityLog extends BaseTimeEntity {
     private String role;
 
     @Column(name = "contribution")
-    private String contribution;
+    private int contribution;
 
     @Column(name = "activity_start_date")
     private LocalDateTime activityStartDate;
@@ -77,7 +77,7 @@ public class ActivityLog extends BaseTimeEntity {
             String content,
             String performance,
             String role,
-            String contribution,
+            Integer contribution,
             LocalDateTime activityStartDate,
             LocalDateTime activityCloseDate,
             Member member
