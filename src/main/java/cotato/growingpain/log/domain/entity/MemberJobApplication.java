@@ -58,10 +58,10 @@ public class MemberJobApplication extends BaseTimeEntity {
     private String jobPostLink;
 
     @Column(name = "application_start_date")
-    private LocalDateTime applicationStartDate;
+    private String applicationStartDate;
 
     @Column(name = "job_application_close_date")
-    private LocalDateTime applicationCloseDate;
+    private String applicationCloseDate;
 
     @CreatedDate
     @Column(updatable = false)
@@ -91,8 +91,8 @@ public class MemberJobApplication extends BaseTimeEntity {
             String companyName,
             String jobPart,
             String jobPostLink,
-            LocalDateTime applicationStartDate,
-            LocalDateTime applicationCloseDate,
+            String applicationStartDate,
+            String applicationCloseDate,
             Member member
     ) {
         // Relation Column
