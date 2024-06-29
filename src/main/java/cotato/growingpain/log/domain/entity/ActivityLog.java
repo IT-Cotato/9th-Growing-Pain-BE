@@ -55,6 +55,12 @@ public class ActivityLog extends BaseTimeEntity {
     @Column(name = "activity_close_date")
     private String activityCloseDate;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "file_url")
+    private String fileUrl;
+
     @CreatedDate
     @Column(updatable = false)
     private String createdAt;
@@ -80,6 +86,8 @@ public class ActivityLog extends BaseTimeEntity {
             String contribution,
             String activityStartDate,
             String activityCloseDate,
+            String imageUrl,
+            String fileUrl,
             Member member
     ) {
         // Relation Column
@@ -94,5 +102,7 @@ public class ActivityLog extends BaseTimeEntity {
         this.contribution = contribution;
         this.activityStartDate = activityStartDate;
         this.activityCloseDate = activityCloseDate;
+        this.imageUrl = imageUrl;
+        this.fileUrl = fileUrl;
     }
 }
