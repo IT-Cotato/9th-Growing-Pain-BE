@@ -50,17 +50,23 @@ public class ActivityLog extends BaseTimeEntity {
     private String contribution;
 
     @Column(name = "activity_start_date")
-    private LocalDateTime activityStartDate;
+    private String activityStartDate;
 
     @Column(name = "activity_close_date")
-    private LocalDateTime activityCloseDate;
+    private String activityCloseDate;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "file_url")
+    private String fileUrl;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    private String modifiedAt;
 
     /* -------------------------------------------- */
     /* -------------- Relation Column ------------- */
@@ -78,8 +84,10 @@ public class ActivityLog extends BaseTimeEntity {
             String performance,
             String role,
             String contribution,
-            LocalDateTime activityStartDate,
-            LocalDateTime activityCloseDate,
+            String activityStartDate,
+            String activityCloseDate,
+            String imageUrl,
+            String fileUrl,
             Member member
     ) {
         // Relation Column
@@ -94,5 +102,7 @@ public class ActivityLog extends BaseTimeEntity {
         this.contribution = contribution;
         this.activityStartDate = activityStartDate;
         this.activityCloseDate = activityCloseDate;
+        this.imageUrl = imageUrl;
+        this.fileUrl = fileUrl;
     }
 }
