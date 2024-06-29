@@ -4,10 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
-import cotato.growingpain.member.domain.MemberBelong;
 import cotato.growingpain.member.domain.MemberJob;
 import cotato.growingpain.security.oauth.AuthProvider;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,10 +47,7 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_belong")
-    private MemberBelong belong;
-
-    @Column(name = "member_belong_detail")
-    private String belongDetail;
+    private String belong;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_job")
