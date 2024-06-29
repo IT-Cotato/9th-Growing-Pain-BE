@@ -48,8 +48,6 @@ public class Post extends BaseTimeEntity {
 
     private int likeCount = 0;
 
-    private int saveCount = 0;
-
     private boolean deleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
