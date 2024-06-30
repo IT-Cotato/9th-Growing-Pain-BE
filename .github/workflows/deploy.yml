@@ -15,6 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # [0] JDK 세팅
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,21 +37,22 @@ jobs:
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
 
+      # [2] 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
         shell: bash
 
-        # [2]
+        # [3] 프로젝트 빌드
       - name: Build with Gradle
         run: ./gradlew build
         shell: bash
 
-        # [3]
+        # [4] Zip 파일 만들기
       - name: Make zip file
         run: zip -r ./$GITHUB_SHA.zip .
         shell: bash
 
-        # [4]
+        # [5] AWS 키 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
