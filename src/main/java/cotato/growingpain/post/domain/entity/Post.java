@@ -43,7 +43,7 @@ public class Post extends BaseTimeEntity {
 
     @Column(name = "post_category")
     @Enumerated(EnumType.STRING)
-    @ColumnDefault(value = "'전체'")
+    @ColumnDefault(value = "'ALL'")
     private PostCategory category;
 
     private int likeCount = 0;
