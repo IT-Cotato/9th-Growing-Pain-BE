@@ -63,16 +63,16 @@ public class ActivityLog extends BaseTimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private String modifiedAt;
+    private LocalDateTime modifiedAt;
 
     /* -------------------------------------------- */
     /* -------------- Relation Column ------------- */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
 
