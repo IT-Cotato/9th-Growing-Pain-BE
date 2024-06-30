@@ -2,6 +2,7 @@ package cotato.growingpain.member.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
+//import cotato.growingpain.security.oauth.AuthProvider;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
 import cotato.growingpain.member.domain.MemberJob;
@@ -15,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+//import java.security.AuthProvider;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,8 +58,8 @@ public class Member extends BaseTimeEntity {
     @Column(name = "oauth_id")
     private String oauthId;
 
-    @Column(name = "auth_provider")
-    private AuthProvider authProvider;
+//    @Column(name = "auth_provider")
+//    private AuthProvider authProvider;
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
