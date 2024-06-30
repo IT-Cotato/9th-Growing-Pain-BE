@@ -74,7 +74,7 @@ public class MemberJobApplication extends BaseTimeEntity {
     /* -------------- Relation Column ------------- */
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", referencedColumnName = "id")
+    @JoinColumn(name = "member_id")
     @JsonIgnore
     private Member member;
 
