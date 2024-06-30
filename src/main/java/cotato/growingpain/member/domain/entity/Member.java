@@ -2,10 +2,17 @@ package cotato.growingpain.member.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
+//import cotato.growingpain.security.oauth.AuthProvider;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
 import cotato.growingpain.member.domain.MemberJob;
-import cotato.growingpain.security.oauth.AuthProvider;
+import cotato.growingpain.post.domain.entity.Post;
+import cotato.growingpain.post.domain.entity.PostLike;
+import cotato.growingpain.post.domain.entity.PostSave;
+import cotato.growingpain.comment.domain.entity.Comment;
+import cotato.growingpain.comment.domain.entity.CommentLike;
+import cotato.growingpain.replycomment.domain.entity.ReplyComment;
+import cotato.growingpain.replycomment.domain.entity.ReplyCommentLike;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+//import java.security.AuthProvider;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,11 +49,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_email")
     private String email;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "member_field")
     private String field;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "member_belong")
     private String belong;
 
@@ -56,8 +62,8 @@ public class Member extends BaseTimeEntity {
     @Column(name = "oauth_id")
     private String oauthId;
 
-    @Column(name = "auth_provider")
-    private AuthProvider authProvider;
+//    @Column(name = "auth_provider")
+//    private AuthProvider authProvider;
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
@@ -66,4 +72,32 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     @JsonIgnore
     private List<ActivityLog> activityLogs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<PostLike> postLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<PostSave> postSaves = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<CommentLike> commentLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<ReplyComment> replyComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
 }
