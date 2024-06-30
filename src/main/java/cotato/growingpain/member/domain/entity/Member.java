@@ -5,7 +5,6 @@ import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
 import cotato.growingpain.member.domain.MemberJob;
-import cotato.growingpain.security.oauth.AuthProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,13 +14,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -56,8 +54,8 @@ public class Member extends BaseTimeEntity {
     @Column(name = "oauth_id")
     private String oauthId;
 
-    @Column(name = "auth_provider")
-    private AuthProvider authProvider;
+    // @Column(name = "auth_provider")
+    // private AuthProvider authProvider;
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
