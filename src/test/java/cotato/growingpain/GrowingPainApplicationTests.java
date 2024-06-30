@@ -1,4 +1,4 @@
-package org.cotato.growingpain;
+package cotato.growingpain;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
