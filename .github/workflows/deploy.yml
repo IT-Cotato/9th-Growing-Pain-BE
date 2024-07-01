@@ -11,6 +11,11 @@ env:
   DEPLOYMENT_GROUP_NAME: growing-pain-group
   RESOURCE_PATH: ./src/main/resources/application.yml
 
+permissions:
+  id-token: write
+  contents: read
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
