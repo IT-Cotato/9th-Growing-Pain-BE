@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source:  /
-    destination: /home/ubuntu/growing-pain-deploy
+    destination: /home/ubuntu/Growing-Pain
     overwrite: yes
 
 permissions:
