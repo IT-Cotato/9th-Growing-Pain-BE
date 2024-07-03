@@ -33,10 +33,10 @@ public class ValidateService {
         }
     }
 
-    public void checkDuplicateId(@NotBlank(message = "로그인할 아이디를 입력해주세요") String loginId) {
-        if (memberRepository.findByLoginId(loginId).isPresent()) {
-            log.error("[회원 가입 실패]: 존재하는 id " + loginId);
-            throw new AppException(ErrorCode.ID_DUPLICATED);
+    public void checkDuplicateEmail(@NotBlank(message = "로그인 할 아이디를 입력해주세요") String email) {
+        if (memberRepository.findByEmail(email).isPresent()) {
+            log.error("[회원 가입 실패]: 중복된 이메일 " + email);
+            throw new AppException(ErrorCode.EMAIL_DUPLICATED);
         }
     }
 }

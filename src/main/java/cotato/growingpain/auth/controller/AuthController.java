@@ -22,7 +22,7 @@ public class AuthController {
 
     @PostMapping("/join")
     public ResponseEntity<?> joinAuth(@RequestBody @Valid JoinRequest request) {
-        log.info("[회원 가입 컨트롤러]: {}", request.id());
+        log.info("[회원 가입 컨트롤러]: {}", request.email());
         authService.createLoginInfo(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

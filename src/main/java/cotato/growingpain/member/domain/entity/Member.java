@@ -22,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 //import java.security.AuthProvider;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,18 +43,15 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_login_id")   //아이디
-    private String loginId;
-
     @Column(name = "member_name")   //닉네임
     private String name;
 
     @Column(name = "member_password")
     private String password;
-//
-//    @Email
-//    @Column(name = "member_email")
-//    private String email;
+
+    @Email
+    @Column(name = "member_email")
+    private String email;
 
     @Column(name = "member_field")  //분야
     private String field;
@@ -108,8 +106,8 @@ public class Member extends BaseTimeEntity {
     private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
 
     @Builder
-    public Member(String loginId, String password, String name, String field, String belong ) {
-        this.loginId = loginId;
+    public Member(String email, String password, String name, String field, String belong ) {
+        this.email = email;
         this.password = password;
         this.name = name;
         this.field = field;

@@ -23,14 +23,14 @@ public class AuthService {
     public void createLoginInfo(JoinRequest request) {
 
         validateService.checkPasswordPattern(request.password());
-        validateService.checkDuplicateId(request.id());
+        validateService.checkDuplicateEmail(request.email());
         validateService.checkDuplicateNickName(request.name());
 
-        log.info("[회원 가입 서비스]: {}", request.id());
+        log.info("[회원 가입 서비스]: {}", request.email());
 
         Member newMember = Member.builder()
                 .password(bCryptPasswordEncoder.encode(request.password()))
-                .loginId(request.id())
+                .email(request.email())
                 .name(request.name())
                 .field(request.field())
                 .belong(request.belong())
