@@ -21,9 +21,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Email;
 //import java.security.AuthProvider;
+import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -42,20 +43,23 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_name")
+    @Column(name = "member_name")   //닉네임
     private String name;
+
+    @Column(name = "member_password")
+    private String password;
 
     @Email
     @Column(name = "member_email")
     private String email;
 
-    @Column(name = "member_field")
+    @Column(name = "member_field")  //분야
     private String field;
 
-    @Column(name = "member_belong")
+    @Column(name = "member_belong") //소속
     private String belong;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)    //소속 중 직업
     @Column(name = "member_job")
     private MemberJob job;
 
@@ -100,4 +104,13 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member")
     @JsonIgnore
     private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
+
+    @Builder
+    public Member(String email, String password, String name, String field, String belong ) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.field = field;
+        this.belong = belong;
+    }
 }
