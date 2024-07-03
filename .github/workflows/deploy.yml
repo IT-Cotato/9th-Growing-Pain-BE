@@ -6,10 +6,15 @@ on:
 
 env:
   PROJECT_NAME: Growing-Pain
-  BUCKET_NAME: growing-pain-bucket
-  CODE_DEPLOY_APP_NAME: growing-pain-deploy
-  DEPLOYMENT_GROUP_NAME: growing-pain-group
+  S3_BUCKET_NAME: growing-pain-bucket
+  CODE_DEPLOY_APPLICATION_NAME: growing-pain-deploy
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: growing-pain-group
   RESOURCE_PATH: ./src/main/resources/application.yml
+
+permissions:
+  id-token: write
+  contents: read
+
 
 jobs:
   build:
@@ -58,7 +63,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ap-northeast-2
 
         # [6] 빌드한 jar파일 S3업로드
       - name: Upload to S3
