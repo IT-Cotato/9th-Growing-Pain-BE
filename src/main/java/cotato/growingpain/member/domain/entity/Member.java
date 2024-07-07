@@ -6,6 +6,7 @@ import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.MemberJobApplication;
 import cotato.growingpain.member.domain.MemberJob;
+import cotato.growingpain.member.domain.MemberRole;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
 import cotato.growingpain.post.domain.entity.PostSave;
@@ -21,12 +22,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-//import java.security.AuthProvider;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
@@ -62,6 +63,11 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)    //소속 중 직업
     @Column(name = "member_job")
     private MemberJob job;
+
+    @Column(name = "member_role")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'GENERAL'")
+    private MemberRole memberRole;
 
     @Column(name = "oauth_id")
     private String oauthId;

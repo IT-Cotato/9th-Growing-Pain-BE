@@ -3,6 +3,8 @@ package cotato.growingpain.auth.service;
 import cotato.growingpain.auth.dto.request.JoinRequest;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
+import cotato.growingpain.security.jwt.Token;
+import cotato.growingpain.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,9 +20,10 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final ValidateService validateService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenProvider tokenProvider;
 
     @Transactional
-    public void createLoginInfo(JoinRequest request) {
+    public Token createLoginInfo(JoinRequest request) {
 
         validateService.checkPasswordPattern(request.password());
         validateService.checkDuplicateEmail(request.email());
@@ -36,5 +39,8 @@ public class AuthService {
                 .belong(request.belong())
                 .build();
         memberRepository.save(newMember);
+
+        // 회원가입 성공 후 토큰 생성 및 반환
+        return tokenProvider.createToken(request.email());
     }
 }
