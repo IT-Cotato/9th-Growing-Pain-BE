@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .toString();
 
         // JWT 토큰 생성
-        Token token = tokenProvider.createToken(principal.getUsername());
+        Token token = tokenProvider.createToken(principal.getUsername(),grantedAuthority);
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 

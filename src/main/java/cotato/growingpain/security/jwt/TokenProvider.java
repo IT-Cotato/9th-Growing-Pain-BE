@@ -63,18 +63,17 @@ public class TokenProvider {
         return claims.get("role", String.class);
     }
 
-    public Token createToken(String email) {
-        String accessToken = createAccessToken(email);
-        String refreshToken = createRefreshToken(email);
+    public Token createToken(String email, String authority) {
         return Token.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .accessToken(createAccessToken(email,authority))
+                .refreshToken(createRefreshToken(email,authority))
                 .build();
     }
 
-    private String createAccessToken(String email) {
+    private String createAccessToken(String email,String authority) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
+        claims.put("role",authority);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
@@ -83,9 +82,10 @@ public class TokenProvider {
                 .compact();
     }
 
-    private String createRefreshToken(String email) {
+    private String createRefreshToken(String email,String authority) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
+        claims.put("role",authority);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
