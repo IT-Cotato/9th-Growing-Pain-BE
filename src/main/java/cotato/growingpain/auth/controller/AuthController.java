@@ -1,6 +1,8 @@
 package cotato.growingpain.auth.controller;
 
 import cotato.growingpain.auth.dto.request.JoinRequest;
+import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
+import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.auth.service.AuthService;
 import cotato.growingpain.security.jwt.Token;
 import jakarta.validation.Valid;
@@ -24,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, String>> joinAuth(@RequestBody @Valid JoinRequest request) {
+    public ResponseEntity<?> joinAuth(@RequestBody @Valid JoinRequest request) {
         log.info("[회원 가입 컨트롤러]: {}", request.email());
         Token token = authService.createLoginInfo(request);
 
@@ -33,5 +35,10 @@ public class AuthController {
         response.put("refreshToken", token.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<ReissueResponse> tokenRefresh(@RequestBody ReissueRequest request) {
+        return ResponseEntity.ok(authService.tokenReissue(request));
     }
 }

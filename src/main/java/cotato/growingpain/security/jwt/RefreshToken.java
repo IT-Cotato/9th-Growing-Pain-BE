@@ -13,7 +13,11 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 
     @Id
-    private String id;
+    private String id; // email이 id로 사용됨
 
     private String refreshToken;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
