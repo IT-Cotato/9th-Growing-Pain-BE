@@ -5,7 +5,20 @@ import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.ApplicationType;
 import cotato.growingpain.log.domain.Result;
 import cotato.growingpain.member.domain.entity.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,19 +27,18 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberJobApplication extends BaseTimeEntity {
+public class JobApplication extends BaseTimeEntity {
     /* -------------------------------------------- */
     /* -------------- Default Column -------------- */
     /* -------------------------------------------- */
     @Id
+    @Column(name = "job_application_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     /* -------------------------------------------- */
     /* ------------ Information Column ------------ */
@@ -42,20 +54,8 @@ public class MemberJobApplication extends BaseTimeEntity {
     @Column(name = "result")
     private Result result;
 
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
-
     @Column(name = "submission_status")
     private boolean submissionStatus;
-
-    @Column(name = "company_name")
-    private String companyName;
-
-    @Column(name = "job_part")
-    private String jobPart;
-
-    @Column(name = "job_post_link")
-    private String jobPostLink;
 
     @Column(name = "application_start_date")
     private String applicationStartDate;
@@ -78,19 +78,19 @@ public class MemberJobApplication extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
+    @OneToMany(mappedBy = "jobApplication")
+    @JsonIgnore
+    private List<ApplicationDetail> applicationDetails = new ArrayList<>();
+
     /* -------------------------------------------- */
     /* ----------------- Functions ---------------- */
     /* -------------------------------------------- */
     @Builder
-    public MemberJobApplication(
+    public JobApplication(
             ApplicationType applicationType,
             String place,
             Result result,
-            String content,
             boolean submissionStatus,
-            String companyName,
-            String jobPart,
-            String jobPostLink,
             String applicationStartDate,
             String applicationCloseDate,
             Member member
@@ -102,11 +102,7 @@ public class MemberJobApplication extends BaseTimeEntity {
         this.applicationType = applicationType;
         this.place = place;
         this.result = result;
-        this.content = content;
         this.submissionStatus = submissionStatus;
-        this.companyName = companyName;
-        this.jobPart = jobPart;
-        this.jobPostLink = jobPostLink;
         this.applicationStartDate = applicationStartDate;
         this.applicationCloseDate = applicationCloseDate;
     }
