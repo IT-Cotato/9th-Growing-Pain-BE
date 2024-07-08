@@ -5,7 +5,17 @@ import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.ApplicationType;
 import cotato.growingpain.log.domain.Result;
 import cotato.growingpain.member.domain.entity.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,13 +24,11 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberJobApplication extends BaseTimeEntity {
+public class JobApplication extends BaseTimeEntity {
     /* -------------------------------------------- */
     /* -------------- Default Column -------------- */
     /* -------------------------------------------- */
@@ -48,15 +56,6 @@ public class MemberJobApplication extends BaseTimeEntity {
     @Column(name = "submission_status")
     private boolean submissionStatus;
 
-    @Column(name = "company_name")
-    private String companyName;
-
-    @Column(name = "job_part")
-    private String jobPart;
-
-    @Column(name = "job_post_link")
-    private String jobPostLink;
-
     @Column(name = "application_start_date")
     private String applicationStartDate;
 
@@ -82,7 +81,7 @@ public class MemberJobApplication extends BaseTimeEntity {
     /* ----------------- Functions ---------------- */
     /* -------------------------------------------- */
     @Builder
-    public MemberJobApplication(
+    public JobApplication(
             ApplicationType applicationType,
             String place,
             Result result,
