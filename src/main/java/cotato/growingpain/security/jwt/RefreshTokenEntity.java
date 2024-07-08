@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class RefreshToken {
+public class RefreshTokenEntity {
 
     @Id
     private String id; // email이 id로 사용됨

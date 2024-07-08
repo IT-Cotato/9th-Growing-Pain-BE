@@ -1,6 +1,6 @@
 package cotato.growingpain.security.jwt.filter;
 
-import cotato.growingpain.security.jwt.TokenProvider;
+import cotato.growingpain.security.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,38 +17,41 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final TokenProvider tokenProvider;
-
-    public JwtAuthorizationFilter(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        String accessToken = tokenProvider.resolveAccessToken(request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String accessToken = resolveAccessToken(request);
         log.info("액세스 토큰 반환 완료: {}",accessToken);
         if (accessToken != null && !accessToken.isBlank()) {
-            if (!tokenProvider.validateToken(accessToken)) {
-                setAuthentication(accessToken);
+            if (!jwtTokenProvider.validateToken(accessToken)) {
+                getAuthentication(accessToken);
             }
         }
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthentication(String accessToken) {
-        log.info("setAuthentication");
-        String email = tokenProvider.getEmail(accessToken);
-        String role = tokenProvider.getRole(accessToken);
+    private void getAuthentication(String accessToken) {
+        log.info("getAuthentication");
+            String email = jwtTokenProvider.getEmail(accessToken);
+            String role = jwtTokenProvider.getRole(accessToken);
         log.info("Member Role: {}", role);
+
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, "",
                 List.of(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-        return path.startsWith("/v1/api/auth") || path.startsWith("/login");
+    public String resolveAccessToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return getBearer(header);
+        } else {
+            return null;
+        }
+    }
+
+    public String getBearer(String authorizationHeader) {
+        return authorizationHeader.replace("Bearer", "");
     }
 }
