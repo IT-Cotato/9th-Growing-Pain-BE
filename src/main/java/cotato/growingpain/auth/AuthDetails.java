@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
-public class PrincipalDetails implements UserDetails {
+public class AuthDetails implements UserDetails {
 
     private final Member member;
 

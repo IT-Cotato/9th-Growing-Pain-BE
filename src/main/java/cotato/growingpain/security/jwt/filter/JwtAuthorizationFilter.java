@@ -1,6 +1,6 @@
 package cotato.growingpain.security.jwt.filter;
 
-import cotato.growingpain.security.jwt.TokenProvider;
+import cotato.growingpain.security.jwt.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,20 +17,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final TokenProvider tokenProvider;
-
-    public JwtAuthorizationFilter(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        String accessToken = tokenProvider.resolveAccessToken(request);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String accessToken = resolveAccessToken(request);
         log.info("액세스 토큰 반환 완료: {}",accessToken);
         if (accessToken != null && !accessToken.isBlank()) {
-            if (!tokenProvider.validateToken(accessToken)) {
-                setAuthentication(accessToken);
+            if (!jwtTokenProvider.validateToken(accessToken)) {
+                getAuthentication(accessToken);
             }
         }
         filterChain.doFilter(request, response);
@@ -40,8 +35,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("setAuthentication");
         String email = tokenProvider.getEmail(accessToken);
         String role = tokenProvider.getRole(accessToken);
+    private void getAuthentication(String accessToken) {
+        log.info("getAuthentication");
+        String memberId = jwtTokenProvider.getMemberId(accessToken);
+        String role = jwtTokenProvider.getRole(accessToken);
         log.info("Member Role: {}", role);
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, "",
+
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(memberId, "",
                 List.of(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

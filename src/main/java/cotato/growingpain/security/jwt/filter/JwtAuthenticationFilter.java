@@ -1,13 +1,13 @@
 package cotato.growingpain.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cotato.growingpain.auth.PrincipalDetails;
+import cotato.growingpain.auth.AuthDetails;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.security.RefreshTokenRepository;
-import cotato.growingpain.security.jwt.TokenProvider;
-import cotato.growingpain.security.jwt.RefreshToken;
+import cotato.growingpain.security.jwt.JwtTokenProvider;
+import cotato.growingpain.security.jwt.RefreshTokenEntity;
 import cotato.growingpain.security.jwt.Token;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.refresh.expiration}")
@@ -56,19 +56,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
 
-        PrincipalDetails principal = (PrincipalDetails) authResult.getPrincipal();
+        AuthDetails authDetails = (AuthDetails) authResult.getPrincipal();
         String grantedAuthority = authResult.getAuthorities().stream()
                 .findAny()
                 .orElseThrow()
                 .toString();
 
         // JWT 토큰 생성
-        Token token = tokenProvider.createToken(principal.getUsername(),grantedAuthority);
+        Token token = jwtTokenProvider.createToken(authDetails.getUsername(),grantedAuthority);
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 
         refreshTokenRepository.save(
-                new RefreshToken(principal.getMember().getEmail(), token.getRefreshToken()));
+                new RefreshTokenEntity(authDetails.getUserId(), token.getRefreshToken()));
 
         Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
         cookie.setPath("/");

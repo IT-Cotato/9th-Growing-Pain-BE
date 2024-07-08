@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TokenProvider {
+public class JwtTokenProvider {
 
     @Value("${jwt.secretKey}")
     String secretKey;

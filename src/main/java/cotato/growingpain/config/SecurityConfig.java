@@ -1,7 +1,7 @@
 package cotato.growingpain.config;
 
 import cotato.growingpain.security.RefreshTokenRepository;
-import cotato.growingpain.security.jwt.TokenProvider;
+import cotato.growingpain.security.jwt.JwtTokenProvider;
 import cotato.growingpain.security.jwt.filter.JwtAuthenticationFilter;
 import cotato.growingpain.security.jwt.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final TokenProvider tokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Bean
@@ -39,8 +39,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .addFilter(new JwtAuthenticationFilter(authenticationManager, tokenProvider, refreshTokenRepository))
-                .addFilterBefore(new JwtAuthorizationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository))
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/join").permitAll() //수정해야 함
                         .anyRequest().permitAll()
