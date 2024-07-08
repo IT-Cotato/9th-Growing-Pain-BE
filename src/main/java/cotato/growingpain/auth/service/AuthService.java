@@ -48,24 +48,24 @@ public class AuthService {
         memberRepository.save(newMember);
 
         // 회원가입 성공 후 토큰 생성 및 반환
-        return tokenProvider.createToken(request.email(), "ROLE_USER");
+        return jwtTokenProvider.createToken(request.email(), "ROLE_USER");
     }
 
     @Transactional
     public ReissueResponse tokenReissue(ReissueRequest request) {
 
-        String memberId = tokenProvider.getEmail(request.refreshToken());
-        String role = tokenProvider.getRole(request.refreshToken());
+        String memberId = jwtTokenProvider.getEmail(request.refreshToken());
+        String role = jwtTokenProvider.getRole(request.refreshToken());
 
         log.info("재발급 요청된 이메일: {}", memberId);
 
         // 데이터베이스에서 이메일 확인 로그 추가
-        RefreshToken findToken = refreshTokenRepository.findById(memberId)
+        RefreshTokenEntity findToken = refreshTokenRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
 
-        log.info("DB에서 찾은 리프레시 토큰: {}", request);
+        //log.info("DB에서 찾은 리프레시 토큰: {}", request);
 
-        if (tokenProvider.isExpired(request.refreshToken())) {
+        if (jwtTokenProvider.isExpired(request.refreshToken())) {
             throw new AppException(ErrorCode.TOKEN_EXPIRED);
         }
 
@@ -80,5 +80,4 @@ public class AuthService {
         log.info("재발급 된 액세스 토큰: {}", token.getRefreshToken());
         return ReissueResponse.from(token.getAccessToken(), token.getRefreshToken());
     }
-
 }

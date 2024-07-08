@@ -31,17 +31,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void setAuthentication(String accessToken) {
-        log.info("setAuthentication");
-        String email = tokenProvider.getEmail(accessToken);
-        String role = tokenProvider.getRole(accessToken);
     private void getAuthentication(String accessToken) {
         log.info("getAuthentication");
-        String memberId = jwtTokenProvider.getMemberId(accessToken);
-        String role = jwtTokenProvider.getRole(accessToken);
+            String email = jwtTokenProvider.getEmail(accessToken);
+            String role = jwtTokenProvider.getRole(accessToken);
         log.info("Member Role: {}", role);
 
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(memberId, "",
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, "",
                 List.of(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

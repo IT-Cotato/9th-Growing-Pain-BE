@@ -13,7 +13,7 @@ public class AuthDetails implements UserDetails {
 
     private final Member member;
 
-    public PrincipalDetails(Member member) {
+    public AuthDetails(Member member) {
         this.member = member;
     }
 
