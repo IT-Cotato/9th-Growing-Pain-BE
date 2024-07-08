@@ -15,7 +15,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,8 +36,9 @@ public class JobApplication extends BaseTimeEntity {
     /* -------------- Default Column -------------- */
     /* -------------------------------------------- */
     @Id
+    @Column(name = "job_application_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     /* -------------------------------------------- */
     /* ------------ Information Column ------------ */
@@ -49,9 +53,6 @@ public class JobApplication extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "result")
     private Result result;
-
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
 
     @Column(name = "submission_status")
     private boolean submissionStatus;
@@ -77,6 +78,10 @@ public class JobApplication extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
+    @OneToMany(mappedBy = "jobApplication")
+    @JsonIgnore
+    private List<ApplicationDetail> applicationDetails = new ArrayList<>();
+
     /* -------------------------------------------- */
     /* ----------------- Functions ---------------- */
     /* -------------------------------------------- */
@@ -85,11 +90,7 @@ public class JobApplication extends BaseTimeEntity {
             ApplicationType applicationType,
             String place,
             Result result,
-            String content,
             boolean submissionStatus,
-            String companyName,
-            String jobPart,
-            String jobPostLink,
             String applicationStartDate,
             String applicationCloseDate,
             Member member
@@ -101,11 +102,7 @@ public class JobApplication extends BaseTimeEntity {
         this.applicationType = applicationType;
         this.place = place;
         this.result = result;
-        this.content = content;
         this.submissionStatus = submissionStatus;
-        this.companyName = companyName;
-        this.jobPart = jobPart;
-        this.jobPostLink = jobPostLink;
         this.applicationStartDate = applicationStartDate;
         this.applicationCloseDate = applicationCloseDate;
     }

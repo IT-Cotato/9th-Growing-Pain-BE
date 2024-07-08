@@ -32,6 +32,7 @@ public class ActivityLog extends BaseTimeEntity {
     /* -------------- Default Column -------------- */
     /* -------------------------------------------- */
     @Id
+    @Column(name = "activity_log_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
