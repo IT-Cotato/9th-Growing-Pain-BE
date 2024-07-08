@@ -8,6 +8,7 @@ import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.member.domain.MemberJob;
+import cotato.growingpain.member.domain.MemberRole;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
 import cotato.growingpain.post.domain.entity.PostSave;
@@ -28,6 +29,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
@@ -60,6 +62,11 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)    //소속 중 직업
     @Column(name = "member_job")
     private MemberJob job;
+
+    @Column(name = "member_role")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'GENERAL'")
+    private MemberRole memberRole;
 
     @Column(name = "oauth_id")
     private String oauthId;
