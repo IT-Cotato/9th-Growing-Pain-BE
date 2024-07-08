@@ -20,3 +20,9 @@ jwt:
 
   refresh:
     expiration: 86400000 #7일
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
