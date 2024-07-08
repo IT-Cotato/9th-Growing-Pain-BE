@@ -12,6 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
 jwt:
   secretKey: ${JWT_SECRET_KEY}
@@ -20,7 +21,6 @@ jwt:
 
   refresh:
     expiration: 86400000 #7일
-        dialect: org.hibernate.dialect.MySQLDialect
 
   data:
     redis:
