@@ -46,9 +46,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-        return path.startsWith("/v1/api/auth") || path.startsWith("/login");
+    public String resolveAccessToken(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header != null && header.startsWith("Bearer ")) {
+            return getBearer(header);
+        } else {
+            return null;
+        }
+    }
+
+    public String getBearer(String authorizationHeader) {
+        return authorizationHeader.replace("Bearer", "");
     }
 }

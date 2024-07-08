@@ -45,19 +45,6 @@ public class JwtTokenProvider {
                 .getBody().get("email", String.class);
     }
 
-    public String resolveAccessToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header != null && header.startsWith("Bearer ")) {
-            return getBearer(header);
-        } else {
-            return null;
-        }
-    }
-
-    public String getBearer(String authorizationHeader) {
-        return authorizationHeader.replace("Bearer", "");
-    }
-
     public String getRole(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return claims.get("role", String.class);
