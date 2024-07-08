@@ -42,8 +42,10 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager, tokenProvider, refreshTokenRepository))
                 .addFilterBefore(new JwtAuthorizationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/join").permitAll() //수정해야 함
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/auth/join").permitAll()
+                        .requestMatchers( "/swagger-ui/**").permitAll()
+                        .requestMatchers( "/v3/api-docs/**").permitAll()
+                        .anyRequest().authenticated()
                 );
         return http.build();
     }
