@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PROJECT_NAME="Growing-Pain"
 JAR_PATH="/home/ubuntu/growing-pain-deploy/build/libs/*.jar"
 DEPLOY_PATH=/home/ubuntu/$PROJECT_NAME/
@@ -22,13 +24,13 @@ then
 else
   echo "> 현재 동작중인 어플리케이션 존재 O" >> $DEPLOY_LOG_PATH
   echo "> 현재 동작중인 어플리케이션 강제 종료 진행" >> $DEPLOY_LOG_PATH
- 축 echo "> kill -9 $CURRENT_PID" >> $DEPLOY_LOG_PATH
+  echo "> kill -9 $CURRENT_PID" >> $DEPLOY_LOG_PATH
   kill -9 $CURRENT_PID
 fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
-nohup java -jar -Dspring.profiles.active=local $DEPLOY_JAR --server.port=8081 >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup java -jar -Dspring.profiles.active=local $DEPLOY_JAR --server.port=8080 >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
 
 sleep 3
 
