@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PrincipalDetailsService implements UserDetailsService {
+public class AuthDetailsService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
@@ -23,6 +23,6 @@ public class PrincipalDetailsService implements UserDetailsService {
         Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(()->new AppException(ErrorCode.MEMBER_NOT_FOUND));
         log.info("해당 유저의 로그인 요청: {}", findMember.getEmail());
-        return new PrincipalDetails(findMember);
+        return new AuthDetails(findMember);
     }
 }

@@ -74,7 +74,7 @@ public class AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST);
         }
 
-        Token token = tokenProvider.createToken(memberId, role);
+        Token token = jwtTokenProvider.createToken(memberId, role);
         findToken.updateRefreshToken(token.getRefreshToken());
         refreshTokenRepository.save(findToken);
         log.info("재발급 된 액세스 토큰: {}", token.getRefreshToken());

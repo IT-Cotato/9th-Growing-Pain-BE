@@ -68,7 +68,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("accessToken", accessToken);
 
         refreshTokenRepository.save(
-                new RefreshTokenEntity(authDetails.getUserId(), token.getRefreshToken()));
+                new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken()));
 
         Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
         cookie.setPath("/");
