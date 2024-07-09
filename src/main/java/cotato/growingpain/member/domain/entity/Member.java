@@ -1,16 +1,17 @@
 package cotato.growingpain.member.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import cotato.growingpain.comment.domain.entity.Comment;
+import cotato.growingpain.comment.domain.entity.CommentLike;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-//import cotato.growingpain.security.oauth.AuthProvider;
 import cotato.growingpain.log.domain.entity.ActivityLog;
-import cotato.growingpain.log.domain.entity.MemberJobApplication;
+import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.member.domain.MemberJob;
+import cotato.growingpain.member.domain.MemberRole;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
 import cotato.growingpain.post.domain.entity.PostSave;
-import cotato.growingpain.comment.domain.entity.Comment;
-import cotato.growingpain.comment.domain.entity.CommentLike;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.domain.entity.ReplyCommentLike;
 import jakarta.persistence.Column;
@@ -21,16 +22,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-//import java.security.AuthProvider;
 import jakarta.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -63,6 +63,11 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_job")
     private MemberJob job;
 
+    @Column(name = "member_role")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'GENERAL'")
+    private MemberRole memberRole;
+
     @Column(name = "oauth_id")
     private String oauthId;
 
@@ -71,7 +76,7 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
-    private List<MemberJobApplication> memberJobApplications = new ArrayList<>();
+    private List<JobApplication> jobApplications = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     @JsonIgnore
@@ -105,8 +110,12 @@ public class Member extends BaseTimeEntity {
     @JsonIgnore
     private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private List<JobPost> jobPosts = new ArrayList<>();
+
     @Builder
-    public Member(String email, String password, String name, String field, String belong ) {
+    public Member(String email, String password, String name, String field, String belong) {
         this.email = email;
         this.password = password;
         this.name = name;
