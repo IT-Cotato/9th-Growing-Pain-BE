@@ -1,6 +1,7 @@
 package cotato.growingpain.auth.service;
 
 import cotato.growingpain.auth.dto.request.JoinRequest;
+import cotato.growingpain.auth.dto.request.LogoutRequest;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.common.exception.AppException;
@@ -79,5 +80,17 @@ public class AuthService {
         refreshTokenRepository.save(findToken);
         log.info("재발급 된 액세스 토큰: {}", token.getRefreshToken());
         return ReissueResponse.from(token.getAccessToken(), token.getRefreshToken());
+    }
+
+    @Transactional
+    public void logout(LogoutRequest request) {
+        deleteRefreshToken(request.refreshToken());
+        log.info("삭제 요청된 refreshToken: {}", request.refreshToken());
+    }
+
+    private void deleteRefreshToken(String refreshToken) {
+        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow();
+        refreshTokenRepository.delete(refreshTokenEntity);
     }
 }

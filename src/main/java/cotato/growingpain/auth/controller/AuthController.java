@@ -1,6 +1,7 @@
 package cotato.growingpain.auth.controller;
 
 import cotato.growingpain.auth.dto.request.JoinRequest;
+import cotato.growingpain.auth.dto.request.LogoutRequest;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.auth.service.AuthService;
@@ -40,5 +41,11 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<ReissueResponse> tokenRefresh(@RequestBody ReissueRequest request) {
         return ResponseEntity.ok(authService.tokenReissue(request));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) {
+        authService.logout(logoutRequest);
+        return ResponseEntity.ok().build();
     }
 }
