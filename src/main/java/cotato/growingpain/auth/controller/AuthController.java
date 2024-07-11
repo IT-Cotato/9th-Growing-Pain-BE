@@ -30,12 +30,7 @@ public class AuthController {
     public ResponseEntity<?> joinAuth(@RequestBody @Valid JoinRequest request) {
         log.info("[회원 가입 컨트롤러]: {}", request.email());
         Token token = authService.createLoginInfo(request);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("accessToken", token.getAccessToken());
-        response.put("refreshToken", token.getRefreshToken());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
     @PostMapping("/reissue")
