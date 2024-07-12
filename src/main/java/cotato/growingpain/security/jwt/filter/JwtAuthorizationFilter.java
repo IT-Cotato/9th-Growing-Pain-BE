@@ -37,8 +37,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private void getAuthentication(String accessToken) {
         log.info("getAuthentication");
-            String email = jwtTokenProvider.getEmail(accessToken);
-            String role = jwtTokenProvider.getRole(accessToken);
+        String email = jwtTokenProvider.getEmail(accessToken);
+        String role = jwtTokenProvider.getRole(accessToken);
         log.info("Member Role: {}", role);
 
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, "",
@@ -56,6 +56,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     public String getBearer(String authorizationHeader) {
-        return authorizationHeader.replace("Bearer", "");
+        return authorizationHeader.replace("Bearer ", "");
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return super.shouldNotFilter(request);
     }
 }
