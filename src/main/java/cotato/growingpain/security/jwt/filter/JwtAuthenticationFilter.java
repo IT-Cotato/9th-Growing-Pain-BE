@@ -66,8 +66,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 
-        refreshTokenRepository.save(
-                new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken()));
+        RefreshTokenEntity refreshTokenEntity  = new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken());
+        refreshTokenEntity.updateRefreshToken(token.getRefreshToken());
+        refreshTokenRepository.save(refreshTokenEntity);
 
         log.info("로그인 성공, JWT 토큰 생성");
     }
