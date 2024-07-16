@@ -11,7 +11,6 @@ import cotato.growingpain.security.jwt.RefreshTokenEntity;
 import cotato.growingpain.security.jwt.Token;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -67,14 +66,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 
-        refreshTokenRepository.save(
-                new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken()));
+        RefreshTokenEntity refreshTokenEntity  = new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken());
+        refreshTokenEntity.updateRefreshToken(token.getRefreshToken());
+        refreshTokenRepository.save(refreshTokenEntity);
 
-        Cookie cookie = new Cookie("refreshToken", token.getRefreshToken());
-        cookie.setPath("/");
-        cookie.setMaxAge(refreshTokenAge);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
         log.info("로그인 성공, JWT 토큰 생성");
     }
 }

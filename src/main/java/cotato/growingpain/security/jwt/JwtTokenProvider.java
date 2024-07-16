@@ -5,12 +5,13 @@ import cotato.growingpain.common.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -25,6 +26,7 @@ public class JwtTokenProvider {
     Long refreshExpiration;
 
     public boolean validateToken(String accessToken) {
+        log.info("Validating access token: {}", accessToken);
         if (accessToken.isEmpty()) {
             throw new AppException(ErrorCode.JWT_NOT_EXISTS);
         }
@@ -63,7 +65,7 @@ public class JwtTokenProvider {
         claims.put("role",authority);
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
@@ -75,9 +77,14 @@ public class JwtTokenProvider {
         claims.put("role",authority);
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public Long getExpiration(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return claims.getExpiration().getTime() - new Date().getTime();
     }
 }

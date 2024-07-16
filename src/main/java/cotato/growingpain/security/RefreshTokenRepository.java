@@ -1,9 +1,10 @@
 package cotato.growingpain.security;
 
 import cotato.growingpain.security.jwt.RefreshTokenEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, String> {
+public interface RefreshTokenRepository extends CrudRepository<RefreshTokenEntity, String> {
 }
