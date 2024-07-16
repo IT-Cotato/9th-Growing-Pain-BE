@@ -93,7 +93,7 @@ public class AuthService {
 
         log.info("재발급 된 액세스 토큰: {}", token.getAccessToken());
         log.info("재발급 된 refresh 토큰: {}", token.getRefreshToken());
-        return ReissueResponse.from(token.getAccessToken());
+        return ReissueResponse.from(token.getAccessToken(),token.getRefreshToken());
     }
 
     @Transactional
