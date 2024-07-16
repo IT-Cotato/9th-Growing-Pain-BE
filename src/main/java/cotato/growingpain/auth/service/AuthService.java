@@ -1,7 +1,9 @@
 package cotato.growingpain.auth.service;
 
+import cotato.growingpain.auth.domain.BlackList;
 import cotato.growingpain.auth.dto.request.JoinRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
+import cotato.growingpain.auth.repository.BlackListRepository;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.common.exception.AppException;
@@ -29,6 +31,7 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final BlackListRepository blackListRepository;
 
     @Transactional
     public Token createLoginInfo(JoinRequest request) {
@@ -89,18 +92,26 @@ public class AuthService {
         refreshTokenRepository.save(findToken);
 
         log.info("재발급 된 액세스 토큰: {}", token.getAccessToken());
+        log.info("재발급 된 refresh 토큰: {}", token.getRefreshToken());
         return ReissueResponse.from(token.getAccessToken());
     }
 
     @Transactional
     public void logout(LogoutRequest request) {
-        deleteRefreshToken(request.refreshToken());
+        String memberId = jwtTokenProvider.getEmail(request.refreshToken());
+        RefreshTokenEntity existRefreshToken = refreshTokenRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST));
+        setBlackList(request.refreshToken());
+        log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
+        refreshTokenRepository.delete(existRefreshToken);
         log.info("삭제 요청된 refreshToken: {}", request.refreshToken());
     }
 
-    private void deleteRefreshToken(String refreshToken) {
-        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow();
-        refreshTokenRepository.delete(refreshTokenEntity);
+    private void setBlackList(String token) {
+        BlackList blackList = BlackList.builder()
+                .id(token)
+                .ttl(jwtTokenProvider.getExpiration(token))
+                .build();
+        blackListRepository.save(blackList);
     }
 }
