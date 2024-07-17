@@ -1,8 +1,10 @@
 package cotato.growingpain.auth.service;
 
 import cotato.growingpain.auth.domain.BlackList;
+import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.JoinRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
+import cotato.growingpain.auth.dto.response.ChangePasswordResponse;
 import cotato.growingpain.auth.repository.BlackListRepository;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
@@ -16,6 +18,7 @@ import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,6 +108,36 @@ public class AuthService {
         log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
         refreshTokenRepository.delete(existRefreshToken);
         log.info("삭제 요청된 refreshToken: {}", request.refreshToken());
+    }
+
+    @Transactional
+    public ChangePasswordResponse changePassword(ChangePasswordRequest request){
+
+        Member member = memberRepository.findByEmail(request.email())
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
+
+        String tempPassword = generateTemporaryPassword();
+        String encodedPassword = bCryptPasswordEncoder.encode(tempPassword);
+
+        log.info("임시 비밀번호 생성: {}", tempPassword);
+        log.info("암호화된 비밀번호: {}", encodedPassword);
+
+        validateService.checkPasswordPattern(tempPassword);
+
+        member.updatePassword(encodedPassword);
+        memberRepository.save(member);
+
+        log.info("비밀번호 업데이트 완료: {}", member.getEmail());
+
+        return new ChangePasswordResponse(tempPassword);
+    }
+
+    private String generateTemporaryPassword() {
+        String tempPassword;
+        do {
+            tempPassword = RandomStringUtils.randomAlphanumeric(8 + (int) (Math.random() * 9)); // 8-16 characters
+        } while (!validateService.isValidPassword(tempPassword));
+        return tempPassword;
     }
 
     private void setBlackList(String token) {

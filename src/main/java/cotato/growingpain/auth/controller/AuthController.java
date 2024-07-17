@@ -1,7 +1,9 @@
 package cotato.growingpain.auth.controller;
 
+import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.JoinRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
+import cotato.growingpain.auth.dto.response.ChangePasswordResponse;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.auth.service.AuthService;
@@ -37,8 +39,14 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) {
-        authService.logout(logoutRequest);
+    public ResponseEntity<?> logout(@RequestBody LogoutRequest request) {
+        authService.logout(request);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<ChangePasswordResponse> changePassword(@RequestBody ChangePasswordRequest request){
+        log.info("[비밀번호 찾기 컨트롤러]: {}", request.email());
+        return ResponseEntity.ok(authService.changePassword(request));
     }
 }

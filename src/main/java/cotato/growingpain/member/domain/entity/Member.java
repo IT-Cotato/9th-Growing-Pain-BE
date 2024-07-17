@@ -122,4 +122,8 @@ public class Member extends BaseTimeEntity {
         this.field = field;
         this.belong = belong;
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
