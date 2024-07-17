@@ -18,11 +18,21 @@ public class ValidateService {
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,16}$";
     private final MemberRepository memberRepository;
 
+
     public void checkPasswordPattern(String password) {
         Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
         Matcher matcher = pattern.matcher(password);
         if (!matcher.matches()) {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
+    public boolean isValidPassword(String password) {
+        try {
+            checkPasswordPattern(password);
+            return true;
+        } catch (AppException e) {
+            return false;
         }
     }
 
