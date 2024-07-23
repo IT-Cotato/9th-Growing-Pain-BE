@@ -60,13 +60,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .findAny()
                 .orElseThrow()
                 .toString();
+        Long memberId = authDetails.getMember().getId();
 
         // JWT 토큰 생성
-        Token token = jwtTokenProvider.createToken(authDetails.getUsername(),grantedAuthority);
+        Token token = jwtTokenProvider.createToken(memberId, authDetails.getUsername(),grantedAuthority);
         String accessToken = token.getAccessToken();
         response.addHeader("accessToken", accessToken);
 
-        RefreshTokenEntity refreshTokenEntity  = new RefreshTokenEntity(authDetails.getMember().getEmail(), token.getRefreshToken());
+        RefreshTokenEntity refreshTokenEntity  = new RefreshTokenEntity(authDetails.getUsername(), token.getRefreshToken());
         refreshTokenEntity.updateRefreshToken(token.getRefreshToken());
         refreshTokenRepository.save(refreshTokenEntity);
 
