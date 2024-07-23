@@ -35,4 +35,8 @@ public class PostService {
     public List<Post> getPostsByCategory(PostCategory category){
         return postRepository.findByCategory(category);
     }
+
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
 }

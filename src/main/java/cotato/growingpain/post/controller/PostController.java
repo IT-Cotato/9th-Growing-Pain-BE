@@ -60,8 +60,14 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public Response<List<Post>> getPostsByCategory(@RequestParam PostCategory category) {
-        List<Post> posts = postService.getPostsByCategory(category);
+        List<Post> posts;
         log.info("카테고리별 게시글 목록 요청: {}", category);
-        return Response.createSuccess("카테고리별 게시글 목록 조회 완료", posts);
+        if (category == PostCategory.ALL) {
+            posts = postService.getAllPosts();
+            return Response.createSuccess("전체 게시글 조회 완료", posts);
+        } else {
+            posts = postService.getPostsByCategory(category);
+            return Response.createSuccess("카테고리별 게시글 목록 조회 완료", posts);
+        }
     }
 }
