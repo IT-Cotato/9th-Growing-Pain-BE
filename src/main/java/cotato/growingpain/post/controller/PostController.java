@@ -1,6 +1,7 @@
 package cotato.growingpain.post.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
 import cotato.growingpain.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,10 +10,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,4 +40,16 @@ public class PostController {
         log.info("게시글 등록한 memberId: {}", memberId);
         return Response.createSuccess("포스트 생성 완료", postService.registerPost(request, memberId));
     }
+
+    @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회을 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public Response<List<Post>> getAllPostsByMemberId(@AuthenticationPrincipal Long memberId) {
+        List<Post> posts = postService.getAllPostsByMemberId(memberId);
+        log.info("{}가 등록한 게시글 목록", memberId);
+        return Response.createSuccess("게시글 목록 조회 완료", posts);
+    }
+
 }

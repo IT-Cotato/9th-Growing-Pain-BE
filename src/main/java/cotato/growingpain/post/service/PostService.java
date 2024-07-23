@@ -5,6 +5,7 @@ import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
 import cotato.growingpain.post.repository.PostRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,5 +25,9 @@ public class PostService {
         return postRepository.save(
                 Post.of(member, request.title(), request.content(), request.imageUrl(), request.category())
         ).getId();
+    }
+
+    public List<Post> getAllPostsByMemberId(Long memberId) {
+        return postRepository.findByMemberId(memberId);
     }
 }
