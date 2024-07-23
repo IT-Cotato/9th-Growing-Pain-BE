@@ -2,6 +2,7 @@ package cotato.growingpain.post.service;
 
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
+import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
 import cotato.growingpain.post.repository.PostRepository;
@@ -27,7 +28,11 @@ public class PostService {
         ).getId();
     }
 
-    public List<Post> getAllPostsByMemberId(Long memberId) {
+    public List<Post> getPostsByMemberId(Long memberId) {
         return postRepository.findByMemberId(memberId);
+    }
+
+    public List<Post> getPostsByCategory(PostCategory category){
+        return postRepository.findByCategory(category);
     }
 }

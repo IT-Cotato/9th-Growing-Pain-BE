@@ -1,6 +1,7 @@
 package cotato.growingpain.post.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
 import cotato.growingpain.post.service.PostService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,15 +43,25 @@ public class PostController {
         return Response.createSuccess("포스트 생성 완료", postService.registerPost(request, memberId));
     }
 
-    @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회을 위한 메소드")
+    @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public Response<List<Post>> getAllPostsByMemberId(@AuthenticationPrincipal Long memberId) {
-        List<Post> posts = postService.getAllPostsByMemberId(memberId);
+    public Response<List<Post>> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
+        List<Post> posts = postService.getPostsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
-        return Response.createSuccess("게시글 목록 조회 완료", posts);
+        return Response.createSuccess("사용자의 게시글 목록 조회 완료", posts);
     }
 
+    @Operation(summary = "카테고리별 게시글 목록 조회", description = "카테고리별로 게시글 목록 조회 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/category")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    public Response<List<Post>> getPostsByCategory(@RequestParam PostCategory category) {
+        List<Post> posts = postService.getPostsByCategory(category);
+        log.info("카테고리별 게시글 목록 요청: {}", category);
+        return Response.createSuccess("카테고리별 게시글 목록 조회 완료", posts);
+    }
 }
