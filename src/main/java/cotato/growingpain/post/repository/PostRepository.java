@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByMemberId(Long memberId);
-    List<Post> findByCategory(PostCategory category);
+    List<Post> findByParentCategory(PostCategory parentCategory);
+    List<Post> findBySubCategory(PostCategory subCategory);
 }
