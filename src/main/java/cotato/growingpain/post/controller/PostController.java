@@ -45,9 +45,8 @@ public class PostController {
 
     @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/{memberId}")
+    @GetMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
     public Response<List<Post>> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
         List<Post> posts = postService.getPostsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
@@ -56,9 +55,8 @@ public class PostController {
 
     @Operation(summary = "카테고리별 게시글 목록 조회", description = "카테고리별로 게시글 목록 조회 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/category")
+    @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping
     public Response<List<Post>> getPostsByCategory(@RequestParam PostCategory category) {
         List<Post> posts;
         log.info("카테고리별 게시글 목록 요청: {}", category);
