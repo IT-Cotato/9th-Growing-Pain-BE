@@ -23,8 +23,9 @@ public class PostService {
     @Transactional
     public Long registerPost(PostRegisterRequest request, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
+        PostCategory parentCategory = request.category().getParent();
         return postRepository.save(
-                Post.of(member, request.title(), request.content(), request.imageUrl(), request.category())
+                Post.of(member, request.title(), request.content(), request.imageUrl(), parentCategory, request.category())
         ).getId();
     }
 
@@ -33,7 +34,11 @@ public class PostService {
     }
 
     public List<Post> getPostsByCategory(PostCategory category){
-        return postRepository.findByCategory(category);
+        if (category.getParent() == null) {
+            return postRepository.findByParentCategory(category);
+        } else {
+            return postRepository.findBySubCategory(category);
+        }
     }
 
     public List<Post> getAllPosts() {
