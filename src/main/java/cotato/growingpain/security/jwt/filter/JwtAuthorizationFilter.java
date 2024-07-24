@@ -37,13 +37,15 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private void getAuthentication(String accessToken) {
         log.info("getAuthentication");
+        Long memberId = jwtTokenProvider.getMemberId(accessToken);
         String email = jwtTokenProvider.getEmail(accessToken);
         String role = jwtTokenProvider.getRole(accessToken);
-        log.info("Member Role: {}", role);
+        log.info("Extracted memberId: {}, email: {}, role: {}", memberId, email, role);
 
-        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, "",
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(memberId, "",
                 List.of(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        log.info("Authentication set for memberId: {}", memberId);
     }
 
     public String resolveAccessToken(HttpServletRequest request) {

@@ -52,15 +52,21 @@ public class JwtTokenProvider {
         return claims.get("role", String.class);
     }
 
-    public Token createToken(String email, String authority) {
+    public Long getMemberId(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("memberId", Long.class);
+    }
+
+    public Token createToken(Long memberId, String email, String authority) {
         return Token.builder()
-                .accessToken(createAccessToken(email,authority))
-                .refreshToken(createRefreshToken(email,authority))
+                .accessToken(createAccessToken(memberId, email,authority))
+                .refreshToken(createRefreshToken(memberId, email,authority))
                 .build();
     }
 
-    private String createAccessToken(String email,String authority) {
+    private String createAccessToken(Long memberId, String email,String authority) {
         Claims claims = Jwts.claims();
+        claims.put("memberId", memberId);
         claims.put("email", email);
         claims.put("role",authority);
         return Jwts.builder()
@@ -71,8 +77,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private String createRefreshToken(String email,String authority) {
+    private String createRefreshToken(Long memberId, String email,String authority) {
         Claims claims = Jwts.claims();
+        claims.put("memberId", memberId);
         claims.put("email", email);
         claims.put("role",authority);
         return Jwts.builder()

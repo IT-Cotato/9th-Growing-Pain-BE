@@ -55,7 +55,7 @@ public class AuthService {
         memberRepository.save(newMember);
 
         // 회원가입 성공 후 토큰 생성 및 반환
-        Token token = jwtTokenProvider.createToken(request.email(), "ROLE_USER");
+        Token token = jwtTokenProvider.createToken(newMember.getId(), request.email(), "ROLE_USER");
 
         // 리프레시 토큰을 데이터베이스에 저장
         RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity
@@ -73,6 +73,7 @@ public class AuthService {
 
         String email = jwtTokenProvider.getEmail(request.refreshToken());
         String role = jwtTokenProvider.getRole(request.refreshToken());
+        Long memberId = jwtTokenProvider.getMemberId(request.refreshToken());
 
         log.info("재발급 요청된 이메일: {}", email);
         log.info("재발급 요청된 role: {}", role);
@@ -90,7 +91,7 @@ public class AuthService {
             throw new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST);
         }
 
-        Token token = jwtTokenProvider.createToken(email, role);
+        Token token = jwtTokenProvider.createToken(memberId, email, role);
         findToken.updateRefreshToken(token.getRefreshToken());
         refreshTokenRepository.save(findToken);
 

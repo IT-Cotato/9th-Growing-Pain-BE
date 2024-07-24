@@ -62,4 +62,16 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     private List<PostSave> postSaves = new ArrayList<>();
+
+    private Post(Member member, String title, String content, String imageUrl, PostCategory category) {
+        this.member = member;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.category = category;
+    }
+
+    public static Post of(Member member, String title, String content, String imageUrl, PostCategory category) {
+        return new Post(member, title, content, imageUrl, category);
+    }
 }
