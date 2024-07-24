@@ -9,6 +9,7 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,14 @@ public class CommentService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
-
         return commentRepository.save(
                 Comment.of(member, post, request.content())
         ).getId();
     }
+
+    @Transactional(readOnly = true)
+    public List<Comment> getCommentsByMemberId(Long memberId) {
+        return commentRepository.findByMemberId(memberId);
+    }
+
 }

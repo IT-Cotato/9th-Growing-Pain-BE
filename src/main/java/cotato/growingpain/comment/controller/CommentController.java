@@ -1,5 +1,6 @@
 package cotato.growingpain.comment.controller;
 
+import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.dto.request.CommentRegisterRequest;
 import cotato.growingpain.comment.service.CommentService;
 import cotato.growingpain.common.Response;
@@ -9,10 +10,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,15 @@ public class CommentController {
                                        @AuthenticationPrincipal Long memberId) {
         log.info("댓글 등록한 memberId: {}", memberId);
         log.info("댓글이 등록된 postId: {}", postId);
-        Long commentId = commentService.registerComment(request, memberId, postId);
-        return Response.createSuccess("댓글 생성 완료", commentId);
+        return Response.createSuccess("댓글 생성 완료", commentService.registerComment(request, memberId, postId));
     }
-}
+
+    @Operation(summary = "사용자별 댓글 목록 조회", description = "사용자별 댓글 목록 조회를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @GetMapping("/{memberId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<Comment>> getCommentsByMemberId(@AuthenticationPrincipal Long memberId) {
+        List<Comment> comments = commentService.getCommentsByMemberId(memberId);
+        log.info("{}가 등록한 게시글 목록", memberId);
+        return Response.createSuccess("사용자 댓글 목록 조회 완료", comments);
+    }
