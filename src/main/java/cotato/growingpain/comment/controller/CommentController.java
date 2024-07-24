@@ -53,3 +53,13 @@ public class CommentController {
         log.info("{}가 등록한 게시글 목록", memberId);
         return Response.createSuccess("사용자 댓글 목록 조회 완료", comments);
     }
+
+    @Operation(summary = "포스트별 댓글 목록 조회", description = "한 포스트내의 댓글 목록 조회를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<Comment>> getCommentsByPostId(@RequestParam Long postId) {
+        List<Comment> comments = commentService.getCommentsByPostId(postId);
+        return Response.createSuccess("포스트별 댓글 목록 조회 완료", comments);
+    }
+}

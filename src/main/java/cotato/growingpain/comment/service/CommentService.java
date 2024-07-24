@@ -42,4 +42,8 @@ public class CommentService {
         return commentRepository.findByMemberId(memberId);
     }
 
+    @Transactional(readOnly = true)
+    public List<Comment> getCommentsByPostId(Long postId) {
+        return commentRepository.findByPostId(postId);
+    }
 }
