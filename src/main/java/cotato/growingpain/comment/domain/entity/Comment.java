@@ -51,4 +51,14 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "comment")
     @JsonIgnore
     private List<CommentLike> commentLikes = new ArrayList<>();
+
+    private Comment(Member member, Post post, String content) {
+        this.member = member;
+        this.post = post;
+        this.content = content;
+    }
+
+    public static Comment of (Member member, Post post, String content) {
+        return new Comment(member, post, content);
+    }
 }
