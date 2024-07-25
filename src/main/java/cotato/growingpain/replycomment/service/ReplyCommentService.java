@@ -41,4 +41,9 @@ public class ReplyCommentService {
                 ReplyComment.of(member, post, comment, request.content())
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<ReplyComment> getReplyCommentsByCommentId(Long commentId) {
+        return replyCommentRepository.findByCommentId(commentId);
+    }
 }

@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Long> {
 
+    List<ReplyComment> findByCommentId(Long commentId);
 }

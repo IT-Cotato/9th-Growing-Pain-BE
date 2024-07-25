@@ -1,7 +1,9 @@
 package cotato.growingpain.replycomment.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.dto.request.ReplyCommentRegisterRequest;
+import cotato.growingpain.replycomment.dto.response.ReplyCommentListResponse;
 import cotato.growingpain.replycomment.service.ReplyCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,10 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +46,14 @@ public class ReplyCommentController {
         log.info("답글이 등록된 commentId: {}", commentId);
         replyCommentService.registerReplyComment(request, postId, commentId,memberId);
         return Response.createSuccessWithNoData("딥글 생성 완료");
+    }
+
+    @Operation(summary = "댓글별 답글 목록 조회", description = "한 댓글내의 답글 목록 조회를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = ReplyCommentListResponse.class)))
+    @GetMapping("")@ResponseStatus(HttpStatus.OK)
+    public Response<ReplyCommentListResponse> getCommentsByPostId(@RequestParam Long commentId) {
+        List<ReplyComment> replyComments = replyCommentService.getReplyCommentsByCommentId(commentId);
+        ReplyCommentListResponse replyCommentListResponse = new ReplyCommentListResponse(replyComments);
+        return Response.createSuccess("댓글별 답글 목록 조회 완료", replyCommentListResponse);
     }
 }
