@@ -50,7 +50,7 @@ public class Post extends BaseTimeEntity {
 
     private int likeCount = 0;
 
-    private boolean deleted = false;
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
