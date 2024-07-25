@@ -2,6 +2,7 @@ package cotato.growingpain.comment.controller;
 
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.dto.request.CommentRegisterRequest;
+import cotato.growingpain.comment.dto.response.CommentListResponse;
 import cotato.growingpain.comment.service.CommentService;
 import cotato.growingpain.common.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,25 +42,28 @@ public class CommentController {
                                        @AuthenticationPrincipal Long memberId) {
         log.info("댓글 등록한 memberId: {}", memberId);
         log.info("댓글이 등록된 postId: {}", postId);
-        return Response.createSuccess("댓글 생성 완료", commentService.registerComment(request, memberId, postId));
+        commentService.registerComment(request, memberId, postId);
+        return Response.createSuccessWithNoData("댓글 생성 완료");
     }
 
     @Operation(summary = "사용자별 댓글 목록 조회", description = "사용자별 댓글 목록 조회를 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
     @GetMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<Comment>> getCommentsByMemberId(@AuthenticationPrincipal Long memberId) {
+    public Response<CommentListResponse> getCommentsByMemberId(@AuthenticationPrincipal Long memberId) {
         List<Comment> comments = commentService.getCommentsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
-        return Response.createSuccess("사용자 댓글 목록 조회 완료", comments);
+        CommentListResponse commentListResponse = new CommentListResponse(comments);
+        return Response.createSuccess("사용자 댓글 목록 조회 완료", commentListResponse);
     }
 
     @Operation(summary = "포스트별 댓글 목록 조회", description = "한 포스트내의 댓글 목록 조회를 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<Comment>> getCommentsByPostId(@RequestParam Long postId) {
+    public Response<CommentListResponse> getCommentsByPostId(@RequestParam Long postId) {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
-        return Response.createSuccess("포스트별 댓글 목록 조회 완료", comments);
+        CommentListResponse commentListResponse = new CommentListResponse(comments);
+        return Response.createSuccess("포스트별 댓글 목록 조회 완료", commentListResponse);
     }
 }

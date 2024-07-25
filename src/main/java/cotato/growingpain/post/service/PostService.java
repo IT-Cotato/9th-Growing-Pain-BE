@@ -21,12 +21,13 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long registerPost(PostRegisterRequest request, Long memberId) {
+    public void registerPost(PostRegisterRequest request, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
         PostCategory parentCategory = request.category().getParent();
-        return postRepository.save(
-                Post.of(member, request.title(), request.content(), request.imageUrl(), parentCategory, request.category())
-        ).getId();
+        postRepository.save(
+                Post.of(member, request.title(), request.content(), request.imageUrl(), parentCategory,
+                        request.category())
+        );
     }
 
     public List<Post> getPostsByMemberId(Long memberId) {

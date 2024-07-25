@@ -25,16 +25,16 @@ public class CommentService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Long registerComment(CommentRegisterRequest request, Long postId, Long memberId) {
+    public void registerComment(CommentRegisterRequest request, Long postId, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
 
-        return commentRepository.save(
+        commentRepository.save(
                 Comment.of(member, post, request.content())
-        ).getId();
+        );
     }
 
     @Transactional(readOnly = true)

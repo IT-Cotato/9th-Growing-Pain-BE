@@ -4,6 +4,7 @@ import cotato.growingpain.common.Response;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
+import cotato.growingpain.post.dto.response.PostListResponse;
 import cotato.growingpain.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -40,32 +41,34 @@ public class PostController {
     public Response<?> registerPost(@Valid @RequestBody PostRegisterRequest request,
                                     @AuthenticationPrincipal Long memberId) {
         log.info("게시글 등록한 memberId: {}", memberId);
-        return Response.createSuccess("포스트 생성 완료", postService.registerPost(request, memberId));
+        postService.registerPost(request, memberId);
+        return Response.createSuccessWithNoData("포스트 생성 완료");
     }
 
     @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = PostListResponse.class)))
     @GetMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<Post>> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
+    public Response<PostListResponse> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
         List<Post> posts = postService.getPostsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
-        return Response.createSuccess("사용자의 게시글 목록 조회 완료", posts);
+        PostListResponse postListResponse = new PostListResponse(posts);
+        return Response.createSuccess("사용자의 게시글 목록 조회 완료", postListResponse);
     }
 
     @Operation(summary = "카테고리별 게시글 목록 조회", description = "카테고리별로 게시글 목록 조회 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = PostListResponse.class)))
     @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<Post>> getPostsByCategory(@RequestParam PostCategory category) {
+    public Response<PostListResponse> getPostsByCategory(@RequestParam PostCategory category) {
         List<Post> posts;
         log.info("카테고리별 게시글 목록 요청: {}", category);
         if (category == PostCategory.ALL) {
             posts = postService.getAllPosts();
-            return Response.createSuccess("전체 게시글 조회 완료", posts);
         } else {
             posts = postService.getPostsByCategory(category);
-            return Response.createSuccess("카테고리별 게시글 목록 조회 완료", posts);
         }
+        PostListResponse postListResponse = new PostListResponse(posts);
+        return Response.createSuccess(category == PostCategory.ALL ? "전체 게시글 조회 완료" : "카테고리별 게시글 목록 조회 완료", postListResponse);
     }
 }
