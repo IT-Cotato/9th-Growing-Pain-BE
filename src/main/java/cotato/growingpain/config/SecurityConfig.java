@@ -33,7 +33,8 @@ public class SecurityConfig {
 
     private final String[] REQUIRED_AUTHENTICATE = {
             "/api/post/**",
-            "/api/comment/**"
+            "/api/comment/**",
+            "/api/reply-comment/**"
     };
 
     @Bean

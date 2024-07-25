@@ -22,7 +22,8 @@ public enum ErrorCode {
     REISSUE_FAIL(HttpStatus.UNAUTHORIZED, "액세스 토큰 재발급 요청 실패"),
 
     //커뮤니티
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글를 찾을 수 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
