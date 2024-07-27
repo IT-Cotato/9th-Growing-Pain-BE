@@ -61,4 +61,8 @@ public class Comment extends BaseTimeEntity {
     public static Comment of (Member member, Post post, String content) {
         return new Comment(member, post, content);
     }
+
+    public void increaseLikeCount(){
+        this.likeCount++;
+    }
 }

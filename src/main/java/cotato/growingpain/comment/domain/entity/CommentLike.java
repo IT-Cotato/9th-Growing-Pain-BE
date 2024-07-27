@@ -42,4 +42,17 @@ public class CommentLike extends BaseTimeEntity {
     @JoinColumn(name = "comment_id")
     @JsonIgnore
     private Comment comment;
+
+    public CommentLike(Member member, Comment comment) {
+        this.member = member;
+        this.comment = comment;
+    }
+
+    public static CommentLike of(Member member, Comment comment) {
+        return new CommentLike(member, comment);
+    }
+
+    public void increaseCommentLikeCount() {
+        comment.increaseLikeCount();
+    }
 }
