@@ -48,4 +48,18 @@ public class ReplyCommentLike extends BaseTimeEntity {
     @JoinColumn(name = "reply_comment_id")
     @JsonIgnore
     private ReplyComment replyComment;
+
+
+    public ReplyCommentLike(Member member, ReplyComment replyComment) {
+        this.member = member;
+        this.replyComment = replyComment;
+    }
+
+    public static ReplyCommentLike of(Member member,ReplyComment replyComment) {
+        return new ReplyCommentLike(member, replyComment);
+    }
+
+    public void increaseReplyCommentLikeCount() {
+        replyComment.increaseLikeCount();
+    }
 }
