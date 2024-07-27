@@ -36,4 +36,17 @@ public class PostLike extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;
+
+    private PostLike(Member member, Post post) {
+        this.member = member;
+        this.post = post;
+    }
+
+    public static PostLike of(Member member, Post post) {
+        return new PostLike(member, post);
+    }
+
+    public void increasePostLikeCount() {
+        post.increaseLikeCount();
+    }
 }

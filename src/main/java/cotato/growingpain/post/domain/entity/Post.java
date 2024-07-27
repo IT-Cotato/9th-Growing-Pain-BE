@@ -77,4 +77,8 @@ public class Post extends BaseTimeEntity {
     public static Post of(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
         return new Post(member, title, content, imageUrl, parentCategory, subCategory);
     }
+
+    public void increaseLikeCount(){
+        this.likeCount++;
+    }
 }
