@@ -31,4 +31,16 @@ public class ReplyCommentLikeService {
 
         replyCommentLikeRepository.save(replyCommentLike);
     }
+
+    public void deleteLike(Long replyCommentId, Long replyCommentLikeId, Long memberId) {
+
+        ReplyComment replyComment = replyCommentRepository.findById(replyCommentId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
+        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findById(replyCommentLikeId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
+        Member member = memberRepository.getReferenceById(memberId);
+
+        replyCommentLike.decreaseReplyCommentLikeCount(member, replyComment);
+        replyCommentLikeRepository.save(replyCommentLike);
+    }
 }

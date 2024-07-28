@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,4 +39,15 @@ public class ReplyCommentLikeController {
         return Response.createSuccessWithNoData("댓글 좋아요 등록 완료");
     }
 
+    @Operation(summary = "답글 좋아요 취소", description = "답글 좋아요 취소를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{reply-comment-like-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deleteLike(@PathVariable("reply-comment-id") Long replyCommentId,
+                                  @PathVariable("reply-comment-like-id") Long replyCommentLikeId,
+                                  @AuthenticationPrincipal Long memberId) {
+
+        replyCommentLikeService.deleteLike(replyCommentId, replyCommentLikeId, memberId);
+        return Response.createSuccessWithNoData("답글 좋아요 취소 완료");
+    }
 }
