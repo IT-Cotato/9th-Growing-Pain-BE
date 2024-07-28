@@ -1,6 +1,8 @@
 package cotato.growingpain.log.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.ApplicationType;
 import cotato.growingpain.log.domain.Result;
@@ -57,6 +59,9 @@ public class JobApplication extends BaseTimeEntity {
     @Column(name = "submission_status")
     private boolean submissionStatus;
 
+    @Column(name = "result_status")
+    private boolean resultStatus;
+
     @Column(name = "application_start_date")
     private String applicationStartDate;
 
@@ -78,8 +83,13 @@ public class JobApplication extends BaseTimeEntity {
     @JsonIgnore
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_post_id")
+    @JsonBackReference
+    private JobPost jobPost;
+
     @OneToMany(mappedBy = "jobApplication")
-    @JsonIgnore
+    @JsonManagedReference
     private List<ApplicationDetail> applicationDetails = new ArrayList<>();
 
     /* -------------------------------------------- */
@@ -90,21 +100,35 @@ public class JobApplication extends BaseTimeEntity {
             ApplicationType applicationType,
             String place,
             Result result,
-            boolean submissionStatus,
             String applicationStartDate,
             String applicationCloseDate,
-            Member member
+            Member member,
+            JobPost jobPost,
+            List<ApplicationDetail> applicationDetails
     ) {
         // Relation Column
         this.member = member;
+        this.jobPost = jobPost;
+        this.applicationDetails = applicationDetails;
 
         // Information Column
         this.applicationType = applicationType;
         this.place = place;
         this.result = result;
-        this.submissionStatus = submissionStatus;
         this.applicationStartDate = applicationStartDate;
         this.applicationCloseDate = applicationCloseDate;
+    }
+
+    public void addApplicationDetail(ApplicationDetail applicationDetail) {
+        this.applicationDetails.add(applicationDetail);
+        applicationDetail.setJobApplication(this);
+    }
+
+    public void setJobPost(JobPost jobPost) {
+        this.jobPost = jobPost;
+        if (!jobPost.getJobApplications().contains(this)) {
+            jobPost.getJobApplications().add(this);
+        }
     }
 
 }

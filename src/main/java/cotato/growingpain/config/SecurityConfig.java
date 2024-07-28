@@ -34,7 +34,8 @@ public class SecurityConfig {
     private final String[] REQUIRED_AUTHENTICATE = {
             "/api/post/**",
             "/api/comment/**",
-            "/api/reply-comment/**"
+            "/api/reply-comment/**",
+            "/api/job-posts/**"
     };
 
     @Bean
@@ -53,7 +54,8 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository))
-                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
                         .requestMatchers(HttpMethod.GET, REQUIRED_AUTHENTICATE).authenticated()

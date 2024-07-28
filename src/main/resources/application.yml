@@ -27,7 +27,3 @@ jwt:
   refresh:
     expiration: 86400000 #7일
 
-  data:
-    redis:
-      host: localhost
-      port: 6379

@@ -1,5 +1,6 @@
 package cotato.growingpain.log.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +43,7 @@ public class ApplicationDetail {
     /* -------------------------------------------- */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_application_id")
+    @JsonBackReference
     @JsonIgnore
     private JobApplication jobApplication;
 
@@ -58,5 +60,13 @@ public class ApplicationDetail {
         this.title = title;
         this.content = content;
     }
+
+    public void setJobApplication(JobApplication jobApplication) {
+        this.jobApplication = jobApplication;
+        if (!jobApplication.getApplicationDetails().contains(this)) {
+            jobApplication.getApplicationDetails().add(this);
+        }
+    }
+
 
 }
