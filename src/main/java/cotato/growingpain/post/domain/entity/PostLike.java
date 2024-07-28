@@ -58,7 +58,7 @@ public class PostLike extends BaseTimeEntity {
         }
 
         if (!post.getId().equals(this.post.getId())) {
-            throw new AppException(ErrorCode.POST_LIKE_NOT_FOUND);  //수정 필요
+            throw new AppException(ErrorCode.POST_NOT_FOUND);
         }
 
         post.decreaseLikeCount();
