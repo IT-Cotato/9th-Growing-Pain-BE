@@ -31,4 +31,16 @@ public class CommentLikeService {
 
         commentLikeRepository.save(commentLike);
     }
+
+    public void deleteLike(Long commentId, Long commentLikeId, Long memberId) {
+
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+        CommentLike commentLike = commentLikeRepository.findById(commentLikeId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_LIKE_NOT_FOUND));
+        Member member = memberRepository.getReferenceById(memberId);
+
+        commentLike.decreaseCommentLikeCount(member, comment);
+        commentLikeRepository.save(commentLike);
+    }
 }

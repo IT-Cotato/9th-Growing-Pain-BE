@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +30,24 @@ public class CommentLikeController {
     @Operation(summary = "댓글 좋아요 등록", description = "댓글 좋아요 등록을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Response<?> registerLike(@PathVariable("comment-id") Long commentId,
                                     @AuthenticationPrincipal Long memberId) {
 
         commentLikeService.registerLike(commentId, memberId);
         log.info("댓글 {} 좋아요 한 memberId: {}", commentId, memberId);
         return Response.createSuccessWithNoData("댓글 좋아요 등록 완료");
+    }
+
+    @Operation(summary = "댓글 좋아요 취소", description = "댓글 좋아요 취소를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{comment-like-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deleteLike(@PathVariable("comment-id") Long commentId,
+                                  @PathVariable("comment-like-id") Long commentLikeId,
+                                  @AuthenticationPrincipal Long memberId) {
+
+        commentLikeService.deleteLike(commentId, commentLikeId, memberId);
+        return Response.createSuccessWithNoData("댓글 좋아요 취소 완료");
     }
 }
