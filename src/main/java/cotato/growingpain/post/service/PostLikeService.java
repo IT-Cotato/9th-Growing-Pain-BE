@@ -22,6 +22,7 @@ public class PostLikeService {
     private final MemberRepository memberRepository;
 
     public void registerLike(Long postId, Long memberId) {
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
         Member member = memberRepository.getReferenceById(memberId);
@@ -29,6 +30,18 @@ public class PostLikeService {
         PostLike postLike = PostLike.of(member, post);
         postLike.increasePostLikeCount();
 
+        postLikeRepository.save(postLike);
+    }
+
+    public void deleteLike(Long postId, Long postLikeId, Long memberId) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        PostLike postLike = postLikeRepository.findById(postLikeId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_LIKE_NOT_FOUND));
+        Member member = memberRepository.getReferenceById(memberId);
+
+        postLike.decreasePostLikeCount(member, post);
         postLikeRepository.save(postLike);
     }
 }

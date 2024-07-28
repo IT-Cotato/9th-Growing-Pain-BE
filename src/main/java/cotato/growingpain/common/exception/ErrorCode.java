@@ -12,6 +12,7 @@ public enum ErrorCode {
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "존재하는 이메일입니다."),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "존재하는 닉네임입니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 패스워드입니다."),
+    ACCESS_DENIED_USER(HttpStatus.FORBIDDEN,"권한이 없는 유저입니다."),
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 요청에 실패했습니다."),
@@ -24,7 +25,8 @@ public enum ErrorCode {
     //커뮤니티
     POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
-    REPLY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 답글을 찾을 수 없습니다.");
+    REPLY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 답글을 찾을 수 없습니다."),
+    POST_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글의 좋아요 정보를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

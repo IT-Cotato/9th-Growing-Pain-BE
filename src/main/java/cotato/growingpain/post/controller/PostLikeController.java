@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,17 @@ public class PostLikeController {
         postLikeService.registerLike(postId, memberId);
         log.info("게시글 {} 좋아요 한 memberId: {}", postId, memberId);
         return Response.createSuccessWithNoData("포스트 좋아요 등록 완료");
+    }
+
+    @Operation(summary = "게시글 좋아요 취소", description = "게시글 좋아요 취소를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{post-like-id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<?> deleteLike(@PathVariable("post-id") Long postId,
+                                  @PathVariable("post-like-id") Long postLikeId,
+                                  @AuthenticationPrincipal Long memberId) {
+
+        postLikeService.deleteLike(postId, postLikeId, memberId);
+        return Response.createSuccessWithNoData("포스트 좋아요 취소 완료");
     }
 }
