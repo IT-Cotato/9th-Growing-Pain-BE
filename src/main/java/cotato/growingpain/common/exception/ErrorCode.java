@@ -23,10 +23,11 @@ public enum ErrorCode {
     REISSUE_FAIL(HttpStatus.UNAUTHORIZED, "액세스 토큰 재발급 요청 실패"),
 
     //커뮤니티
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글을 찾을 수 없습니다."),
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
-    REPLY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 답글을 찾을 수 없습니다."),
-    POST_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글의 좋아요 정보를 찾을 수 없습니다.");
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글 정보를 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글 정보를 찾을 수 없습니다."),
+    REPLY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 답글 정보를 찾을 수 없습니다."),
+    POST_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글의 좋아요 정보를 찾을 수 없습니다."),
+    COMMENT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글의 좋아요 정보를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
