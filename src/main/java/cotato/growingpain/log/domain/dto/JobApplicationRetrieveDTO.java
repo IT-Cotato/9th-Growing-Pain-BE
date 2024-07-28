@@ -8,7 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 public record JobApplicationRetrieveDTO(
         String applicationType,
-        String status
+        String status,
+        String endDate
 ) {
     public static JobApplicationRetrieveDTO fromEntity(JobApplication jobApplication) {
         String status = jobApplication.getResult().toString();
@@ -22,6 +23,7 @@ public record JobApplicationRetrieveDTO(
         return JobApplicationRetrieveDTO.builder()
                 .applicationType(String.valueOf(jobApplication.getApplicationType()))
                 .status(status)
+                .endDate(jobApplication.getApplicationCloseDate())
                 .build();
     }
 }
