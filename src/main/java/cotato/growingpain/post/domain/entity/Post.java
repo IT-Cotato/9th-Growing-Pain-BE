@@ -20,7 +20,6 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
@@ -41,14 +40,17 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_image_url")
     private String imageUrl;
 
-    @Column(name = "post_category")
     @Enumerated(EnumType.STRING)
-    @ColumnDefault(value = "'ALL'")
-    private PostCategory category;
+    @Column(name = "parent_post_category")
+    private PostCategory parentCategory;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sub_post_category")
+    private PostCategory subCategory;
 
     private int likeCount = 0;
 
-    private boolean deleted = false;
+    private boolean isDeleted = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -62,4 +64,27 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     private List<PostSave> postSaves = new ArrayList<>();
+
+    private Post(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
+        this.member = member;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.parentCategory = parentCategory;
+        this.subCategory = subCategory;
+    }
+
+    public static Post of(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
+        return new Post(member, title, content, imageUrl, parentCategory, subCategory);
+    }
+
+    public void increaseLikeCount(){
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 }

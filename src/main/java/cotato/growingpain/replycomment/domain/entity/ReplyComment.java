@@ -56,4 +56,25 @@ public class ReplyComment extends BaseTimeEntity {
     @OneToMany(mappedBy = "replyComment")
     @JsonIgnore
     private List<ReplyCommentLike> replyCommentLikes = new ArrayList<>();
+
+    private ReplyComment(Member member, Post post, Comment comment, String content) {
+        this.member = member;
+        this.post = post;
+        this.comment = comment;
+        this.content = content;
+    }
+
+    public static ReplyComment of (Member member, Post post, Comment comment, String content) {
+        return new ReplyComment(member, post, comment, content);
+    }
+
+    public void increaseLikeCount(){
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 }

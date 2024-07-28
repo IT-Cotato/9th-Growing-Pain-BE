@@ -2,6 +2,8 @@ package cotato.growingpain.post.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
+import cotato.growingpain.common.exception.AppException;
+import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,4 +38,29 @@ public class PostLike extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;
+
+    private PostLike(Member member, Post post) {
+        this.member = member;
+        this.post = post;
+    }
+
+    public static PostLike of(Member member, Post post) {
+        return new PostLike(member, post);
+    }
+
+    public void increasePostLikeCount() {
+        post.increaseLikeCount();
+    }
+
+    public void decreasePostLikeCount(Member member, Post post) {
+        if (!member.getId().equals(this.member.getId())) {
+            throw new AppException(ErrorCode.ACCESS_DENIED_USER);
+        }
+
+        if (!post.getId().equals(this.post.getId())) {
+            throw new AppException(ErrorCode.POST_NOT_FOUND);
+        }
+
+        post.decreaseLikeCount();
+    }
 }

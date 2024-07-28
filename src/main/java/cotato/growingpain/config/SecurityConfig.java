@@ -7,6 +7,7 @@ import cotato.growingpain.security.jwt.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,19 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final String[] WHITE_LIST = {
+            "/swagger-ui/**",
+            "/api/auth/**",
+            "/v3/api-docs/**"
+    };
+
+    private final String[] REQUIRED_AUTHENTICATE = {
+            "/api/post/**",
+            "/api/comment/**",
+            "/api/reply-comment/**",
+            "/api/job-posts/**"
+    };
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -43,10 +57,9 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/join").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/job-posts/**").permitAll()
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, REQUIRED_AUTHENTICATE).authenticated()
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

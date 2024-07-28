@@ -3,6 +3,8 @@ package cotato.growingpain.replycomment.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.common.domain.BaseTimeEntity;
+import cotato.growingpain.common.exception.AppException;
+import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.post.domain.entity.Post;
 import jakarta.persistence.Column;
@@ -48,4 +50,30 @@ public class ReplyCommentLike extends BaseTimeEntity {
     @JoinColumn(name = "reply_comment_id")
     @JsonIgnore
     private ReplyComment replyComment;
+
+
+    public ReplyCommentLike(Member member, ReplyComment replyComment) {
+        this.member = member;
+        this.replyComment = replyComment;
+    }
+
+    public static ReplyCommentLike of(Member member,ReplyComment replyComment) {
+        return new ReplyCommentLike(member, replyComment);
+    }
+
+    public void increaseReplyCommentLikeCount() {
+        replyComment.increaseLikeCount();
+    }
+
+    public void decreaseReplyCommentLikeCount(Member member, ReplyComment replyComment) {
+        if (!member.getId().equals(this.member.getId())) {
+            throw new AppException(ErrorCode.ACCESS_DENIED_USER);
+        }
+
+        if (!replyComment.getId().equals(this.replyComment.getId())) {
+            throw new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND);
+        }
+
+        replyComment.decreaseLikeCount();
+    }
 }
