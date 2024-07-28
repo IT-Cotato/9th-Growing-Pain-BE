@@ -28,17 +28,15 @@ public class JobService {
 
     private final ApplicationDetailRepository applicationDetailRepository;
 
-    public JobPost createJobPost(JobPostRequestDTO jobPostRequestDTO) {
-        Long memberId = jobPostRequestDTO.memberId();
-        log.debug("Trying to fetch member with ID: {}", memberId);
+    public JobPost createJobPost(JobPostRequestDTO jobPostRequest, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
         log.info("Found member with ID: {}", member.getId());
-        log.info(jobPostRequestDTO.jobApplications().toString());
+        log.info(jobPostRequest.jobApplications().toString());
 
-        JobPost jobPost = jobPostRequestDTO.toEntity(member);
+        JobPost jobPost = jobPostRequest.toEntity(member);
 
         log.info("Creating job post with job part: {}", jobPost.getJobPart());
         log.debug("JobPost details: {}", jobPost);

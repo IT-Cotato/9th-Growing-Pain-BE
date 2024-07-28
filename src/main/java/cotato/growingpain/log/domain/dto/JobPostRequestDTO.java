@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 public record JobPostRequestDTO(
         @NotBlank String companyName,
         @NotBlank String jobPart,
-        Long memberId,
         List<JobApplicationRequestDTO> jobApplications
 ) {
 
