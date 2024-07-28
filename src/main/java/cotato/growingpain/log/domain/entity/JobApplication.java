@@ -59,6 +59,9 @@ public class JobApplication extends BaseTimeEntity {
     @Column(name = "submission_status")
     private boolean submissionStatus;
 
+    @Column(name = "result_status")
+    private boolean resultStatus;
+
     @Column(name = "application_start_date")
     private String applicationStartDate;
 
@@ -87,7 +90,7 @@ public class JobApplication extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "jobApplication")
     @JsonManagedReference
-    private final List<ApplicationDetail> applicationDetails = new ArrayList<>();
+    private List<ApplicationDetail> applicationDetails = new ArrayList<>();
 
     /* -------------------------------------------- */
     /* ----------------- Functions ---------------- */
@@ -97,7 +100,6 @@ public class JobApplication extends BaseTimeEntity {
             ApplicationType applicationType,
             String place,
             Result result,
-            boolean submissionStatus,
             String applicationStartDate,
             String applicationCloseDate,
             Member member,
@@ -107,12 +109,12 @@ public class JobApplication extends BaseTimeEntity {
         // Relation Column
         this.member = member;
         this.jobPost = jobPost;
+        this.applicationDetails = applicationDetails;
 
         // Information Column
         this.applicationType = applicationType;
         this.place = place;
         this.result = result;
-        this.submissionStatus = submissionStatus;
         this.applicationStartDate = applicationStartDate;
         this.applicationCloseDate = applicationCloseDate;
     }
