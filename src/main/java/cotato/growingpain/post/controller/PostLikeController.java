@@ -30,7 +30,7 @@ public class PostLikeController {
     @Operation(summary = "게시글 좋아요 등록", description = "게시글 좋아요 등록을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Response<?> registerLike(@PathVariable("post-id") Long postId,
                                     @AuthenticationPrincipal Long memberId) {
 
@@ -42,7 +42,7 @@ public class PostLikeController {
     @Operation(summary = "게시글 좋아요 취소", description = "게시글 좋아요 취소를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @DeleteMapping("/{post-like-id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public Response<?> deleteLike(@PathVariable("post-id") Long postId,
                                   @PathVariable("post-like-id") Long postLikeId,
                                   @AuthenticationPrincipal Long memberId) {
