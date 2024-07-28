@@ -52,7 +52,6 @@ public class PostLike extends BaseTimeEntity {
         post.increaseLikeCount();
     }
 
-
     public void decreasePostLikeCount(Member member, Post post) {
         if (!member.getId().equals(this.member.getId())) {
             throw new AppException(ErrorCode.ACCESS_DENIED_USER);
