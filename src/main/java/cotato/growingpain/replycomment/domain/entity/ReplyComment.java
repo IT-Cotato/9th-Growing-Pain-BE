@@ -68,4 +68,13 @@ public class ReplyComment extends BaseTimeEntity {
         return new ReplyComment(member, post, comment, content);
     }
 
+    public void increaseLikeCount(){
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 }
