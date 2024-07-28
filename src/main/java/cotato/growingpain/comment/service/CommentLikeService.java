@@ -26,6 +26,11 @@ public class CommentLikeService {
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
         Member member = memberRepository.getReferenceById(memberId);
 
+        if (commentLikeRepository.existsByMemberAndComment(member, comment)) {
+            log.info("이미 좋아요를 누른 댓글입니다: commentId={}, memberId={}", commentId, memberId);
+            throw new AppException(ErrorCode.ALREADY_LIKED);
+        }
+
         CommentLike commentLike = CommentLike.of(member, comment);
         commentLike.increaseCommentLikeCount();
 

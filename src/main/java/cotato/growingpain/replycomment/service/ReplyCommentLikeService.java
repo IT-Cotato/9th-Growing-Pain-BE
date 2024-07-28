@@ -26,6 +26,11 @@ public class ReplyCommentLikeService {
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
         Member member = memberRepository.getReferenceById(memberId);
 
+        if (replyCommentLikeRepository.existsByMemberAndReplyComment(member, replyComment)) {
+            log.info("이미 좋아요를 누른 답글입니다: replyCommentId={}, memberId={}", replyCommentId, memberId);
+            throw new AppException(ErrorCode.ALREADY_LIKED);
+        }
+
         ReplyCommentLike replyCommentLike = ReplyCommentLike.of(member, replyComment);
         replyCommentLike.increaseReplyCommentLikeCount();
 
