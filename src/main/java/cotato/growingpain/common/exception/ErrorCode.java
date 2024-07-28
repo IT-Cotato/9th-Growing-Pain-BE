@@ -26,6 +26,7 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 게시글 정보를 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 댓글 정보를 찾을 수 없습니다."),
     REPLY_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 답글 정보를 찾을 수 없습니다."),
+    ALREADY_LIKED(HttpStatus.CONFLICT, "이미 좋아요를 눌렀습니다."),
     POST_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 게시글의 좋아요 정보를 찾을 수 없습니다."),
     COMMENT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글의 좋아요 정보를 찾을 수 없습니다."),
     REPLY_COMMENT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 답글의 좋아요 정보를 찾을 수 없습니다.");
