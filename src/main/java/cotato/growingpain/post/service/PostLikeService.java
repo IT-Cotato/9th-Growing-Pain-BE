@@ -26,6 +26,7 @@ public class PostLikeService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
         Member member = memberRepository.getReferenceById(memberId);
+        post.validatePostLike(member);
 
         if (postLikeRepository.existsByMemberAndPost(member, post)) {
             log.info("이미 좋아요를 누른 포스트입니다: postId={}, memberId={}", postId, memberId);
