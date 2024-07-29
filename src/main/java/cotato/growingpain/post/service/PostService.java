@@ -93,4 +93,13 @@ public class PostService {
         PostSave postSave = PostSave.createPostSave(member, post);
         postSaveRepository.save(postSave);
     }
+
+    @Transactional
+    public void deleteSavePost(Long postId, Long memberId) {
+        if (!postSaveRepository.existsByMemberIdAndPostId(memberId, postId)) {
+            throw new AppException(ErrorCode.POST_NOT_FOUND);
+        }
+
+        postSaveRepository.deleteByMemberIdAndPostId(memberId, postId);
+    }
 }

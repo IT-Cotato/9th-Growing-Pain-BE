@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PostSaveRepository extends JpaRepository<PostSave, Long> {
 
     boolean existsByMemberIdAndPostId(Long memberId, Long postId);
+    void deleteByMemberIdAndPostId(Long memberId, Long postId);
 }
