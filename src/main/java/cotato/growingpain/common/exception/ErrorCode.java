@@ -16,7 +16,7 @@ public enum ErrorCode {
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 요청에 실패했습니다."),
-    JWT_NOT_EXISTS(HttpStatus.NO_CONTENT, "Jwt 토큰이 존재하지 않습니다."),
+    JWT_NOT_EXISTS(HttpStatus.BAD_REQUEST, "Jwt 토큰이 존재하지 않습니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저를 찾을 수 없습니다."),
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "토큰이 만료되었습니다."),
     REFRESH_TOKEN_NOT_EXIST(HttpStatus.UNAUTHORIZED, "해당 refresh 토큰이 DB에 존재하지 않습니다."),
