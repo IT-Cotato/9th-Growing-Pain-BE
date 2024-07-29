@@ -17,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,5 +72,16 @@ public class PostController {
         }
         PostListResponse postListResponse = new PostListResponse(posts);
         return Response.createSuccess(category == PostCategory.ALL ? "전체 게시글 조회 완료" : "카테고리별 게시글 목록 조회 완료", postListResponse);
+    }
+
+    @Operation(summary = "게시글 삭제", description = "게시글 삭제를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deletePost(@PathVariable Long postId,
+                                  @AuthenticationPrincipal Long memberId) {
+        log.info("게시글 삭제한 memberId: {}", memberId);
+        postService.deletePost(postId, memberId);
+        return Response.createSuccessWithNoData("포스트 삭제 완료");
     }
 }

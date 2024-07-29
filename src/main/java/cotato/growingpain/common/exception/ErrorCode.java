@@ -16,7 +16,7 @@ public enum ErrorCode {
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일이 존재하지 않습니다."),
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 요청에 실패했습니다."),
-    JWT_NOT_EXISTS(HttpStatus.NO_CONTENT, "Jwt 토큰이 존재하지 않습니다."),
+    JWT_NOT_EXISTS(HttpStatus.BAD_REQUEST, "Jwt 토큰이 존재하지 않습니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저를 찾을 수 없습니다."),
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "토큰이 만료되었습니다."),
     REFRESH_TOKEN_NOT_EXIST(HttpStatus.UNAUTHORIZED, "해당 refresh 토큰이 DB에 존재하지 않습니다."),
@@ -32,7 +32,8 @@ public enum ErrorCode {
     REPLY_COMMENT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 답글의 좋아요 정보를 찾을 수 없습니다."),
     CANNOT_LIKE_OWN_POST(HttpStatus.BAD_REQUEST, "본인이 작성한 게시글은 좋아요를 누를 수 없습니다."),
     CANNOT_LIKE_OWN_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 댓글은 좋아요를 누를 수 없습니다."),
-    CANNOT_LIKE_OWN_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 답글은 좋아요를 누를 수 없습니다.");
+    CANNOT_LIKE_OWN_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 답글은 좋아요를 누를 수 없습니다."),
+    ALREADY_DELETED(HttpStatus.CONFLICT, "이미 삭제되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

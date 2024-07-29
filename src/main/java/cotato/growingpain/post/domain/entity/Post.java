@@ -95,4 +95,9 @@ public class Post extends BaseTimeEntity {
             throw new AppException(ErrorCode.CANNOT_LIKE_OWN_POST);
         }
     }
+
+    public void deletePost() {
+        isDeleted = true;
+        likeCount = 0;
+    }
 }

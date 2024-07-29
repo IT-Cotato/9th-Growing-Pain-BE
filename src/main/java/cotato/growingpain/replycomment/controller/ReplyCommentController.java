@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +57,16 @@ public class ReplyCommentController {
         List<ReplyComment> replyComments = replyCommentService.getReplyCommentsByCommentId(commentId);
         ReplyCommentListResponse replyCommentListResponse = new ReplyCommentListResponse(replyComments);
         return Response.createSuccess("댓글별 답글 목록 조회 완료", replyCommentListResponse);
+    }
+
+    @Operation(summary = "답글 삭제", description = "답글 삭제를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{replyCommentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deleteReplyComment(@PathVariable Long replyCommentId,
+                                     @AuthenticationPrincipal Long memberId) {
+        log.info("답글 삭제한 memberId: {}", memberId);
+        replyCommentService.deleteReplyComment(replyCommentId, memberId);
+        return Response.createSuccessWithNoData("답글 삭제 완료");
     }
 }
