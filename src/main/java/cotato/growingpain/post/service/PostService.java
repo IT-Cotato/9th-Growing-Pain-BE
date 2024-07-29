@@ -8,9 +8,11 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
+import cotato.growingpain.post.domain.entity.PostSave;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
 import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
+import cotato.growingpain.post.repository.PostSaveRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final PostLikeRepository postLikeRepository;
+    private final PostSaveRepository postSaveRepository;
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
     private final ReplyCommentRepository replyCommentRepository;
@@ -74,5 +77,20 @@ public class PostService {
 
         post.deletePost();
         postRepository.save(post);
+    }
+
+    @Transactional
+    public void savePost(Long postId, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        if (postSaveRepository.existsByMemberIdAndPostId(memberId, postId)) {
+            throw new AppException(ErrorCode.ALREADY_SAVED);
+        }
+
+        PostSave postSave = PostSave.createPostSave(member, post);
+        postSaveRepository.save(postSave);
     }
 }

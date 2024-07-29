@@ -84,4 +84,15 @@ public class PostController {
         postService.deletePost(postId, memberId);
         return Response.createSuccessWithNoData("포스트 삭제 완료");
     }
+
+    @Operation(summary = "게시글 저장", description = "게시글을 저장하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/{postId}/save")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> savePost(@PathVariable Long postId,
+                                @AuthenticationPrincipal Long memberId) {
+        log.info("게시글 {} 저장한 memberId: {}", postId, memberId);
+        postService.savePost(postId, memberId);
+        return Response.createSuccessWithNoData("게시글 저장 완료");
+    }
 }
