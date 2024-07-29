@@ -48,4 +48,13 @@ public class PostSaveService {
 
         postSaveRepository.deleteByMemberIdAndPostId(memberId, postId);
     }
+
+    @Transactional
+    public List<Post> getSavedPosts(Long memberId) {
+        List<PostSave> postSaves = postSaveRepository.findByMemberId(memberId);
+
+        return postSaves.stream()
+                .map(PostSave::getPost)
+                .collect(Collectors.toList());
+    }
 }

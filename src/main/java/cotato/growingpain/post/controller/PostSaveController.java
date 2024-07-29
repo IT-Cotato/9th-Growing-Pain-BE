@@ -51,4 +51,14 @@ public class PostSaveController {
         postSaveService.deleteSavePost(postId, memberId);
         return Response.createSuccessWithNoData("게시글 저장 취소 완료");
     }
+
+    @Operation(summary = "저장한 게시글 목록 조회", description = "사용자가 저장한 게시글의 목록을 조회하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @GetMapping("/list/{member-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<List<Post>> getSavedPosts(@AuthenticationPrincipal Long memberId) {
+        log.info("사용자가 저장한 게시글 목록 요청: memberId {}", memberId);
+        List<Post> savedPosts = postSaveService.getSavedPosts(memberId);
+        return Response.createSuccess("저장한 게시글 목록 조회 완료", savedPosts);
+    }
 }
