@@ -3,6 +3,8 @@ package cotato.growingpain.replycomment.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.common.domain.BaseTimeEntity;
+import cotato.growingpain.common.exception.AppException;
+import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.post.domain.entity.Post;
 import jakarta.persistence.Column;
@@ -75,6 +77,12 @@ public class ReplyComment extends BaseTimeEntity {
     public void decreaseLikeCount() {
         if (this.likeCount > 0) {
             this.likeCount--;
+        }
+    }
+
+    public void validateReplyCommentLike(Member member) {
+        if (member.getId().equals(this.member.getId())) {
+            throw new AppException(ErrorCode.CANNOT_LIKE_OWN_REPLY_COMMENT);
         }
     }
 }
