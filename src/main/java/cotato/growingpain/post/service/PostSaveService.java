@@ -8,6 +8,8 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostSave;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.post.repository.PostSaveRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,9 +40,9 @@ public class PostSaveService {
     }
 
     @Transactional
-    public void deleteSavePost(Long postId, Long postSaveId, Long memberId) {
+    public void deleteSavePost(Long postId, Long memberId) {
 
-        if (!postSaveRepository.existsById(postSaveId)) {
+        if (!postSaveRepository.existsByMemberIdAndPostId(postId, memberId)) {
             throw new AppException(ErrorCode.POST_NOT_FOUND);
         }
 
