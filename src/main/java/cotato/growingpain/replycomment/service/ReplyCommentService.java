@@ -10,6 +10,7 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.dto.request.ReplyCommentRegisterRequest;
+import cotato.growingpain.replycomment.repository.ReplyCommentLikeRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class ReplyCommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final ReplyCommentLikeRepository replyCommentLikeRepository;
 
     @Transactional
     public void registerReplyComment(ReplyCommentRegisterRequest request, Long postId, Long commentId, Long memberId) {
@@ -45,5 +47,20 @@ public class ReplyCommentService {
     @Transactional(readOnly = true)
     public List<ReplyComment> getReplyCommentsByCommentId(Long commentId) {
         return replyCommentRepository.findByCommentId(commentId);
+    }
+
+    @Transactional
+    public void deleteReplyComment(Long replyCommentId, Long memberId) {
+        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberId(replyCommentId, memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
+
+        if(replyComment.isDeleted()) {
+            throw new AppException(ErrorCode.ALREADY_DELETED);
+        }
+
+        replyCommentLikeRepository.deleteByReplyCommentId(replyCommentId);
+
+        replyComment.deleteReplyComment();
+        replyCommentRepository.save(replyComment);
     }
 }
