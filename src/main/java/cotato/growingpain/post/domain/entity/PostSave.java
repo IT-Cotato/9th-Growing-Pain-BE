@@ -36,4 +36,13 @@ public class PostSave extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     @JsonIgnore
     private Post post;
+
+    public PostSave(Member member, Post post) {
+        this.member = member;
+        this.post = post;
+    }
+
+    public static PostSave createPostSave(Member member, Post post) {
+        return new PostSave(member, post);
+    }
 }
