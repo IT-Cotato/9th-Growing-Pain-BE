@@ -30,7 +30,7 @@ public class CommentService {
     private final ReplyCommentRepository replyCommentRepository;
 
     @Transactional
-    public void registerComment(CommentRegisterRequest request, Long postId, Long memberId) {
+    public void registerComment(CommentRegisterRequest request, Long memberId, Long postId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
