@@ -2,6 +2,7 @@ package cotato.growingpain.comment.service;
 
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.dto.request.CommentRegisterRequest;
+import cotato.growingpain.comment.repository.CommentLikeRepository;
 import cotato.growingpain.comment.repository.CommentRepository;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
@@ -9,6 +10,8 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
+import cotato.growingpain.replycomment.domain.entity.ReplyComment;
+import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final CommentLikeRepository commentLikeRepository;
+    private final ReplyCommentRepository replyCommentRepository;
 
     @Transactional
     public void registerComment(CommentRegisterRequest request, Long postId, Long memberId) {
@@ -45,5 +50,23 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<Comment> getCommentsByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId, Long memberId) {
+        Comment comment = commentRepository.findByIdAndMemberId(commentId, memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if(comment.isDeleted()) {
+            throw new AppException(ErrorCode.ALREADY_DELETED);
+        }
+
+        List<ReplyComment> replyComments = replyCommentRepository.findByCommentId(commentId);
+        replyCommentRepository.deleteAll(replyComments);
+
+        commentLikeRepository.deleteByCommentId(commentId);
+
+        comment.deleteComment();
+        commentRepository.save(comment);
     }
 }

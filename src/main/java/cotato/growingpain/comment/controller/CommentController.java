@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,5 +67,16 @@ public class CommentController {
         List<Comment> comments = commentService.getCommentsByPostId(postId);
         CommentListResponse commentListResponse = new CommentListResponse(comments);
         return Response.createSuccess("포스트별 댓글 목록 조회 완료", commentListResponse);
+    }
+
+    @Operation(summary = "댓글 삭제", description = "댓글 삭제를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> deleteComment(@PathVariable Long commentId,
+                                  @AuthenticationPrincipal Long memberId) {
+        log.info("댓글 삭제한 memberId: {}", memberId);
+        commentService.deleteComment(commentId, memberId);
+        return Response.createSuccessWithNoData("댓글 삭제 완료");
     }
 }

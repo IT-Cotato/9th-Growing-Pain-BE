@@ -79,4 +79,9 @@ public class Comment extends BaseTimeEntity {
             throw new AppException(ErrorCode.CANNOT_LIKE_OWN_COMMENT);
         }
     }
+
+    public void deleteComment() {
+        isDeleted = true;
+        likeCount = 0;
+    }
 }
