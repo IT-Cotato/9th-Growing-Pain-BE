@@ -32,7 +32,8 @@ public enum ErrorCode {
     REPLY_COMMENT_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 답글의 좋아요 정보를 찾을 수 없습니다."),
     CANNOT_LIKE_OWN_POST(HttpStatus.BAD_REQUEST, "본인이 작성한 게시글은 좋아요를 누를 수 없습니다."),
     CANNOT_LIKE_OWN_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 댓글은 좋아요를 누를 수 없습니다."),
-    CANNOT_LIKE_OWN_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 답글은 좋아요를 누를 수 없습니다.");
+    CANNOT_LIKE_OWN_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 답글은 좋아요를 누를 수 없습니다."),
+    ALREADY_DELETED(HttpStatus.CONFLICT, "이미 삭제되었습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

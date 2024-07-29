@@ -1,11 +1,17 @@
 package cotato.growingpain.post.service;
 
+import cotato.growingpain.comment.domain.entity.Comment;
+import cotato.growingpain.comment.repository.CommentRepository;
+import cotato.growingpain.common.exception.AppException;
+import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.dto.request.PostRegisterRequest;
+import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
+import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
+    private final ReplyCommentRepository replyCommentRepository;
 
     @Transactional
     public void registerPost(PostRegisterRequest request, Long memberId) {
@@ -44,5 +53,26 @@ public class PostService {
 
     public List<Post> getAllPosts() {
         return postRepository.findAll();
+    }
+
+    @Transactional
+    public void deletePost(Long postId, Long memberId) {
+        Post post = postRepository.findByIdAndMemberId(postId, memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        if(post.isDeleted()) {
+            throw new AppException(ErrorCode.ALREADY_DELETED);
+        }
+
+        List<Comment> comments = commentRepository.findByPostId(postId);
+        for (Comment comment : comments) {
+            replyCommentRepository.deleteAllByCommentId(comment.getId());
+            commentRepository.delete(comment);
+        }
+
+        postLikeRepository.deleteByPostId(postId);
+
+        post.deletePost();
+        postRepository.save(post);
     }
 }
