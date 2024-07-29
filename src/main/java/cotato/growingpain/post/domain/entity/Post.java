@@ -1,6 +1,7 @@
 package cotato.growingpain.post.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
@@ -28,6 +29,7 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Post extends BaseTimeEntity {
 
     @Id
