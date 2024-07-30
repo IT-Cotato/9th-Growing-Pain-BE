@@ -11,6 +11,7 @@ import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -21,10 +22,11 @@ public class ReplyCommentLikeService {
     private final ReplyCommentLikeRepository replyCommentLikeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void registerLike(Long replyCommentId, Long memberId) {
-        ReplyComment replyComment = replyCommentRepository.findById(replyCommentId)
-                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        ReplyComment replyComment = findReplyCommentById(replyCommentId);
+        Member member = findMemberById(memberId);
+
         replyComment.validateReplyCommentLike(member);
 
         if (replyCommentLikeRepository.existsByMemberAndReplyComment(member, replyComment)) {
@@ -38,15 +40,28 @@ public class ReplyCommentLikeService {
         replyCommentLikeRepository.save(replyCommentLike);
     }
 
+    @Transactional
     public void deleteLike(Long replyCommentId, Long replyCommentLikeId, Long memberId) {
 
-        ReplyComment replyComment = replyCommentRepository.findById(replyCommentId)
-                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
-        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findById(replyCommentLikeId)
-                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        ReplyComment replyComment = findReplyCommentById(replyCommentId);
+        ReplyCommentLike replyCommentLike = findReplyCommentLikeById(replyCommentLikeId);
+        Member member = findMemberById(memberId);
 
         replyCommentLike.decreaseReplyCommentLikeCount(member, replyComment);
         replyCommentLikeRepository.save(replyCommentLike);
+    }
+
+    private ReplyComment findReplyCommentById(Long replyCommentId) {
+        return replyCommentRepository.findById(replyCommentId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
+    }
+
+    private ReplyCommentLike findReplyCommentLikeById(Long replyCommentLikeId) {
+        return replyCommentLikeRepository.findById(replyCommentLikeId)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.getReferenceById(memberId);
     }
 }

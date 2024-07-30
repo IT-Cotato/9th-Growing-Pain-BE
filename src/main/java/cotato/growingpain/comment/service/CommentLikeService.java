@@ -11,6 +11,7 @@ import cotato.growingpain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -21,10 +22,10 @@ public class CommentLikeService {
     private final CommentLikeRepository commentLikeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void registerLike(Long commentId, Long memberId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        Comment comment = findCommentId(commentId);
+        Member member = findMemberById(memberId);
         comment.validateCommentLike(member);
 
         if (commentLikeRepository.existsByMemberAndComment(member, comment)) {
@@ -38,15 +39,24 @@ public class CommentLikeService {
         commentLikeRepository.save(commentLike);
     }
 
+    @Transactional
     public void deleteLike(Long commentId, Long commentLikeId, Long memberId) {
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+        Comment comment = findCommentId(commentId);
         CommentLike commentLike = commentLikeRepository.findById(commentLikeId)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_LIKE_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        Member member = findMemberById(memberId);
 
         commentLike.decreaseCommentLikeCount(member, comment);
         commentLikeRepository.save(commentLike);
+    }
+
+    private Comment findCommentId(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.getReferenceById(memberId);
     }
 }

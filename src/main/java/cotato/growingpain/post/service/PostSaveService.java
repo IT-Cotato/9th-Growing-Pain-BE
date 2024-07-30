@@ -26,10 +26,8 @@ public class PostSaveService {
 
     @Transactional
     public void savePost(Long postId, Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        Member member = findByMemberId(memberId);
+        Post post = findByPostId(postId);
 
         if (postSaveRepository.existsByMemberIdAndPostId(memberId, postId)) {
             throw new AppException(ErrorCode.ALREADY_SAVED);
@@ -56,5 +54,15 @@ public class PostSaveService {
         return postSaves.stream()
                 .map(PostSave::getPost)
                 .collect(Collectors.toList());
+    }
+
+    private Post findByPostId(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    private Member findByMemberId(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

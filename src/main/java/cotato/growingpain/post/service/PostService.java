@@ -57,8 +57,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long postId, Long memberId) {
-        Post post = postRepository.findByIdAndMemberId(postId, memberId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        Post post = findByPostIdAndMemberId(postId, memberId);
 
         if(post.isDeleted()) {
             throw new AppException(ErrorCode.ALREADY_DELETED);
@@ -78,8 +77,7 @@ public class PostService {
 
     @Transactional
     public void updatePost(Long postId, PostRequest request, Long memberId) {
-        Post post = postRepository.findByIdAndMemberId(postId, memberId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        Post post = findByPostIdAndMemberId(postId, memberId);
 
         if (post.isDeleted()) {
             throw new AppException(ErrorCode.ALREADY_DELETED);
@@ -87,5 +85,10 @@ public class PostService {
 
         post.updatePost(request.title(), request.content(), request.imageUrl(), request.category());
         postRepository.save(post);
+    }
+
+    private Post findByPostIdAndMemberId(Long postId, Long memberId) {
+        return postRepository.findByIdAndMemberId(postId, memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
     }
 }
