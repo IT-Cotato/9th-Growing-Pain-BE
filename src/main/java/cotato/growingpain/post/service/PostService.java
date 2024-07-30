@@ -8,7 +8,7 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
-import cotato.growingpain.post.dto.request.PostRegisterRequest;
+import cotato.growingpain.post.dto.request.PostRequest;
 import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
@@ -30,7 +30,7 @@ public class PostService {
     private final ReplyCommentRepository replyCommentRepository;
 
     @Transactional
-    public void registerPost(PostRegisterRequest request, Long memberId) {
+    public void registerPost(PostRequest request, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
         PostCategory parentCategory = request.category().getParent();
         postRepository.save(
@@ -73,6 +73,19 @@ public class PostService {
         postLikeRepository.deleteByPostId(postId);
 
         post.deletePost();
+        postRepository.save(post);
+    }
+
+    @Transactional
+    public void updatePost(Long postId, PostRequest request, Long memberId) {
+        Post post = postRepository.findByIdAndMemberId(postId, memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+
+        if (post.isDeleted()) {
+            throw new AppException(ErrorCode.ALREADY_DELETED);
+        }
+
+        post.updatePost(request.title(), request.content(), request.imageUrl(), request.category());
         postRepository.save(post);
     }
 }

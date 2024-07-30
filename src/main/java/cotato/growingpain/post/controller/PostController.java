@@ -3,7 +3,7 @@ package cotato.growingpain.post.controller;
 import cotato.growingpain.common.Response;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
-import cotato.growingpain.post.dto.request.PostRegisterRequest;
+import cotato.growingpain.post.dto.request.PostRequest;
 import cotato.growingpain.post.dto.response.PostListResponse;
 import cotato.growingpain.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,7 +40,7 @@ public class PostController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> registerPost(@Valid @RequestBody PostRegisterRequest request,
+    public Response<?> registerPost(@Valid @RequestBody PostRequest request,
                                     @AuthenticationPrincipal Long memberId) {
         log.info("게시글 등록한 memberId: {}", memberId);
         postService.registerPost(request, memberId);
@@ -83,5 +83,17 @@ public class PostController {
         log.info("게시글 삭제한 memberId: {}", memberId);
         postService.deletePost(postId, memberId);
         return Response.createSuccessWithNoData("포스트 삭제 완료");
+    }
+
+    @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/update/{postId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Response<?> registerPost(@PathVariable Long postId,
+                                    @RequestBody PostRequest request,
+                                    @AuthenticationPrincipal Long memberId) {
+        log.info("게시글 {} 수정한 memberId: {}", postId, memberId);
+        postService.updatePost(postId, request,memberId);
+        return Response.createSuccessWithNoData("포스트 수정 완료");
     }
 }
