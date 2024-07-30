@@ -76,7 +76,7 @@ public class PostController {
 
     @Operation(summary = "게시글 삭제", description = "게시글 삭제를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/{postId}/delete")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> deletePost(@PathVariable Long postId,
                                   @AuthenticationPrincipal Long memberId) {
@@ -87,7 +87,7 @@ public class PostController {
 
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/update/{postId}")
+    @PostMapping("/{postId}/update")
     @ResponseStatus(HttpStatus.CREATED)
     public Response<?> registerPost(@PathVariable Long postId,
                                     @RequestBody PostRequest request,

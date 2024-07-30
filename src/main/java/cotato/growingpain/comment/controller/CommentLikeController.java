@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "댓글 좋아요", description = "댓글 좋아요 관련된 api")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment/{comment-id}/likes")
+@RequestMapping("/api/comment/{commentId}/likes")
 @Slf4j
 public class CommentLikeController {
 
@@ -31,7 +31,7 @@ public class CommentLikeController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response<?> registerLike(@PathVariable("comment-id") Long commentId,
+    public Response<?> registerLike(@PathVariable Long commentId,
                                     @AuthenticationPrincipal Long memberId) {
 
         commentLikeService.registerLike(commentId, memberId);
@@ -41,10 +41,10 @@ public class CommentLikeController {
 
     @Operation(summary = "댓글 좋아요 취소", description = "댓글 좋아요 취소를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @DeleteMapping("/{comment-like-id}")
+    @DeleteMapping("/{commentLikeId}")
     @ResponseStatus(HttpStatus.OK)
-    public Response<?> deleteLike(@PathVariable("comment-id") Long commentId,
-                                  @PathVariable("comment-like-id") Long commentLikeId,
+    public Response<?> deleteLike(@PathVariable Long commentId,
+                                  @PathVariable Long commentLikeId,
                                   @AuthenticationPrincipal Long memberId) {
 
         commentLikeService.deleteLike(commentId, commentLikeId, memberId);
