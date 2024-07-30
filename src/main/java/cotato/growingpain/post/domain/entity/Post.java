@@ -18,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -101,5 +102,14 @@ public class Post extends BaseTimeEntity {
     public void deletePost() {
         isDeleted = true;
         likeCount = 0;
+    }
+
+    public void updatePost(String title, String content, String imageUrl, PostCategory category) {
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.subCategory = category;
+        this.parentCategory = category.getParent();
+        this.modifiedAt = LocalDateTime.now();
     }
 }
