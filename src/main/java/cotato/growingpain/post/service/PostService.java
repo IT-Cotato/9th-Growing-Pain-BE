@@ -63,7 +63,7 @@ public class PostService {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        List<Comment> comments = commentRepository.findByPostId(postId);
+        List<Comment> comments = commentRepository.findCommentsByPostId(postId);
         for (Comment comment : comments) {
             replyCommentRepository.deleteAllByCommentId(comment.getId());
             commentRepository.delete(comment);

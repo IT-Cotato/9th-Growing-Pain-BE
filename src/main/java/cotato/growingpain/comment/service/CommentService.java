@@ -2,6 +2,8 @@ package cotato.growingpain.comment.service;
 
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.dto.request.CommentRegisterRequest;
+import cotato.growingpain.comment.dto.response.CommentListResponse;
+import cotato.growingpain.comment.dto.response.CommentResponse;
 import cotato.growingpain.comment.repository.CommentLikeRepository;
 import cotato.growingpain.comment.repository.CommentRepository;
 import cotato.growingpain.common.exception.AppException;
@@ -43,13 +45,15 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Comment> getCommentsByMemberId(Long memberId) {
-        return commentRepository.findByMemberId(memberId);
+    public CommentListResponse getCommentsByMemberId(Long memberId) {
+        List<CommentResponse> commentList = commentRepository.findByMemberId(memberId);
+        return new CommentListResponse(commentList);
     }
 
     @Transactional(readOnly = true)
-    public List<Comment> getCommentsByPostId(Long postId) {
-        return commentRepository.findByPostId(postId);
+    public CommentListResponse getCommentsByPostId(Long postId) {
+        List<CommentResponse> commentList = commentRepository.findByPostId(postId);
+        return new CommentListResponse(commentList);
     }
 
     @Transactional
