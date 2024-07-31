@@ -1,6 +1,5 @@
 package cotato.growingpain.comment.controller;
 
-import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.dto.request.CommentRegisterRequest;
 import cotato.growingpain.comment.dto.response.CommentListResponse;
 import cotato.growingpain.comment.service.CommentService;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -50,22 +48,20 @@ public class CommentController {
 
     @Operation(summary = "사용자별 댓글 목록 조회", description = "사용자별 댓글 목록 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
-    @GetMapping("/{memberId}")
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response<CommentListResponse> getCommentsByMemberId(@AuthenticationPrincipal Long memberId) {
-        List<Comment> comments = commentService.getCommentsByMemberId(memberId);
+        CommentListResponse commentListResponse = commentService.getCommentsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
-        CommentListResponse commentListResponse = new CommentListResponse(comments);
         return Response.createSuccess("사용자 댓글 목록 조회 완료", commentListResponse);
     }
 
     @Operation(summary = "포스트별 댓글 목록 조회", description = "한 포스트내의 댓글 목록 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
-    @GetMapping("")
+    @GetMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public Response<CommentListResponse> getCommentsByPostId(@RequestParam Long postId) {
-        List<Comment> comments = commentService.getCommentsByPostId(postId);
-        CommentListResponse commentListResponse = new CommentListResponse(comments);
+    public Response<CommentListResponse> getCommentsByPostId(@PathVariable Long postId) {
+        CommentListResponse commentListResponse = commentService.getCommentsByPostId(postId);
         return Response.createSuccess("포스트별 댓글 목록 조회 완료", commentListResponse);
     }
 

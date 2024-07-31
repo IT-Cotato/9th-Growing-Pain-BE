@@ -11,6 +11,7 @@ import cotato.growingpain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -21,11 +22,11 @@ public class PostLikeService {
     private final PostLikeRepository postLikeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void registerLike(Long postId, Long memberId) {
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        Post post = findPostId(postId);
+        Member member = findMemberById(memberId);
         post.validatePostLike(member);
 
         if (postLikeRepository.existsByMemberAndPost(member, post)) {
@@ -39,15 +40,24 @@ public class PostLikeService {
         postLikeRepository.save(postLike);
     }
 
+    @Transactional
     public void deleteLike(Long postId, Long postLikeId, Long memberId) {
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+        Post post = findPostId(postId);
         PostLike postLike = postLikeRepository.findById(postLikeId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_LIKE_NOT_FOUND));
-        Member member = memberRepository.getReferenceById(memberId);
+        Member member = findMemberById(memberId);
 
         postLike.decreasePostLikeCount(member, post);
         postLikeRepository.save(postLike);
+    }
+
+    private Post findPostId(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.getReferenceById(memberId);
     }
 }
