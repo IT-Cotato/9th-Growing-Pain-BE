@@ -49,7 +49,7 @@ public class PostController {
 
     @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = PostListResponse.class)))
-    @GetMapping("/{memberId}")
+    @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response<PostListResponse> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
         List<Post> posts = postService.getPostsByMemberId(memberId);
