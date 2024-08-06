@@ -68,8 +68,11 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault(value = "'GENERAL'")
     private MemberRole memberRole;
 
+    @Column(name = "profile_image_url") // 프로필 사진 URL
+    private String profileImageUrl;
+
     @Column(name = "oauth_id")
-    private String oauthId;
+    private String oauth2Id;
 
 //    @Column(name = "auth_provider")
 //    private AuthProvider authProvider;
@@ -115,12 +118,13 @@ public class Member extends BaseTimeEntity {
     private List<JobPost> jobPosts = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String name, String field, String belong) {
+    public Member(String email, String password, String name, String field, String belong, String profileImageUrl) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.field = field;
         this.belong = belong;
+        this.profileImageUrl = profileImageUrl;
     }
 
     public void updatePassword(String newPassword) {

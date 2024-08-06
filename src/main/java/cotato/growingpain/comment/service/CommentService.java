@@ -14,6 +14,7 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,20 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CommentListResponse getCommentsByPostId(Long postId) {
         List<CommentResponse> commentList = commentRepository.findByPostId(postId);
+        return new CommentListResponse(commentList);
+    }
+
+    @Transactional(readOnly = true)
+    public CommentListResponse getAllPostsAndCommentsByMemberId(Long memberId) {
+        // 사용자가 작성한 모든 포스트 조회
+        List<Post> posts = postRepository.findByMemberId(memberId);
+        List<CommentResponse> commentList = new ArrayList<>();
+
+        // 각 포스트의 댓글 조회
+        for (Post post : posts) {
+            List<CommentResponse> comments = commentRepository.findByPostId(post.getId());
+            commentList.addAll(comments);
+        }
         return new CommentListResponse(commentList);
     }
 
