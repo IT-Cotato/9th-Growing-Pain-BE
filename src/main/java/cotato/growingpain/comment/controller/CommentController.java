@@ -65,10 +65,14 @@ public class CommentController {
         return Response.createSuccess("포스트별 댓글 목록 조회 완료", commentListResponse);
     }
 
-//    @Operation(summary = "사용자가 작성한 포스트내의 모든 댓글 목록 조회", description = "사용자가 작성한 포스트내의 모든 댓글 목록 조회를 위한 메소드")
-//    @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
-//    @GetMapping("/{memberId}")
-//    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "사용자가 작성한 포스트내의 모든 댓글 목록 조회", description = "사용자가 작성한 포스트내의 모든 댓글 목록 조회를 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = CommentListResponse.class)))
+    @GetMapping("/member")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<CommentListResponse> getAllPostsAndCommentsByMemberId(@AuthenticationPrincipal Long memberId) {
+        CommentListResponse commentListResponse = commentService.getAllPostsAndCommentsByMemberId(memberId);
+        return Response.createSuccess("포스트별 댓글 목록 조회 완료", commentListResponse);
+    }
 
     @Operation(summary = "댓글 삭제", description = "댓글 삭제를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
