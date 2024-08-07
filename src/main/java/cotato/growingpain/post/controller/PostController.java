@@ -47,7 +47,7 @@ public class PostController {
         return Response.createSuccessWithNoData("포스트 생성 완료");
     }
 
-    @Operation(summary = "게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
+    @Operation(summary = "사용자별 게시글 목록 조회", description = "사용자가 등록한 게시글의 목록 전체 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = PostListResponse.class)))
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
