@@ -72,18 +72,38 @@ public class AuthService {
                     .build();
             memberRepository.save(newMember);
 
-        // 회원가입 성공 후 토큰 생성 및 반환
-        Token token = jwtTokenProvider.createToken(newMember.getId(), request.email(), "ROLE_USER");
+            // 회원가입 성공 후 토큰 생성 및 반환
+            return jwtTokenProvider.createToken(newMember.getId(), request.email(), "ROLE_INCOMPLETE");
+        }
+    }
 
-        // 리프레시 토큰을 데이터베이스에 저장
-        RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity
-                .builder()
-                .email(request.email())
-                .refreshToken(token.getRefreshToken())
-                .build();
-        refreshTokenRepository.save(refreshTokenEntity);
+    @Transactional
+    public void completeSignup(CompleteSignupRequest request, String accessToken) {
 
-        return token;
+        // 토큰에서 이메일 추출
+        String email = jwtTokenProvider.getEmail(accessToken);
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+
+        log.info("추가 정보 입력 받는 이메일: {}", email);
+
+        // 필드를 개별적으로 업데이트
+        member.updateName(request.name());
+        member.updateField(request.field());
+        member.updateBelong(request.belong());
+        member.updateJob(request.job());
+        member.updateRole(MemberRole.MEMBER);
+
+        // 변경된 엔티티를 저장
+        memberRepository.save(member);
+    }
+
+    public String resolveAccessToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.replace("Bearer ", ""); // "Bearer " 부분을 제거
+        }
+        return null;
     }
 
     @Transactional

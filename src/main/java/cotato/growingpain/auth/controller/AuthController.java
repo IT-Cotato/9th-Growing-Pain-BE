@@ -45,6 +45,17 @@ public class AuthController {
         return Response.createSuccess("회원가입 및 로그인 완료", token);
     }
 
+    @Operation(summary = "추가 정보 입력", description = "최초 로그인 (회원가입) 시 추가 정보를 입력하는 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/complete-signup")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> completeSignup(@RequestBody @Valid CompleteSignupRequest request,
+                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        String accessToken = authService.resolveAccessToken(authorizationHeader);
+        authService.completeSignup(request, accessToken);
+        return Response.createSuccessWithNoData("추가 정보 입력 완료");
+    }
+
     @Operation(summary = "리이슈", description = "리이슈 및 토큰 재발급을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = ReissueResponse.class)))
     @PostMapping("/reissue")
