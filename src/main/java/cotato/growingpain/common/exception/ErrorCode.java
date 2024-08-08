@@ -18,6 +18,7 @@ public enum ErrorCode {
     LOGIN_FAIL(HttpStatus.UNAUTHORIZED, "로그인 요청에 실패했습니다."),
     JWT_NOT_EXISTS(HttpStatus.BAD_REQUEST, "Jwt 토큰이 존재하지 않습니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 유저를 찾을 수 없습니다."),
+    USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"이미 존재하는 유저입니다."),
     TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "토큰이 만료되었습니다."),
     REFRESH_TOKEN_NOT_EXIST(HttpStatus.UNAUTHORIZED, "해당 refresh 토큰이 DB에 존재하지 않습니다."),
     REISSUE_FAIL(HttpStatus.UNAUTHORIZED, "액세스 토큰 재발급 요청 실패"),
