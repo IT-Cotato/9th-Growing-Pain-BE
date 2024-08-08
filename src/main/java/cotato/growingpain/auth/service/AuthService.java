@@ -2,20 +2,23 @@ package cotato.growingpain.auth.service;
 
 import cotato.growingpain.auth.domain.BlackList;
 import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
-import cotato.growingpain.auth.dto.request.JoinRequest;
+import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
+import cotato.growingpain.auth.dto.request.LoginRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
 import cotato.growingpain.auth.dto.response.ChangePasswordResponse;
 import cotato.growingpain.auth.repository.BlackListRepository;
-import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
-import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
+import cotato.growingpain.member.domain.MemberRole;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.security.RefreshTokenRepository;
+import cotato.growingpain.security.jwt.JwtTokenProvider;
 import cotato.growingpain.security.jwt.RefreshTokenEntity;
 import cotato.growingpain.security.jwt.Token;
-import cotato.growingpain.security.jwt.JwtTokenProvider;
+import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
+import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -37,22 +40,37 @@ public class AuthService {
     private final BlackListRepository blackListRepository;
 
     @Transactional
-    public Token createLoginInfo(JoinRequest request) {
+    public Token createLoginInfo(LoginRequest request) {
 
-        validateService.checkPasswordPattern(request.password());
-        validateService.checkDuplicateEmail(request.email());
-        validateService.checkDuplicateNickName(request.name());
+        Optional<Member> existingMember = memberRepository.findByEmail(request.email());
 
-        log.info("[회원 가입 서비스]: {}", request.email());
+        if (existingMember.isPresent()) {
 
-        Member newMember = Member.builder()
-                .password(bCryptPasswordEncoder.encode(request.password()))
-                .email(request.email())
-                .name(request.name())
-                .field(request.field())
-                .belong(request.belong())
-                .build();
-        memberRepository.save(newMember);
+            // 기존 회원이 존재하면 로그인 처리
+            Member member = existingMember.get();
+            if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
+                throw new IllegalArgumentException("이메일 또는 비밀번호가 올바르지 않습니다.");
+            }
+
+            if (member.getName() == null) {
+                return jwtTokenProvider.createToken(member.getId(), request.email(), "ROLE_INCOMPLETE");
+            }
+
+            // 토큰 생성 및 반환
+            return jwtTokenProvider.createToken(member.getId(), request.email(), "ROLE_MEMBER");
+        }
+        else {
+            // 신규 회원일 경우 회원가입 처리
+            validateService.checkPasswordPattern(request.password());
+            validateService.checkDuplicateEmail(request.email());
+
+            log.info("[회원 가입 서비스]: {}", request.email());
+
+            Member newMember = Member.builder()
+                    .password(bCryptPasswordEncoder.encode(request.password()))
+                    .email(request.email())
+                    .build();
+            memberRepository.save(newMember);
 
         // 회원가입 성공 후 토큰 생성 및 반환
         Token token = jwtTokenProvider.createToken(newMember.getId(), request.email(), "ROLE_USER");
