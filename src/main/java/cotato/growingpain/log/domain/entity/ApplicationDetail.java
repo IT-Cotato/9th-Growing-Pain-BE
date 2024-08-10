@@ -2,6 +2,7 @@ package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import cotato.growingpain.log.domain.dto.ApplicationDetailRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,6 +66,15 @@ public class ApplicationDetail {
         this.jobApplication = jobApplication;
         if (!jobApplication.getApplicationDetails().contains(this)) {
             jobApplication.getApplicationDetails().add(this);
+        }
+    }
+
+    public void update(ApplicationDetailRequestDTO detailRequestDTO) {
+        if (detailRequestDTO.title() != null) {
+            this.title = detailRequestDTO.title();
+        }
+        if (detailRequestDTO.content() != null) {
+            this.content = detailRequestDTO.content();
         }
     }
 
