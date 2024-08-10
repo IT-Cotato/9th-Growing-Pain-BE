@@ -2,6 +2,10 @@ package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import cotato.growingpain.log.domain.dto.JobApplicationRequestDTO;
+import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
+import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
+import cotato.growingpain.log.domain.repository.JobApplicationRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -77,5 +81,31 @@ public class JobPost {
     public void addJobApplication(JobApplication jobApplication) {
         this.jobApplications.add(jobApplication);
         jobApplication.setJobPost(this);
+    }
+
+    public void update(JobPostRequestDTO jobPostRequestDTO, JobApplicationRepository jobApplicationRepository,
+                       ApplicationDetailRepository applicationDetailRepository) {
+        if (jobPostRequestDTO.companyName() != null) {
+            this.companyName = jobPostRequestDTO.companyName();
+        }
+        if (jobPostRequestDTO.jobPart() != null) {
+            this.jobPart = jobPostRequestDTO.jobPart();
+        }
+
+        // JobApplication 리스트 업데이트
+        for (JobApplicationRequestDTO jobApplicationRequestDTO : jobPostRequestDTO.jobApplications()) {
+            if (jobApplicationRequestDTO.id() != null) {
+                // 기존 JobApplication 업데이트
+                JobApplication jobApplication = jobApplicationRepository.findById(jobApplicationRequestDTO.id())
+                        .orElseThrow(() -> new RuntimeException(
+                                "JobApplication not found with ID: " + jobApplicationRequestDTO.id()));
+                jobApplication.update(jobApplicationRequestDTO, applicationDetailRepository);
+            } else {
+                // 새로운 JobApplication 추가
+                JobApplication jobApplication = jobApplicationRequestDTO.toEntity(this.member, this);
+                jobApplicationRepository.save(jobApplication);
+                this.addJobApplication(jobApplication);
+            }
+        }
     }
 }

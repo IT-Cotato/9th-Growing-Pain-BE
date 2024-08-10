@@ -28,7 +28,7 @@ public class JobService {
 
     private final ApplicationDetailRepository applicationDetailRepository;
 
-    public JobPost createJobPost(JobPostRequestDTO jobPostRequest, Long memberId) {
+    public JobPost createJobPost(final JobPostRequestDTO jobPostRequest, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
@@ -57,12 +57,27 @@ public class JobService {
     }
 
     public List<JobPostRetrieveDTO> jobPostRetrieveList(final Long memberId) {
-        log.debug("Fetching job posts for member ID: {}", memberId);
-
         List<JobPost> jobPosts = jobPostRepository.findByMemberId(memberId);
 
         return jobPosts.stream()
                 .map(JobPostRetrieveDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public JobPost updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
+
+        if (!jobPost.getMember().getId().equals(memberId)) {
+            throw new RuntimeException("Member not authoriuzed to update this JobPost");
+        }
+
+        jobPost.update(request, jobApplicationRepository, applicationDetailRepository);
+        JobPost updatedJobPost = jobPostRepository.save(jobPost);
+
+        log.info("Updated JobPost with ID: {}", jobPostId);
+
+        return updatedJobPost;
+
     }
 }

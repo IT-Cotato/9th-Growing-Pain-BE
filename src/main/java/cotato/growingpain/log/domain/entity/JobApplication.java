@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.domain.ApplicationType;
 import cotato.growingpain.log.domain.Result;
+import cotato.growingpain.log.domain.dto.ApplicationDetailRequestDTO;
+import cotato.growingpain.log.domain.dto.JobApplicationRequestDTO;
+import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -131,4 +134,38 @@ public class JobApplication extends BaseTimeEntity {
         }
     }
 
+    public void update(JobApplicationRequestDTO jobApplicationRequestDTO,
+                       ApplicationDetailRepository applicationDetailRepository) {
+        if (jobApplicationRequestDTO.applicationType() != null) {
+            this.applicationType = ApplicationType.valueOf(jobApplicationRequestDTO.applicationType());
+        }
+        if (jobApplicationRequestDTO.place() != null) {
+            this.place = jobApplicationRequestDTO.place();
+        }
+        if (jobApplicationRequestDTO.result() != null) {
+            this.result = Result.valueOf(jobApplicationRequestDTO.result());
+        }
+        if (jobApplicationRequestDTO.applicationStartDate() != null) {
+            this.applicationStartDate = jobApplicationRequestDTO.applicationStartDate();
+        }
+        if (jobApplicationRequestDTO.applicationCloseDate() != null) {
+            this.applicationCloseDate = jobApplicationRequestDTO.applicationCloseDate();
+        }
+
+        // ApplicationDetail 업데이트
+        for (ApplicationDetailRequestDTO detailRequestDTO : jobApplicationRequestDTO.applicationDetails()) {
+            if (detailRequestDTO.id() != null) {
+                // 기존 ApplicationDetail 업데이트
+                ApplicationDetail applicationDetail = applicationDetailRepository.findById(detailRequestDTO.id())
+                        .orElseThrow(() -> new RuntimeException(
+                                "ApplicationDetail not found with ID: " + detailRequestDTO.id()));
+                applicationDetail.update(detailRequestDTO);
+            } else {
+                // 새로운 ApplicationDetail 추가
+                ApplicationDetail applicationDetail = detailRequestDTO.toEntity(this);
+                applicationDetailRepository.save(applicationDetail);
+                this.addApplicationDetail(applicationDetail);
+            }
+        }
+    }
 }
