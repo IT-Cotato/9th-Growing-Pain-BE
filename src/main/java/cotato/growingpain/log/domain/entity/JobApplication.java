@@ -10,6 +10,7 @@ import cotato.growingpain.log.domain.dto.ApplicationDetailRequestDTO;
 import cotato.growingpain.log.domain.dto.JobApplicationRequestDTO;
 import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
 import cotato.growingpain.member.domain.entity.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -91,7 +92,7 @@ public class JobApplication extends BaseTimeEntity {
     @JsonBackReference
     private JobPost jobPost;
 
-    @OneToMany(mappedBy = "jobApplication")
+    @OneToMany(mappedBy = "jobApplication", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<ApplicationDetail> applicationDetails = new ArrayList<>();
 

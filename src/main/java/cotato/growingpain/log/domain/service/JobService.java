@@ -78,6 +78,12 @@ public class JobService {
         log.info("Updated JobPost with ID: {}", jobPostId);
 
         return updatedJobPost;
+    }
 
+    public void deleteJobPost(Long jobPostId, Long memberId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new RuntimeException("JobPost not found with ID" + jobPostId));
+
+        jobPostRepository.delete(jobPost);
     }
 }

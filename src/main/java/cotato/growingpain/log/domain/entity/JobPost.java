@@ -7,6 +7,7 @@ import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
 import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
 import cotato.growingpain.log.domain.repository.JobApplicationRepository;
 import cotato.growingpain.member.domain.entity.Member;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,7 +56,7 @@ public class JobPost {
     @JsonIgnore
     private Member member;
 
-    @OneToMany(mappedBy = "jobPost")
+    @OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<JobApplication> jobApplications = new ArrayList<>();
 
