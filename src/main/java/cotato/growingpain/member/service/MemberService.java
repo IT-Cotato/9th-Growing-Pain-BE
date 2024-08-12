@@ -22,7 +22,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
-        member.updateMemberInfo(request.name(), request.field(), request.belong(), request.job());
+        member.updateDefaultInfo(request.field(), request.belong(), request.job());
         memberRepository.save(member);
     }
 }

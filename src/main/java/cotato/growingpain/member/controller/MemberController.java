@@ -30,7 +30,7 @@ public class MemberController {
 
     @Operation(summary = "기본 정보 수정", description = "정보 업데이트 중 기본 정보 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/update-default-info")
+    @PatchMapping("/update-default-info")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> registerPost(@Valid @RequestBody UpdateDefaultInfoRequest request,
                                     @AuthenticationPrincipal Long memberId) {

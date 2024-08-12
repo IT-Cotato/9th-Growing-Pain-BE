@@ -149,4 +149,10 @@ public class Member extends BaseTimeEntity {
     public void updateRole(MemberRole memberRole) {
         this.memberRole = memberRole;
     }
+
+    public void updateDefaultInfo( String field, String belong, MemberJob job){
+            this.field = field;
+            this.belong = belong;
+            this.job = job;
+    }
 }
