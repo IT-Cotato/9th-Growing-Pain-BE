@@ -132,10 +132,18 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateMemberInfo(String name, String field, String belong, MemberJob job) {
-       this.name = name;
-       this.field = field;
-       this.belong = belong;
-       this.job = job;
+        if (name != null) {
+            this.name = name;
+        }
+        if (field != null) {
+            this.field = field;
+        }
+        if (belong != null) {
+            this.belong = belong;
+        }
+        if (job != null) {
+            this.job = job;
+        }
     }
 
     public void updateRole(MemberRole memberRole) {
