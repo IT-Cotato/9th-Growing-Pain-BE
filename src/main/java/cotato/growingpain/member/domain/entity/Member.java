@@ -131,21 +131,11 @@ public class Member extends BaseTimeEntity {
         this.password = newPassword;
     }
 
-    // 추가 정보를 받기 위한 코드
-    public void updateName(String name) {
-        this.name = name;
-    }
-
-    public void updateField(String field) {
-        this.field = field;
-    }
-
-    public void updateBelong(String belong) {
-        this.belong = belong;
-    }
-
-    public void updateJob(MemberJob job) {
-        this.job = job;
+    public void updateMemberInfo(String name, String field, String belong, MemberJob job) {
+       this.name = name;
+       this.field = field;
+       this.belong = belong;
+       this.job = job;
     }
 
     public void updateRole(MemberRole memberRole) {
