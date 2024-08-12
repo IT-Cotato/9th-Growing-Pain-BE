@@ -1,29 +1,21 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_PATH}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+  profiles:
+    active: local # dev: 개발 서버, local: 로컬 개발
 
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+  output:
+    ansi:
+      enabled: always #콘솔 색상
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web:
+          servlet:
+            handler:
+              SimpleUrlHandlerMapping: WARN
+      springframework.security: DEBUG
 
-jwt:
-  secretKey: ${JWT_SECRET_KEY}
-  access:
-    expiration: 1800000 #30분
-
-  refresh:
-    expiration: 86400000 #7일
-
+    com:
+      fasterxml.jackson: DEBUG
