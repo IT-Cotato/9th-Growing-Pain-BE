@@ -10,11 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 public record JobPostListRetrieveDTO(
         String companyName,
         String jobPart,
-        List<JobApplicationRetrieveDTO> jobApplications
+        List<JobApplicationListRetrieveDTO> jobApplications
 ) {
     public static JobPostListRetrieveDTO fromEntity(JobPost jobPost) {
-        List<JobApplicationRetrieveDTO> jobApplicationList = jobPost.getJobApplications().stream()
-                .map(JobApplicationRetrieveDTO::fromEntity)
+        List<JobApplicationListRetrieveDTO> jobApplicationList = jobPost.getJobApplications().stream()
+                .map(JobApplicationListRetrieveDTO::fromEntity)
                 .toList();
 
         return JobPostListRetrieveDTO.builder()

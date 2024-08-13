@@ -6,12 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Builder
-public record JobApplicationRetrieveDTO(
+public record JobApplicationListRetrieveDTO(
         String applicationType,
         String status,
         String endDate
 ) {
-    public static JobApplicationRetrieveDTO fromEntity(JobApplication jobApplication) {
+    public static JobApplicationListRetrieveDTO fromEntity(JobApplication jobApplication) {
         String status = jobApplication.getResult().toString();
 
         if ("DOCUMENT".equals(jobApplication.getApplicationType().toString())) {
@@ -20,7 +20,7 @@ public record JobApplicationRetrieveDTO(
             status = jobApplication.getResult() != null ? jobApplication.getResult().toString() : null;
         }
 
-        return JobApplicationRetrieveDTO.builder()
+        return JobApplicationListRetrieveDTO.builder()
                 .applicationType(String.valueOf(jobApplication.getApplicationType()))
                 .status(status)
                 .endDate(jobApplication.getApplicationCloseDate())
