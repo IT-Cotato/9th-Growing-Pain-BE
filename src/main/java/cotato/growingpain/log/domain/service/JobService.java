@@ -28,7 +28,7 @@ public class JobService {
 
     private final ApplicationDetailRepository applicationDetailRepository;
 
-    public JobPost createJobPost(final JobPostRequestDTO jobPostRequest, Long memberId) {
+    public void createJobPost(final JobPostRequestDTO jobPostRequest, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
@@ -53,7 +53,6 @@ public class JobService {
             });
         });
 
-        return savedJobPost;
     }
 
     public List<JobPostRetrieveDTO> jobPostRetrieveList(final Long memberId) {
