@@ -64,7 +64,7 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
-    public JobPost updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
+    public void updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
                 .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
 
@@ -73,11 +73,10 @@ public class JobService {
         }
 
         jobPost.update(request, jobApplicationRepository, applicationDetailRepository);
-        JobPost updatedJobPost = jobPostRepository.save(jobPost);
+        jobPostRepository.save(jobPost);
 
         log.info("Updated JobPost with ID: {}", jobPostId);
 
-        return updatedJobPost;
     }
 
     public void deleteJobPost(Long jobPostId, Long memberId) {
