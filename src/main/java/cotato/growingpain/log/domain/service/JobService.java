@@ -2,6 +2,7 @@ package cotato.growingpain.log.domain.service;
 
 import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
+import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
@@ -61,6 +62,13 @@ public class JobService {
         return jobPosts.stream()
                 .map(JobPostListRetrieveDTO::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public JobPostRetrieveDTO getJobPostById(final Long jobPostId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
+
+        return JobPostRetrieveDTO.fromEntity(jobPost);
     }
 
 
