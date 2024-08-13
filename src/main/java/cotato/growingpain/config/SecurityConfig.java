@@ -7,7 +7,6 @@ import cotato.growingpain.security.jwt.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -59,8 +58,7 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers(HttpMethod.GET, REQUIRED_AUTHENTICATE).authenticated()
-                        .requestMatchers(HttpMethod.GET).permitAll()
+                        .requestMatchers(REQUIRED_AUTHENTICATE).hasAuthority("ROLE_MEMBER")
                         .anyRequest().authenticated()
                 );
         return http.build();
