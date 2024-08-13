@@ -19,6 +19,7 @@ import cotato.growingpain.security.jwt.RefreshTokenEntity;
 import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
+import cotato.growingpain.security.oauth.AuthProvider;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +76,7 @@ public class AuthService {
                     .password(bCryptPasswordEncoder.encode(request.password()))
                     .email(request.email())
                     .memberRole(MemberRole.PENDING)
+                    .authProvider(AuthProvider.GENERAL)
                     .build();
             memberRepository.save(member);
 

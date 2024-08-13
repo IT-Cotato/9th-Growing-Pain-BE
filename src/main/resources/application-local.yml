@@ -30,8 +30,7 @@ jwt:
   refresh:
     expiration: 86400000 #7일
 
-logging:
-  discord:
-    webhook-url: ${DISCORD_WEBHOOK_URL}
-  config: classpath:logback-test.xml
-
+#logging:
+#  discord:
+#    webhook-url: ${DISCORD_WEBHOOK_URL}
+#  config: classpath:logback-test.xml
