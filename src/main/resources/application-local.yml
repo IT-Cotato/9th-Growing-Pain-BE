@@ -33,5 +33,5 @@ jwt:
 logging:
   discord:
     webhook-url: ${DISCORD_WEBHOOK_URL}
-  config: classpath:logback-test.xml
+  config: classpath:logback.xml
 
