@@ -6,7 +6,7 @@
         <property resource="application-dev.yml"/>
         <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
         <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
-            <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+            <webhookUrl>${DISCORD_WEBHOOK_URL}</webhookUrl>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] [%-5level] %logger{36} - %msg%n```%ex{full}```</pattern>
             </layout>
