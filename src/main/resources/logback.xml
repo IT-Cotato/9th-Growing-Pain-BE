@@ -5,6 +5,7 @@
     <springProfile name="dev">
         <property resource="application-dev.yml"/>
         <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
+
         <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
             <webhookUrl>${DISCORD_WEBHOOK_URL}</webhookUrl>
             <layout class="ch.qos.logback.classic.PatternLayout">
