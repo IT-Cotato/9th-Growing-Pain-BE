@@ -7,17 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Builder
-public record JobPostRetrieveDTO(
+public record JobPostListRetrieveDTO(
         String companyName,
         String jobPart,
         List<JobApplicationRetrieveDTO> jobApplications
 ) {
-    public static JobPostRetrieveDTO fromEntity(JobPost jobPost) {
+    public static JobPostListRetrieveDTO fromEntity(JobPost jobPost) {
         List<JobApplicationRetrieveDTO> jobApplicationList = jobPost.getJobApplications().stream()
                 .map(JobApplicationRetrieveDTO::fromEntity)
                 .toList();
 
-        return JobPostRetrieveDTO.builder()
+        return JobPostListRetrieveDTO.builder()
                 .companyName(jobPost.getCompanyName())
                 .jobPart(jobPost.getJobPart())
                 .jobApplications(jobApplicationList)

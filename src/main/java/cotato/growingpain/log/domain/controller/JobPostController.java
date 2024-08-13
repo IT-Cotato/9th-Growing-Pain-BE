@@ -1,8 +1,8 @@
 package cotato.growingpain.log.domain.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
-import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.domain.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,9 +47,9 @@ public class JobPostController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<JobPostRetrieveDTO>> getJobPosts(
+    public Response<List<JobPostListRetrieveDTO>> getJobPosts(
             @AuthenticationPrincipal Long memberId) {
-        List<JobPostRetrieveDTO> retrievedJobPost = jobService.jobPostRetrieveList(memberId);
+        List<JobPostListRetrieveDTO> retrievedJobPost = jobService.jobPostRetrieveList(memberId);
         return Response.createSuccess("지원 현황 조회 완료", retrievedJobPost);
     }
 

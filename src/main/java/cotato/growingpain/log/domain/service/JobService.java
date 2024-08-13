@@ -1,7 +1,7 @@
 package cotato.growingpain.log.domain.service;
 
+import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
-import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
@@ -55,13 +55,14 @@ public class JobService {
 
     }
 
-    public List<JobPostRetrieveDTO> jobPostRetrieveList(final Long memberId) {
+    public List<JobPostListRetrieveDTO> jobPostRetrieveList(final Long memberId) {
         List<JobPost> jobPosts = jobPostRepository.findByMemberId(memberId);
 
         return jobPosts.stream()
-                .map(JobPostRetrieveDTO::fromEntity)
+                .map(JobPostListRetrieveDTO::fromEntity)
                 .collect(Collectors.toList());
     }
+
 
     public void updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
