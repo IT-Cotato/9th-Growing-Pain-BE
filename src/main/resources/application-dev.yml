@@ -33,4 +33,4 @@ jwt:
 logging:
   discord:
     webhook-url: ${DISCORD_WEBHOOK_URL}
-  config: classpath:logback-spring.xml
+  config: classpath:logback.xml
