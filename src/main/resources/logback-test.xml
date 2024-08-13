@@ -4,7 +4,7 @@
     <springProperty name="DISCORD_WEBHOOK_URI" source="logging.discord.webhook-uri"/>
     <appender name="DISCORD" class="com.github.napstr.logback.DiscordAppender">
         <webhookUri>
-            https://discord.com/api/webhooks/1271821219796353087/b3PiRYHFr-eU1_Eh-QlhF4jNfnzD9D2MDVDuRuhao7x7J51DYUWvLLgqDc2p4CHVrkbW
+            ${DISCORD_WEBHOOK_URI}
         </webhookUri>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg %n</pattern>
