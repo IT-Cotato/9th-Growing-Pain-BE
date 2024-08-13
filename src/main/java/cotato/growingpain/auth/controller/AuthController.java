@@ -1,9 +1,11 @@
 package cotato.growingpain.auth.controller;
 
+import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
 import cotato.growingpain.auth.dto.request.LoginRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
-import cotato.growingpain.auth.dto.response.ChangePasswordResponse;
+import cotato.growingpain.auth.dto.request.ResetPasswordRequest;
+import cotato.growingpain.auth.dto.response.ResetPasswordResponse;
 import cotato.growingpain.auth.service.AuthService;
 import cotato.growingpain.common.Response;
 import cotato.growingpain.security.jwt.Token;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -74,11 +77,21 @@ public class AuthController {
     }
 
     @Operation(summary = "비밀번호 초기화", description = "비밀번호 찾기 및 초기화를 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = ChangePasswordResponse.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = ResetPasswordResponse.class)))
+    @PostMapping("/reset-password")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<ResetPasswordResponse> resetPassword(@RequestBody ResetPasswordRequest request){
+        log.info("[비밀번호 초기화 컨트롤러]: {}", request.email());
+        return Response.createSuccess("비밀번호 초기화 완료",authService.resetPassword(request));
+    }
+
+    @Operation(summary = "비밀번호 변경", description = "로그인된 사용자가 비밀번호를 변경하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/change-password")
     @ResponseStatus(HttpStatus.OK)
-    public Response<ChangePasswordResponse> changePassword(@RequestBody cotato.growingpain.auth.dto.request.ChangePasswordRequest request){
-        log.info("[비밀번호 초기화 컨트롤러]: {}", request.email());
-        return Response.createSuccess("비밀번호 초기화 완료",authService.changePassword(request));
+    public Response<?> changePassword(@RequestBody @Valid ChangePasswordRequest request,
+                                      @AuthenticationPrincipal Long memberId) {
+        authService.changePassword(request, memberId);
+        return Response.createSuccessWithNoData("비밀번호 변경 완료");
     }
 }

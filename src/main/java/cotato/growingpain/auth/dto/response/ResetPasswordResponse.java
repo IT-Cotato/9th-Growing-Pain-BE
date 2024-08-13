@@ -1,6 +1,6 @@
 package cotato.growingpain.auth.dto.response;
 
-public record ChangePasswordResponse(
+public record ResetPasswordResponse(
     String password
 ) {
 }

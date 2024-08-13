@@ -5,7 +5,8 @@ import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
 import cotato.growingpain.auth.dto.request.LoginRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
-import cotato.growingpain.auth.dto.response.ChangePasswordResponse;
+import cotato.growingpain.auth.dto.request.ResetPasswordRequest;
+import cotato.growingpain.auth.dto.response.ResetPasswordResponse;
 import cotato.growingpain.auth.repository.BlackListRepository;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
@@ -152,7 +153,7 @@ public class AuthService {
     }
 
     @Transactional
-    public ChangePasswordResponse changePassword(ChangePasswordRequest request){
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request){
 
         Member member = memberRepository.findByEmail(request.email())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
@@ -170,7 +171,29 @@ public class AuthService {
 
         log.info("비밀번호 업데이트 완료: {}", member.getEmail());
 
-        return new ChangePasswordResponse(tempPassword);
+        return new ResetPasswordResponse(tempPassword);
+    }
+
+    @Transactional
+    public void changePassword(ChangePasswordRequest request, Long memberId) {
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 기존 비밀번호 검증
+        if (!bCryptPasswordEncoder.matches(request.currentPassword(), member.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        // 새 비밀번호 패턴 검증
+        validateService.checkPasswordPattern(request.newPassword());
+
+        // 새 비밀번호로 업데이트
+        String encodedNewPassword = bCryptPasswordEncoder.encode(request.newPassword());
+        member.updatePassword(encodedNewPassword);
+        memberRepository.save(member);
+
+        log.info("비밀번호 번경 완료: {}", memberId);
     }
 
     private String generateTemporaryPassword() {
