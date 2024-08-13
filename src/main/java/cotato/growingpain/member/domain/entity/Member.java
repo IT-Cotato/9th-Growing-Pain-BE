@@ -118,9 +118,10 @@ public class Member extends BaseTimeEntity {
     private List<JobPost> jobPosts = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String name, String field, String belong, String profileImageUrl) {
+    public Member(String email, String password, MemberRole memberRole, String name, String field, String belong, String profileImageUrl) {
         this.email = email;
         this.password = password;
+        this.memberRole = memberRole;
         this.name = name;
         this.field = field;
         this.belong = belong;

@@ -52,12 +52,12 @@ public class AuthService {
                 throw new IllegalArgumentException("이메일 또는 비밀번호가 올바르지 않습니다.");
             }
 
-            if (member.getName() == null) {
-                return jwtTokenProvider.createToken(member.getId(), request.email(), "ROLE_INCOMPLETE");
+            if (member.getMemberRole() == MemberRole.PENDING) {
+                return jwtTokenProvider.createToken(member.getId(), request.email(), MemberRole.PENDING.getDescription());
             }
 
             // 토큰 생성 및 반환
-            return jwtTokenProvider.createToken(member.getId(), request.email(), "ROLE_MEMBER");
+            return jwtTokenProvider.createToken(member.getId(), request.email(), MemberRole.MEMBER.getDescription());
         }
         else {
             // 신규 회원일 경우 회원가입 처리
@@ -69,16 +69,17 @@ public class AuthService {
             Member newMember = Member.builder()
                     .password(bCryptPasswordEncoder.encode(request.password()))
                     .email(request.email())
+                    .memberRole(MemberRole.PENDING)
                     .build();
             memberRepository.save(newMember);
 
             // 회원가입 성공 후 토큰 생성 및 반환
-            return jwtTokenProvider.createToken(newMember.getId(), request.email(), "ROLE_INCOMPLETE");
+            return jwtTokenProvider.createToken(newMember.getId(), request.email(),MemberRole.PENDING.getDescription());
         }
     }
 
     @Transactional
-    public void completeSignup(CompleteSignupRequest request, String accessToken) {
+    public Token completeSignup(CompleteSignupRequest request, String accessToken) {
 
         // 토큰에서 이메일 추출
         String email = jwtTokenProvider.getEmail(accessToken);
@@ -88,12 +89,16 @@ public class AuthService {
 
         log.info("추가 정보 입력 받는 이메일: {}", email);
 
-        // 필드를 개별적으로 업데이트
-        member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
-        member.updateRole(MemberRole.MEMBER);
+        if(member.getMemberRole() == MemberRole.PENDING){
+            // 필드를 개별적으로 업데이트
+            member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
+            member.updateRole(MemberRole.MEMBER);
+            memberRepository.save(member);
 
-        // 변경된 엔티티를 저장
-        memberRepository.save(member);
+            return jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.MEMBER.getDescription());
+        }
+        log.info("memberRole = {}", member.getMemberRole());
+        return null;
     }
 
     public String resolveAccessToken(String authorizationHeader) {
