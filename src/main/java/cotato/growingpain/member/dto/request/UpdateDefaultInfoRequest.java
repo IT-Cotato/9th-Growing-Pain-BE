@@ -1,13 +1,10 @@
-package cotato.growingpain.auth.dto.request;
+package cotato.growingpain.member.dto.request;
 
 import cotato.growingpain.member.domain.MemberJob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record CompleteSignupRequest (
-
-        @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
-        String name,
+public record UpdateDefaultInfoRequest (
 
         @NotBlank(message = "분야는 필수 입력 항목입니다.")
         String field,

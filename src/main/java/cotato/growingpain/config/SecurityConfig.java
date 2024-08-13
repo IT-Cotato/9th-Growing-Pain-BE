@@ -35,7 +35,8 @@ public class SecurityConfig {
             "/api/post/**",
             "/api/comment/**",
             "/api/reply-comment/**",
-            "/api/job-posts/**"
+            "/api/job-posts/**",
+            "/api/member/**"
     };
 
     @Bean

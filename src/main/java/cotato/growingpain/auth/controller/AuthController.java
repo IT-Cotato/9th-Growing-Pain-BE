@@ -52,8 +52,7 @@ public class AuthController {
     public Response<?> completeSignup(@RequestBody @Valid CompleteSignupRequest request,
                                       @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         String accessToken = authService.resolveAccessToken(authorizationHeader);
-        authService.completeSignup(request, accessToken);
-        return Response.createSuccessWithNoData("추가 정보 입력 완료");
+        return Response.createSuccess("추가 정보 입력 완료", authService.completeSignup(request, accessToken));
     }
 
     @Operation(summary = "리이슈", description = "리이슈 및 토큰 재발급을 위한 메소드")
