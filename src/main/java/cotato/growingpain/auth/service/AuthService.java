@@ -50,15 +50,19 @@ public class AuthService {
             // 기존 회원이 존재하면 로그인 처리
             Member member = existingMember.get();
             if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
-                throw new IllegalArgumentException("이메일 또는 비밀번호가 올바르지 않습니다.");
+                throw new AppException(ErrorCode.INVALID_PASSWORD);
             }
 
-            if (member.getMemberRole() == MemberRole.PENDING) {
-                return jwtTokenProvider.createToken(member.getId(), request.email(), MemberRole.PENDING.getDescription());
-            }
+            String role = (member.getMemberRole() == MemberRole.PENDING)
+                    ? MemberRole.PENDING.getDescription()
+                    : MemberRole.MEMBER.getDescription();
 
-            // 토큰 생성 및 반환
-            return jwtTokenProvider.createToken(member.getId(), request.email(), MemberRole.MEMBER.getDescription());
+            Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), role);
+
+            // RefreshTokenEntity 저장 또는 업데이트
+            saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
+
+            return token;
         }
         else {
             // 신규 회원일 경우 회원가입 처리
@@ -67,15 +71,19 @@ public class AuthService {
 
             log.info("[회원 가입 서비스]: {}", request.email());
 
-            Member newMember = Member.builder()
+            Member member = Member.builder()
                     .password(bCryptPasswordEncoder.encode(request.password()))
                     .email(request.email())
                     .memberRole(MemberRole.PENDING)
                     .build();
-            memberRepository.save(newMember);
+            memberRepository.save(member);
 
             // 회원가입 성공 후 토큰 생성 및 반환
-            return jwtTokenProvider.createToken(newMember.getId(), request.email(),MemberRole.PENDING.getDescription());
+            Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.PENDING.getDescription());
+
+            saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
+
+            return token;
         }
     }
 
@@ -96,7 +104,12 @@ public class AuthService {
             member.updateRole(MemberRole.MEMBER);
             memberRepository.save(member);
 
-            return jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.MEMBER.getDescription());
+            Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.MEMBER.getDescription());
+
+            // RefreshTokenEntity 저장
+            saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
+
+            return token;
         }
         log.info("memberRole = {}", member.getMemberRole());
         return null;
@@ -127,25 +140,36 @@ public class AuthService {
             throw new AppException(ErrorCode.TOKEN_EXPIRED);
         }
 
-        if (!request.equals(request)) {
+        if (!findToken.getRefreshToken().equals(request.refreshToken())) {
             log.warn("[쿠키로 들어온 토큰과 DB의 토큰이 일치하지 않음.]");
             throw new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST);
         }
 
         Token token = jwtTokenProvider.createToken(memberId, email, role);
-        findToken.updateRefreshToken(token.getRefreshToken());
-        refreshTokenRepository.save(findToken);
 
         log.info("재발급 된 액세스 토큰: {}", token.getAccessToken());
         log.info("재발급 된 refresh 토큰: {}", token.getRefreshToken());
+
+        // RefreshTokenEntity 업데이트
+        saveOrUpdateRefreshToken(email, token.getRefreshToken());
         return ReissueResponse.from(token.getAccessToken(),token.getRefreshToken());
+    }
+
+    private void saveOrUpdateRefreshToken(String email, String refreshToken) {
+        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(email)
+                .orElse(RefreshTokenEntity.builder().email(email).build());
+
+        refreshTokenEntity.updateRefreshToken(refreshToken);
+        refreshTokenRepository.save(refreshTokenEntity);
     }
 
     @Transactional
     public void logout(LogoutRequest request) {
-        String memberId = jwtTokenProvider.getEmail(request.refreshToken());
-        RefreshTokenEntity existRefreshToken = refreshTokenRepository.findById(memberId)
+        String email = jwtTokenProvider.getEmail(request.refreshToken());
+
+        RefreshTokenEntity existRefreshToken = refreshTokenRepository.findById(email)
                 .orElseThrow(() -> new AppException(ErrorCode.REFRESH_TOKEN_NOT_EXIST));
+
         setBlackList(request.refreshToken());
         log.info("[로그아웃 된 리프레시 토큰 블랙리스트 처리]");
         refreshTokenRepository.delete(existRefreshToken);
