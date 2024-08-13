@@ -1,6 +1,7 @@
 package cotato.growingpain.member.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.member.dto.request.AdditionalInformationRequest;
 import cotato.growingpain.member.dto.request.UpdateDefaultInfoRequest;
 import cotato.growingpain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,5 +39,16 @@ public class MemberController {
         log.info("기본 정보를 수정한 memberId: {}", memberId);
         memberService.updateDefaultInfo(request, memberId);
         return Response.createSuccessWithNoData("[마이페이지] 기본 정보 수정 완료");
+    }
+
+    @Operation(summary = "추가 정보 등록", description = "정보 업데이트 중 추가 정보 등록을 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PostMapping("/additional-info")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> registerPost(@Valid @RequestBody AdditionalInformationRequest request,
+                                    @AuthenticationPrincipal Long memberId) {
+        log.info("추가 정보를 등록한 memberId: {}", memberId);
+        memberService.registerAdditionalInfo(request, memberId);
+        return Response.createSuccessWithNoData("[마이페이지] 추가 정보 입력 완료");
     }
 }

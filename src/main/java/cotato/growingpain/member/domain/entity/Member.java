@@ -77,6 +77,27 @@ public class Member extends BaseTimeEntity {
 //    @Column(name = "auth_provider")
 //    private AuthProvider authProvider;
 
+    @Column(name = "education_background")
+    private String educationBackground;
+
+    @Column(name = "skill")
+    private String skill;
+
+    @Column(name = "activity_history")
+    private String activityHistory;
+
+    @Column(name = "award")
+    private String award;
+
+    @Column(name = "language_score")
+    private String languageScore;
+
+    @Column(name = "career")
+    private String career;
+
+    @Column(name = "about_me")
+    private String aboutMe;
+
     @OneToMany(mappedBy = "member")
     @JsonIgnore
     private List<JobApplication> jobApplications = new ArrayList<>();
@@ -143,9 +164,19 @@ public class Member extends BaseTimeEntity {
         this.memberRole = memberRole;
     }
 
-    public void updateDefaultInfo( String field, String belong, MemberJob job){
+    public void updateDefaultInfo(String field, String belong, MemberJob job){
         this.field = field;
         this.belong = belong;
         this.job = job;
+    }
+
+    public void updateAdditionalInfo(String educationBackground, String skill, String activityHistory, String award, String languageScore, String career, String aboutMe) {
+        this.educationBackground = educationBackground;
+        this.skill = skill;
+        this.activityHistory = activityHistory;
+        this.award = award;
+        this.languageScore = languageScore;
+        this.career = career;
+        this.aboutMe = aboutMe;
     }
 }
