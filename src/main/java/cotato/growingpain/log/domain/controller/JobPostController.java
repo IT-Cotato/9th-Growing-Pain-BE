@@ -1,6 +1,7 @@
 package cotato.growingpain.log.domain.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
 import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobPost;
@@ -43,14 +44,24 @@ public class JobPostController {
         return Response.createSuccess("지원 현황 등록 완료", null);
     }
 
-    @Operation(summary = "지원 현황 조회", description = "지원 현황을 조회하기 위한 메소드")
+    @Operation(summary = "지원 현황 리스트 조회", description = "지원 현황 리스트를 조회하기 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<JobPostRetrieveDTO>> getJobPosts(
+    public Response<List<JobPostListRetrieveDTO>> getJobPosts(
             @AuthenticationPrincipal Long memberId) {
-        List<JobPostRetrieveDTO> retrievedJobPost = jobService.jobPostRetrieveList(memberId);
-        return Response.createSuccess("지원 현황 조회 완료", retrievedJobPost);
+        List<JobPostListRetrieveDTO> retrievedJobPostList = jobService.jobPostRetrieveList(memberId);
+        return Response.createSuccess("지원 현황 리스트 조회 완료", retrievedJobPostList);
+    }
+
+    @Operation(summary = "지원 현황 상세 삭제", description = "지원 현황 상세 정보를 조회하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{jobPostId}")
+    public Response<JobPostRetrieveDTO> getJobPostById(@PathVariable Long jobPostId) {
+
+        JobPostRetrieveDTO retrievedJobPost = jobService.getJobPostById(jobPostId);
+        return Response.createSuccess("지원 현황 상세 조회 완료", retrievedJobPost);
     }
 
     @Operation(summary = "지원 현황 내용 수정", description = "지원 현황을 수정하기 위한 메소드")
@@ -77,4 +88,6 @@ public class JobPostController {
 
         return Response.createSuccess("지원 현황 삭제 완료", null);
     }
+
+
 }

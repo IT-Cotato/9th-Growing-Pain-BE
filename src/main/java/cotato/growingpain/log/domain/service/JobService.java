@@ -1,5 +1,6 @@
 package cotato.growingpain.log.domain.service;
 
+import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
 import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobApplication;
@@ -28,7 +29,7 @@ public class JobService {
 
     private final ApplicationDetailRepository applicationDetailRepository;
 
-    public JobPost createJobPost(final JobPostRequestDTO jobPostRequest, Long memberId) {
+    public void createJobPost(final JobPostRequestDTO jobPostRequest, Long memberId) {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
@@ -53,18 +54,25 @@ public class JobService {
             });
         });
 
-        return savedJobPost;
     }
 
-    public List<JobPostRetrieveDTO> jobPostRetrieveList(final Long memberId) {
+    public List<JobPostListRetrieveDTO> jobPostRetrieveList(final Long memberId) {
         List<JobPost> jobPosts = jobPostRepository.findByMemberId(memberId);
 
         return jobPosts.stream()
-                .map(JobPostRetrieveDTO::fromEntity)
+                .map(JobPostListRetrieveDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    public JobPost updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
+    public JobPostRetrieveDTO getJobPostById(final Long jobPostId) {
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
+
+        return JobPostRetrieveDTO.fromEntity(jobPost);
+    }
+
+
+    public void updateJobApplication(Long jobPostId, JobPostRequestDTO request, Long memberId) {
         JobPost jobPost = jobPostRepository.findById(jobPostId)
                 .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
 
@@ -73,11 +81,10 @@ public class JobService {
         }
 
         jobPost.update(request, jobApplicationRepository, applicationDetailRepository);
-        JobPost updatedJobPost = jobPostRepository.save(jobPost);
+        jobPostRepository.save(jobPost);
 
         log.info("Updated JobPost with ID: {}", jobPostId);
 
-        return updatedJobPost;
     }
 
     public void deleteJobPost(Long jobPostId, Long memberId) {
