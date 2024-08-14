@@ -34,4 +34,3 @@ logging:
   discord:
     webhook-uri: ${DISCORD_WEBHOOK_URI}
   config: classpath:logback-test.xml
-

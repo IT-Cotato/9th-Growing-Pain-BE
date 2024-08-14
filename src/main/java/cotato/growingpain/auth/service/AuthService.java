@@ -19,6 +19,7 @@ import cotato.growingpain.security.jwt.RefreshTokenEntity;
 import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
+import cotato.growingpain.security.oauth.AuthProvider;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class AuthService {
     private final BlackListRepository blackListRepository;
 
     @Transactional
-    public Token createLoginInfo(LoginRequest request) {
+    public Token createLoginInfo(AuthProvider authProvider, LoginRequest request) {
 
         Optional<Member> existingMember = memberRepository.findByEmail(request.email());
 
@@ -67,16 +68,11 @@ public class AuthService {
         else {
             // 신규 회원일 경우 회원가입 처리
             validateService.checkPasswordPattern(request.password());
-            validateService.checkDuplicateEmail(request.email());
+            //validateService.checkDuplicateEmail(request.email());
 
             log.info("[회원 가입 서비스]: {}", request.email());
 
-            Member member = Member.builder()
-                    .password(bCryptPasswordEncoder.encode(request.password()))
-                    .email(request.email())
-                    .memberRole(MemberRole.PENDING)
-                    .build();
-            memberRepository.save(member);
+            Member member = registerMember(authProvider, request.email(), request.password());
 
             // 회원가입 성공 후 토큰 생성 및 반환
             Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.PENDING.getDescription());
@@ -85,6 +81,19 @@ public class AuthService {
 
             return token;
         }
+    }
+
+    private Member registerMember(AuthProvider authProvider, String email, String password) {
+        Member.MemberBuilder memberBuilder = Member.builder()
+                .email(email)
+                .authProvider(authProvider)
+                .memberRole(MemberRole.PENDING);
+
+        if (authProvider == AuthProvider.GENERAL) {
+            memberBuilder.password(bCryptPasswordEncoder.encode(password));
+        }
+
+        return memberRepository.save(memberBuilder.build());
     }
 
     @Transactional
@@ -101,6 +110,7 @@ public class AuthService {
         if(member.getMemberRole() == MemberRole.PENDING){
             // 필드를 개별적으로 업데이트
             member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
+            //validateService.checkDuplicateNickName(request.name());
             member.updateRole(MemberRole.MEMBER);
             memberRepository.save(member);
 

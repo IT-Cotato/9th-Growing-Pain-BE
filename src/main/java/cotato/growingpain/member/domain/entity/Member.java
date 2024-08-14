@@ -14,6 +14,7 @@ import cotato.growingpain.post.domain.entity.PostLike;
 import cotato.growingpain.post.domain.entity.PostSave;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.domain.entity.ReplyCommentLike;
+import cotato.growingpain.security.oauth.AuthProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -74,8 +75,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "oauth_id")
     private String oauth2Id;
 
-//    @Column(name = "auth_provider")
-//    private AuthProvider authProvider;
+    @Column(name = "auth_provider")
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     @Column(name = "education_background")
     private String educationBackground;
@@ -139,14 +141,12 @@ public class Member extends BaseTimeEntity {
     private List<JobPost> jobPosts = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, MemberRole memberRole, String name, String field, String belong, String profileImageUrl) {
+    public Member(String email, String password, String oauth2Id, AuthProvider authProvider, MemberRole memberRole) {
         this.email = email;
         this.password = password;
+        this.oauth2Id = oauth2Id;
+        this.authProvider = authProvider;
         this.memberRole = memberRole;
-        this.name = name;
-        this.field = field;
-        this.belong = belong;
-        this.profileImageUrl = profileImageUrl;
     }
 
     public void updatePassword(String newPassword) {
