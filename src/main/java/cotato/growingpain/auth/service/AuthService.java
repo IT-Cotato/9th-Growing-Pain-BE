@@ -110,6 +110,7 @@ public class AuthService {
         if(member.getMemberRole() == MemberRole.PENDING){
             // 필드를 개별적으로 업데이트
             member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
+            validateService.checkDuplicateNickName(request.name()); //닉네임 중복 체크
             member.updateRole(MemberRole.MEMBER);
             memberRepository.save(member);
 
