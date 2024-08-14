@@ -54,7 +54,7 @@ public class JobPostController {
         return Response.createSuccess("지원 현황 리스트 조회 완료", retrievedJobPostList);
     }
 
-    @Operation(summary = "지원 현황 상세 삭제", description = "지원 현황 상세 정보를 조회하기 위한 메소드")
+    @Operation(summary = "지원 현황 상세 조회", description = "지원 현황 상세 정보를 조회하기 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{jobPostId}")
@@ -88,6 +88,5 @@ public class JobPostController {
 
         return Response.createSuccess("지원 현황 삭제 완료", null);
     }
-
 
 }
