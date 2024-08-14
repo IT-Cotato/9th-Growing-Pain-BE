@@ -1,7 +1,7 @@
-package cotato.growingpain.log.domain.dto;
+package cotato.growingpain.log.dto;
 
-import cotato.growingpain.log.domain.entity.ApplicationDetail;
-import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.entity.ApplicationDetail;
+import cotato.growingpain.log.entity.JobApplication;
 
 public record ApplicationDetailRequestDTO(
         Long id,

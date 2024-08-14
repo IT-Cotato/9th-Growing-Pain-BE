@@ -1,6 +1,6 @@
-package cotato.growingpain.log.domain.repository;
+package cotato.growingpain.log.repository;
 
-import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.entity.JobApplication;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

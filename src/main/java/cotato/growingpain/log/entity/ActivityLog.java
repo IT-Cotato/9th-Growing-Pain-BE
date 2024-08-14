@@ -1,8 +1,8 @@
-package cotato.growingpain.log.domain.entity;
+package cotato.growingpain.log.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.log.domain.ActivityType;
+import cotato.growingpain.log.ActivityType;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

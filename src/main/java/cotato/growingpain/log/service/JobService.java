@@ -1,13 +1,13 @@
-package cotato.growingpain.log.domain.service;
+package cotato.growingpain.log.service;
 
-import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
-import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
-import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
-import cotato.growingpain.log.domain.entity.JobApplication;
-import cotato.growingpain.log.domain.entity.JobPost;
-import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
-import cotato.growingpain.log.domain.repository.JobApplicationRepository;
-import cotato.growingpain.log.domain.repository.JobPostRepository;
+import cotato.growingpain.log.dto.JobPostListRetrieveDTO;
+import cotato.growingpain.log.dto.JobPostRequestDTO;
+import cotato.growingpain.log.dto.JobPostRetrieveDTO;
+import cotato.growingpain.log.entity.JobApplication;
+import cotato.growingpain.log.entity.JobPost;
+import cotato.growingpain.log.repository.ApplicationDetailRepository;
+import cotato.growingpain.log.repository.JobApplicationRepository;
+import cotato.growingpain.log.repository.JobPostRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import java.util.List;

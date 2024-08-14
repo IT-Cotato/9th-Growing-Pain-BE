@@ -1,6 +1,6 @@
-package cotato.growingpain.log.domain.dto;
+package cotato.growingpain.log.dto;
 
-import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.entity.JobApplication;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 

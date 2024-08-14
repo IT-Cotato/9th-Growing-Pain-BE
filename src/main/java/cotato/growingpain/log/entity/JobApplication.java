@@ -1,14 +1,14 @@
-package cotato.growingpain.log.domain.entity;
+package cotato.growingpain.log.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.log.domain.ApplicationType;
-import cotato.growingpain.log.domain.Result;
-import cotato.growingpain.log.domain.dto.ApplicationDetailRequestDTO;
-import cotato.growingpain.log.domain.dto.JobApplicationRequestDTO;
-import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
+import cotato.growingpain.log.ApplicationType;
+import cotato.growingpain.log.Result;
+import cotato.growingpain.log.dto.ApplicationDetailRequestDTO;
+import cotato.growingpain.log.dto.JobApplicationRequestDTO;
+import cotato.growingpain.log.repository.ApplicationDetailRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

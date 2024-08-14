@@ -1,4 +1,4 @@
-package cotato.growingpain.log.domain.service;
+package cotato.growingpain.log.service;
 
 import cotato.growingpain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.domain.entity.CommentLike;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.log.domain.entity.ActivityLog;
-import cotato.growingpain.log.domain.entity.JobApplication;
-import cotato.growingpain.log.domain.entity.JobPost;
+import cotato.growingpain.log.entity.ActivityLog;
+import cotato.growingpain.log.entity.JobApplication;
+import cotato.growingpain.log.entity.JobPost;
 import cotato.growingpain.member.domain.MemberJob;
 import cotato.growingpain.member.domain.MemberProfileShowing;
 import cotato.growingpain.member.domain.MemberRole;
@@ -170,13 +170,14 @@ public class Member extends BaseTimeEntity {
         this.memberRole = memberRole;
     }
 
-    public void updateDefaultInfo(String field, String belong, MemberJob job){
+    public void updateDefaultInfo(String field, String belong, MemberJob job) {
         this.field = field;
         this.belong = belong;
         this.job = job;
     }
 
-    public void updateAdditionalInfo(String educationBackground, String skill, String activityHistory, String award, String languageScore, String career, String aboutMe) {
+    public void updateAdditionalInfo(String educationBackground, String skill, String activityHistory, String award,
+                                     String languageScore, String career, String aboutMe) {
         this.educationBackground = educationBackground;
         this.skill = skill;
         this.activityHistory = activityHistory;
