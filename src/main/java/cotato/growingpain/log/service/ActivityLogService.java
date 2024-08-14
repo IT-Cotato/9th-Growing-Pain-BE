@@ -8,6 +8,7 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,15 +30,15 @@ public class ActivityLogService {
     }
 
     @Transactional
-    public void createActivityLog(final ActivityLogDTO activityLogDto, Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
-        ActivityLog activityLog = activityLogDto.toEntity(member);
-        activityLogRepository.save(activityLog);
+    public List<ActivityLog> retrieveActivityLogsByMemberId(Long memberId) {
+        return activityLogRepository.findByMemberId(memberId);
     }
 
     @Transactional
-    public List<ActivityLog> retrieveActivityLogsByMemberId(Long memberId) {
-        return activityLogRepository.findByMemberId(memberId);
+    public ActivityLogDTO retrieveActivityLogById(Long activityLogId) {
+        ActivityLog activityLog = activityLogRepository.findById(activityLogId)
+                .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
+
+        return ActivityLogDTO.fromEntity(activityLog);
     }
 }
