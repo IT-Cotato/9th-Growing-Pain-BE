@@ -8,6 +8,7 @@ import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.member.domain.MemberJob;
+import cotato.growingpain.member.domain.MemberProfileShowing;
 import cotato.growingpain.member.domain.MemberRole;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
@@ -53,6 +54,11 @@ public class Member extends BaseTimeEntity {
     @Email
     @Column(name = "member_email")
     private String email;
+
+    @Column(name = "member_profile_showing")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault(value = "'PUBLIC'")
+    private MemberProfileShowing memberProfileShowing;
 
     @Column(name = "member_field")  //분야
     private String field;
@@ -178,5 +184,9 @@ public class Member extends BaseTimeEntity {
         this.languageScore = languageScore;
         this.career = career;
         this.aboutMe = aboutMe;
+    }
+
+    public void updateProfilePublic(MemberProfileShowing memberProfileShowing) {
+        this.memberProfileShowing = memberProfileShowing;
     }
 }
