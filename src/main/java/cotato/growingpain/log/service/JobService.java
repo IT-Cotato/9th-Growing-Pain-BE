@@ -34,13 +34,7 @@ public class JobService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
-        log.info("Found member with ID: {}", member.getId());
-        log.info(jobPostRequest.jobApplications().toString());
-
         JobPost jobPost = jobPostRequest.toEntity(member);
-
-        log.info("Creating job post with job part: {}", jobPost.getJobPart());
-        log.debug("JobPost details: {}", jobPost);
 
         JobPost savedJobPost = jobPostRepository.save(jobPost);
 

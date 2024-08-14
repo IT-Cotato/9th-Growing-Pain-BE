@@ -3,7 +3,7 @@ package cotato.growingpain.log;
 import lombok.Getter;
 
 @Getter
-public enum ActivityType {
+public enum ActivityCategory {
 
     EXTRA_ACTIVITY("대외활동"),
     VOLUNTEER_ACTIVITY("봉사활동"),
@@ -14,7 +14,7 @@ public enum ActivityType {
 
     private final String description;
 
-    ActivityType(String description) {
+    ActivityCategory(String description) {
         this.description = description;
     }
 }
