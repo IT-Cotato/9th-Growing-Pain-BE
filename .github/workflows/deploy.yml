@@ -9,7 +9,7 @@ env:
   S3_BUCKET_NAME: growing-pain-bucket
   CODE_DEPLOY_APPLICATION_NAME: growing-pain-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: growing-pain-group
-  RESOURCE_PATH: ./src/main/resources/application.yml
+  RESOURCE_PATH: ./src/main/resources/application-dev.yml
 
 permissions:
   id-token: write

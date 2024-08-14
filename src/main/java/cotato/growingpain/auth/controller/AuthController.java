@@ -11,6 +11,7 @@ import cotato.growingpain.common.Response;
 import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
+import cotato.growingpain.security.oauth.AuthProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,14 +39,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(summary = "회원가입", description = "회원가입 및 로그인을 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/join")
+    @Operation(summary = "일반 로그인", description = "회원가입 및 로그인을 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Token.class)))
+    @PostMapping("/login/general")
     @ResponseStatus(HttpStatus.OK )
-    public Response<?> joinAuth(@RequestBody @Valid LoginRequest request) {
-        log.info("[회원 가입 컨트롤러]: {}", request.email());
-        Token token = authService.createLoginInfo(request);
-        return Response.createSuccess("회원가입 및 로그인 완료", token);
+    public Response<Token> joinAuth(@RequestBody @Valid LoginRequest request) {
+        log.info("[일반 로그인 컨트롤러]: {}", request.email());
+        return Response.createSuccess("회원가입 및 로그인 완료", authService.createLoginInfo(AuthProvider.GENERAL, request));
     }
 
     @Operation(summary = "추가 정보 입력", description = "최초 로그인 (회원가입) 시 추가 정보를 입력하는 메소드")
