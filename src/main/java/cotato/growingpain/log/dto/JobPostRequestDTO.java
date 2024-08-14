@@ -1,7 +1,7 @@
 package cotato.growingpain.log.dto;
 
-import cotato.growingpain.log.entity.JobApplication;
-import cotato.growingpain.log.entity.JobPost;
+import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;

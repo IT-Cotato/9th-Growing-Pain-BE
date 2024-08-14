@@ -1,4 +1,4 @@
-package cotato.growingpain.log.entity;
+package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,10 +1,10 @@
 package cotato.growingpain.log.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.dto.JobPostListRetrieveDTO;
 import cotato.growingpain.log.dto.JobPostRequestDTO;
 import cotato.growingpain.log.dto.JobPostRetrieveDTO;
-import cotato.growingpain.log.entity.JobPost;
 import cotato.growingpain.log.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

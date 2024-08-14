@@ -2,9 +2,9 @@ package cotato.growingpain.log.dto;
 
 import cotato.growingpain.log.ApplicationType;
 import cotato.growingpain.log.Result;
-import cotato.growingpain.log.entity.ApplicationDetail;
-import cotato.growingpain.log.entity.JobApplication;
-import cotato.growingpain.log.entity.JobPost;
+import cotato.growingpain.log.domain.entity.ApplicationDetail;
+import cotato.growingpain.log.domain.entity.JobApplication;
+import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.member.domain.entity.Member;
 import java.util.ArrayList;
 import java.util.List;

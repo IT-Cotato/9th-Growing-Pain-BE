@@ -1,4 +1,4 @@
-package cotato.growingpain.log.entity;
+package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
