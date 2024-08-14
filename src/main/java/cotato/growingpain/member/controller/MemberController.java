@@ -43,6 +43,17 @@ public class MemberController {
         return Response.createSuccessWithNoData("[마이페이지] 기본 정보 수정 완료");
     }
 
+    @Operation(summary = "프로필 공개 여부 설정", description = "멤버의 프로필을 공개 또는 비공개로 설정")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PatchMapping("/update-profile-showing")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> updateProfileShowing(@Valid @RequestBody UpdateMemberProfileShowingRequest request,
+                                            @AuthenticationPrincipal Long memberId) {
+        log.info("프로필 공개 여부를 수정한 memberId: {}", memberId);
+        memberService.updateProfileShowing(memberId, request.memberProfileShowing());
+        return Response.createSuccessWithNoData("[마이페이지] 프로필 공개 여부 설정");
+    }
+
     @Operation(summary = "추가 정보 등록", description = "정보 업데이트 중 추가 정보 등록을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/additional-info")
