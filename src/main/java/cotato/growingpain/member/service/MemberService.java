@@ -47,6 +47,15 @@ public class MemberService {
     }
 
     @Transactional
+    public void updateProfileShowing(Long memberId, MemberProfileShowing memberProfileShowing) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
+
+        member.updateProfilePublic(memberProfileShowing);
+        memberRepository.save(member);
+    }
+
+    @Transactional
     public MemberInfoResponse getMemberInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
