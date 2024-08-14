@@ -1,6 +1,6 @@
 package cotato.growingpain.member.dto.request;
 
-public record AdditionalInformationRequest(
+public record AdditionalInfoRequest(
 
         String educationBackground,
 

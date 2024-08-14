@@ -68,7 +68,7 @@ public class AuthService {
         else {
             // 신규 회원일 경우 회원가입 처리
             validateService.checkPasswordPattern(request.password());
-            //validateService.checkDuplicateEmail(request.email());
+            validateService.checkDuplicateEmail(request.email());
 
             log.info("[회원 가입 서비스]: {}", request.email());
 
@@ -110,8 +110,8 @@ public class AuthService {
         if(member.getMemberRole() == MemberRole.PENDING){
             // 필드를 개별적으로 업데이트
             member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
-            //validateService.checkDuplicateNickName(request.name());
             member.updateRole(MemberRole.MEMBER);
+
             memberRepository.save(member);
 
             Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.MEMBER.getDescription());
@@ -121,6 +121,8 @@ public class AuthService {
 
             return token;
         }
+
+        //validateService.checkDuplicateNickName(request.name()); TODO
         log.info("memberRole = {}", member.getMemberRole());
         return null;
     }
