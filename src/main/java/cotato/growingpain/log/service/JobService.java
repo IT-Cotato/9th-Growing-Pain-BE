@@ -2,9 +2,9 @@ package cotato.growingpain.log.service;
 
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
-import cotato.growingpain.log.dto.JobPostListRetrieveDTO;
-import cotato.growingpain.log.dto.JobPostRequestDTO;
-import cotato.growingpain.log.dto.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.request.JobPostRequestDTO;
+import cotato.growingpain.log.dto.request.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.retrieve.JobPostListRetrieveDTO;
 import cotato.growingpain.log.repository.ApplicationDetailRepository;
 import cotato.growingpain.log.repository.JobApplicationRepository;
 import cotato.growingpain.log.repository.JobPostRepository;

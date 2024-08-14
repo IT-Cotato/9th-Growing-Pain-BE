@@ -1,4 +1,4 @@
-package cotato.growingpain.log.dto;
+package cotato.growingpain.log.dto.retrieve;
 
 import cotato.growingpain.log.domain.entity.JobPost;
 import java.util.List;

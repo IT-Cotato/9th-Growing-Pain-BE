@@ -1,4 +1,4 @@
-package cotato.growingpain.log.dto;
+package cotato.growingpain.log.dto.request;
 
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;

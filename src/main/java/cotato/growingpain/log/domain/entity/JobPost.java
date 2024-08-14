@@ -2,8 +2,8 @@ package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import cotato.growingpain.log.dto.JobApplicationRequestDTO;
-import cotato.growingpain.log.dto.JobPostRequestDTO;
+import cotato.growingpain.log.dto.request.JobApplicationRequestDTO;
+import cotato.growingpain.log.dto.request.JobPostRequestDTO;
 import cotato.growingpain.log.repository.ApplicationDetailRepository;
 import cotato.growingpain.log.repository.JobApplicationRepository;
 import cotato.growingpain.member.domain.entity.Member;

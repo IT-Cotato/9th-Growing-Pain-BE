@@ -1,4 +1,4 @@
-package cotato.growingpain.log.dto;
+package cotato.growingpain.log.dto.request;
 
 import cotato.growingpain.log.ApplicationType;
 import cotato.growingpain.log.Result;
