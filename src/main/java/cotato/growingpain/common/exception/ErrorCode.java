@@ -11,7 +11,8 @@ public enum ErrorCode {
     //회원가입
     EMAIL_DUPLICATED(HttpStatus.CONFLICT, "존재하는 이메일입니다."),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT, "존재하는 닉네임입니다."),
-    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 패스워드입니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "유효하지 않은 비밀번호 형식입니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
     ACCESS_DENIED_USER(HttpStatus.FORBIDDEN,"권한이 없는 유저입니다."),
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 이메일이 존재하지 않습니다."),

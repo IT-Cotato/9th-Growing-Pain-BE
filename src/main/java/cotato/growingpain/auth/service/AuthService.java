@@ -51,7 +51,7 @@ public class AuthService {
             // 기존 회원이 존재하면 로그인 처리
             Member member = existingMember.get();
             if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
-                throw new AppException(ErrorCode.INVALID_PASSWORD);
+                throw new AppException(ErrorCode.WRONG_PASSWORD);
             }
 
             String role = (member.getMemberRole() == MemberRole.PENDING)
@@ -108,6 +108,9 @@ public class AuthService {
         log.info("추가 정보 입력 받는 이메일: {}", email);
 
         if(member.getMemberRole() == MemberRole.PENDING){
+
+            validateService.checkDuplicateNickName(request.name());
+
             // 필드를 개별적으로 업데이트
             member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
             member.updateRole(MemberRole.MEMBER);
@@ -122,7 +125,6 @@ public class AuthService {
             return token;
         }
 
-        //validateService.checkDuplicateNickName(request.name()); TODO
         log.info("memberRole = {}", member.getMemberRole());
         return null;
     }
@@ -218,7 +220,7 @@ public class AuthService {
 
         // 기존 비밀번호 검증
         if (!bCryptPasswordEncoder.matches(request.currentPassword(), member.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
         }
 
         // 새 비밀번호 패턴 검증
