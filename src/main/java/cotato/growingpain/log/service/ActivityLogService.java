@@ -30,7 +30,7 @@ public class ActivityLogService {
     }
 
     @Transactional
-    public List<ActivityLog> retrieveActivityLogsByMemberId(Long memberId) {
+    public List<ActivityLogRequestDTO> retrieveActivityLogsByMemberId(Long memberId) {
         return activityLogRepository.findByMemberId(memberId);
     }
 
@@ -40,5 +40,17 @@ public class ActivityLogService {
                 .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
 
         return ActivityLogDTO.fromEntity(activityLog);
+    }
+
+    @Transactional
+    public ActivityLogDTO updateActivityLog(Long activityLogId, ActivityLogDTO updatedActivityLogDTO) {
+        ActivityLog existingActivityLog = activityLogRepository.findById(activityLogId)
+                .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
+
+        existingActivityLog.updateFromDTO(updatedActivityLogDTO);
+
+        ActivityLog savedActivityLog = activityLogRepository.save(existingActivityLog);
+
+        return ActivityLogDTO.fromEntity(savedActivityLog);
     }
 }

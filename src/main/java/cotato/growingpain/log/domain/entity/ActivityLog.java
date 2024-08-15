@@ -3,6 +3,7 @@ package cotato.growingpain.log.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.log.ActivityCategory;
+import cotato.growingpain.log.dto.ActivityLogDTO;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -108,5 +109,17 @@ public class ActivityLog extends BaseTimeEntity {
         this.contribution = contribution;
         this.activityType = activityType;
         this.url = url;
+    }
+
+    public void updateFromDTO(ActivityLogDTO updatedActivityLogDTO) {
+        this.activityCategory = updatedActivityLogDTO.activityCategory();
+        this.activityName = updatedActivityLogDTO.activityName();
+        this.content = updatedActivityLogDTO.content();
+        this.performance = updatedActivityLogDTO.performance();
+        this.role = updatedActivityLogDTO.role();
+        this.activityDuration = updatedActivityLogDTO.activityDuration();
+        this.activityType = updatedActivityLogDTO.activityType();
+        this.url = updatedActivityLogDTO.url();
+        this.contribution = updatedActivityLogDTO.contribution();
     }
 }

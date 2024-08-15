@@ -23,6 +23,7 @@ public record ActivityLogDTO(
     public static ActivityLogDTO fromEntity(ActivityLog activityLog) {
         return ActivityLogDTO.builder()
                 .id(activityLog.getId())
+                .activityName(activityLog.getActivityName())
                 .activityCategory(activityLog.getActivityCategory())
                 .activityDuration(activityLog.getActivityDuration())
                 .content(activityLog.getContent())

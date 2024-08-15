@@ -3,7 +3,6 @@ package cotato.growingpain.log.controller;
 import static cotato.growingpain.common.Response.createSuccess;
 
 import cotato.growingpain.common.Response;
-import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.log.dto.ActivityLogDTO;
 import cotato.growingpain.log.dto.request.ActivityLogRequestDTO;
 import cotato.growingpain.log.service.ActivityLogService;
@@ -18,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +36,9 @@ public class ActivityLogController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<ActivityLog> createJobPost(@RequestBody @Valid ActivityLogRequestDTO activityLogRequestDTO,
-                                               @AuthenticationPrincipal Long memberId) {
+    public Response<ActivityLogRequestDTO> createJobPost(
+            @RequestBody @Valid ActivityLogRequestDTO activityLogRequestDTO,
+            @AuthenticationPrincipal Long memberId) {
         activityLogService.createActivityLog(activityLogRequestDTO, memberId);
         return createSuccess("활동 기록 등록 완료", null);
     }
@@ -46,9 +47,9 @@ public class ActivityLogController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public Response<List<ActivityLog>> retrieveActivityLogList(
+    public Response<List<ActivityLogRequestDTO>> retrieveActivityLogList(
             @AuthenticationPrincipal Long memberId) {
-        List<ActivityLog> activityLogList = activityLogService.retrieveActivityLogsByMemberId(memberId);
+        List<ActivityLogRequestDTO> activityLogList = activityLogService.retrieveActivityLogsByMemberId(memberId);
         return createSuccess("활동 기록 조회 완료", activityLogList);
     }
 
@@ -60,5 +61,15 @@ public class ActivityLogController {
             @PathVariable Long activityLogId) {
         ActivityLogDTO activityLogDTO = activityLogService.retrieveActivityLogById(activityLogId);
         return Response.createSuccess("활동 기록 상세 조회 완료", activityLogDTO);
+    }
+
+    @Operation(summary = "활동 기록 수정", description = "활동 기록을 수정하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @PatchMapping("/{activityLogId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<ActivityLogDTO> updateActivityLog(@PathVariable Long activityLogId,
+                                                      @RequestBody ActivityLogDTO updatedActivityLogDTO) {
+        ActivityLogDTO updatedActivityLog = activityLogService.updateActivityLog(activityLogId, updatedActivityLogDTO);
+        return Response.createSuccess("활동 기록 수정 완료", updatedActivityLog);
     }
 }
