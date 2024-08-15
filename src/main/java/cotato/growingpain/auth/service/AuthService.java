@@ -108,6 +108,9 @@ public class AuthService {
         log.info("추가 정보 입력 받는 이메일: {}", email);
 
         if(member.getMemberRole() == MemberRole.PENDING){
+
+            validateService.checkDuplicateNickName(request.name());
+
             // 필드를 개별적으로 업데이트
             member.updateMemberInfo(request.name(), request.field(), request.belong(),request.job());
             member.updateRole(MemberRole.MEMBER);
