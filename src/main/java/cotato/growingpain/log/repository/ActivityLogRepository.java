@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> {
     List<ActivityLogRequestDTO> findByMemberId(Long memberId);
 
+    Optional<ActivityLog> findByMemberIdAndId(Long activityLogId, Long memberId);
+
     Optional<ActivityLog> findById(Long activityLogId);
 }

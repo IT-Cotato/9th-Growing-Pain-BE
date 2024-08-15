@@ -46,11 +46,16 @@ public class ActivityLogService {
     public ActivityLogDTO updateActivityLog(Long activityLogId, ActivityLogDTO updatedActivityLogDTO) {
         ActivityLog existingActivityLog = activityLogRepository.findById(activityLogId)
                 .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
-
         existingActivityLog.updateFromDTO(updatedActivityLogDTO);
-
         ActivityLog savedActivityLog = activityLogRepository.save(existingActivityLog);
 
         return ActivityLogDTO.fromEntity(savedActivityLog);
+    }
+
+    @Transactional
+    public void deleteActivityLog(Long activityLogId, Long memberId) {
+        ActivityLog existingActivityLog = activityLogRepository.findByMemberIdAndId(activityLogId, memberId)
+                .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
+        activityLogRepository.delete(existingActivityLog);
     }
 }

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,5 +72,16 @@ public class ActivityLogController {
                                                       @RequestBody ActivityLogDTO updatedActivityLogDTO) {
         ActivityLogDTO updatedActivityLog = activityLogService.updateActivityLog(activityLogId, updatedActivityLogDTO);
         return Response.createSuccess("활동 기록 수정 완료", updatedActivityLog);
+    }
+
+    @Operation(summary = "활동 기록 삭제", description = "활동 기록을 삭제하기 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @DeleteMapping("/{activityLogId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Response<?> deleteActivityLog(@PathVariable Long activityLogId,
+                                         @AuthenticationPrincipal Long memberId) {
+        activityLogService.deleteActivityLog(activityLogId, memberId);
+
+        return Response.createSuccess("활동 기록 삭제 완료", null);
     }
 }
