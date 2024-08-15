@@ -1,11 +1,11 @@
-package cotato.growingpain.log.domain.controller;
+package cotato.growingpain.log.controller;
 
 import cotato.growingpain.common.Response;
-import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
-import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
-import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobPost;
-import cotato.growingpain.log.domain.service.JobService;
+import cotato.growingpain.log.dto.request.JobPostRequestDTO;
+import cotato.growingpain.log.dto.request.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.retrieve.JobPostListRetrieveDTO;
+import cotato.growingpain.log.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -66,7 +66,7 @@ public class JobPostController {
 
     @Operation(summary = "지원 현황 내용 수정", description = "지원 현황을 수정하기 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PutMapping("/{jobPostId}")
+    @PatchMapping("/{jobPostId}")
     @ResponseStatus(HttpStatus.OK)
     public Response<JobPost> updateJobPost(
             @PathVariable Long jobPostId,

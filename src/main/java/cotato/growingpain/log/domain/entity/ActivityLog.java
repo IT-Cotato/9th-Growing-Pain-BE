@@ -2,7 +2,8 @@ package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import cotato.growingpain.common.domain.BaseTimeEntity;
-import cotato.growingpain.log.domain.ActivityType;
+import cotato.growingpain.log.ActivityCategory;
+import cotato.growingpain.log.dto.ActivityLogDTO;
 import cotato.growingpain.member.domain.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,8 +41,8 @@ public class ActivityLog extends BaseTimeEntity {
     /* ------------ Information Column ------------ */
     /* -------------------------------------------- */
     @Enumerated(EnumType.STRING)
-    @Column(name = "activity_type")
-    private ActivityType activityType;
+    @Column(name = "activity_category")
+    private ActivityCategory activityCategory;
 
     @Column(name = "activity_name")
     private String activityName;
@@ -58,17 +59,14 @@ public class ActivityLog extends BaseTimeEntity {
     @Column(name = "contribution")
     private int contribution;
 
-    @Column(name = "activity_start_date")
-    private String activityStartDate;
+    @Column(name = "activity_duration")
+    private String activityDuration;
 
-    @Column(name = "activity_close_date")
-    private String activityCloseDate;
+    @Column(name = "activity_type")
+    private String activityType;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "file_url")
-    private String fileUrl;
+    @Column(name = "url")
+    private String url;
 
     @CreatedDate
     @Column(updatable = false)
@@ -87,31 +85,41 @@ public class ActivityLog extends BaseTimeEntity {
 
     @Builder
     public ActivityLog(
-            ActivityType activityType,
+            ActivityCategory activityCategory,
             String activityName,
             String content,
             String performance,
             String role,
-            Integer contribution,
-            String activityStartDate,
-            String activityCloseDate,
-            String imageUrl,
-            String fileUrl,
+            String activityDuration,
+            String activityType,
+            String url,
+            int contribution,
             Member member
     ) {
         // Relation Column
         this.member = member;
 
         // Information Column
-        this.activityType = activityType;
+        this.activityCategory = activityCategory;
         this.activityName = activityName;
         this.content = content;
         this.performance = performance;
         this.role = role;
+        this.activityDuration = activityDuration;
         this.contribution = contribution;
-        this.activityStartDate = activityStartDate;
-        this.activityCloseDate = activityCloseDate;
-        this.imageUrl = imageUrl;
-        this.fileUrl = fileUrl;
+        this.activityType = activityType;
+        this.url = url;
+    }
+
+    public void updateFromDTO(ActivityLogDTO updatedActivityLogDTO) {
+        this.activityCategory = updatedActivityLogDTO.activityCategory();
+        this.activityName = updatedActivityLogDTO.activityName();
+        this.content = updatedActivityLogDTO.content();
+        this.performance = updatedActivityLogDTO.performance();
+        this.role = updatedActivityLogDTO.role();
+        this.activityDuration = updatedActivityLogDTO.activityDuration();
+        this.activityType = updatedActivityLogDTO.activityType();
+        this.url = updatedActivityLogDTO.url();
+        this.contribution = updatedActivityLogDTO.contribution();
     }
 }

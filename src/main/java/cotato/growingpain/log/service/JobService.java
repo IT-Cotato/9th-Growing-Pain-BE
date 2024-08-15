@@ -1,13 +1,13 @@
-package cotato.growingpain.log.domain.service;
+package cotato.growingpain.log.service;
 
-import cotato.growingpain.log.domain.dto.JobPostListRetrieveDTO;
-import cotato.growingpain.log.domain.dto.JobPostRequestDTO;
-import cotato.growingpain.log.domain.dto.JobPostRetrieveDTO;
 import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
-import cotato.growingpain.log.domain.repository.ApplicationDetailRepository;
-import cotato.growingpain.log.domain.repository.JobApplicationRepository;
-import cotato.growingpain.log.domain.repository.JobPostRepository;
+import cotato.growingpain.log.dto.request.JobPostRequestDTO;
+import cotato.growingpain.log.dto.request.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.retrieve.JobPostListRetrieveDTO;
+import cotato.growingpain.log.repository.ApplicationDetailRepository;
+import cotato.growingpain.log.repository.JobApplicationRepository;
+import cotato.growingpain.log.repository.JobPostRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import java.util.List;
@@ -34,13 +34,7 @@ public class JobService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found with ID: " + memberId));
 
-        log.info("Found member with ID: {}", member.getId());
-        log.info(jobPostRequest.jobApplications().toString());
-
         JobPost jobPost = jobPostRequest.toEntity(member);
-
-        log.info("Creating job post with job part: {}", jobPost.getJobPart());
-        log.debug("JobPost details: {}", jobPost);
 
         JobPost savedJobPost = jobPostRepository.save(jobPost);
 
@@ -93,4 +87,5 @@ public class JobService {
 
         jobPostRepository.delete(jobPost);
     }
+
 }

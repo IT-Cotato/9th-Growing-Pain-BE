@@ -1,4 +1,4 @@
-package cotato.growingpain.log.domain.repository;
+package cotato.growingpain.log.repository;
 
 import cotato.growingpain.log.domain.entity.JobApplication;
 import java.util.List;

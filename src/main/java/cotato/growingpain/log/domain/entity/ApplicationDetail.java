@@ -2,7 +2,7 @@ package cotato.growingpain.log.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import cotato.growingpain.log.domain.dto.ApplicationDetailRequestDTO;
+import cotato.growingpain.log.dto.request.ApplicationDetailRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

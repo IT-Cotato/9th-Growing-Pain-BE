@@ -1,4 +1,4 @@
-package cotato.growingpain.log.domain.dto;
+package cotato.growingpain.log.dto;
 
 import cotato.growingpain.log.domain.entity.ApplicationDetail;
 import lombok.Builder;
