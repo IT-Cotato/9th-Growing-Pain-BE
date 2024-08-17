@@ -60,7 +60,7 @@ public class PostSaveController {
     public Response<PostListResponse> getSavedPosts(@AuthenticationPrincipal Long memberId) {
         log.info("사용자가 저장한 게시글 목록 요청: memberId {}", memberId);
         List<Post> savedPosts= postSaveService.getSavedPosts(memberId);
-        PostListResponse postListResponse = new PostListResponse(savedPosts);
+        PostListResponse postListResponse = PostListResponse.from(savedPosts);
         return Response.createSuccess("저장한 게시글 목록 조회 완료", postListResponse);
     }
 }
