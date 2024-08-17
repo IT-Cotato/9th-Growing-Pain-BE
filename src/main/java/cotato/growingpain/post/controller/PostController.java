@@ -54,7 +54,7 @@ public class PostController {
     public Response<PostListResponse> getPostsByMemberId(@AuthenticationPrincipal Long memberId) {
         List<Post> posts = postService.getPostsByMemberId(memberId);
         log.info("{}가 등록한 게시글 목록", memberId);
-        PostListResponse postListResponse = new PostListResponse(posts);
+        PostListResponse postListResponse = PostListResponse.from(posts);
         return Response.createSuccess("사용자의 게시글 목록 조회 완료", postListResponse);
     }
 
@@ -70,7 +70,7 @@ public class PostController {
         } else {
             posts = postService.getPostsByCategory(category);
         }
-        PostListResponse postListResponse = new PostListResponse(posts);
+        PostListResponse postListResponse = PostListResponse.from(posts);
         return Response.createSuccess(category == PostCategory.ALL ? "전체 게시글 조회 완료" : "카테고리별 게시글 목록 조회 완료", postListResponse);
     }
 

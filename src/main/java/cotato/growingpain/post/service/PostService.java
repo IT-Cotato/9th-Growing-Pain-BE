@@ -44,11 +44,7 @@ public class PostService {
     }
 
     public List<Post> getPostsByCategory(PostCategory category){
-        if (category.getParent() == null) {
-            return postRepository.findByParentCategory(category);
-        } else {
-            return postRepository.findBySubCategory(category);
-        }
+        return postRepository.findByCategory(category);
     }
 
     public List<Post> getAllPosts() {
