@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Builder
 public record JobPostListRetrieveDTO(
+        Long id,
         String companyName,
         String jobPart,
         List<JobApplicationListRetrieveDTO> jobApplications
@@ -18,6 +19,7 @@ public record JobPostListRetrieveDTO(
                 .toList();
 
         return JobPostListRetrieveDTO.builder()
+                .id(jobPost.getId())
                 .companyName(jobPost.getCompanyName())
                 .jobPart(jobPost.getJobPart())
                 .jobApplications(jobApplicationList)
