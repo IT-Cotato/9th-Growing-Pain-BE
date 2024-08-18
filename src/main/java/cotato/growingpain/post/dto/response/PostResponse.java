@@ -1,9 +1,13 @@
 package cotato.growingpain.post.dto.response;
 
 import cotato.growingpain.post.domain.entity.Post;
+import java.time.LocalDateTime;
 
 public record PostResponse(
+
         Long postId,
+        LocalDateTime createdAt,
+        LocalDateTime modifiedAt,
         String title,
         String content,
         String postImageUrl,
@@ -17,7 +21,10 @@ public record PostResponse(
 ) {
     public static PostResponse from(Post post) {
         return new PostResponse(
+
                 post.getId(),
+                post.getCreatedAt(),
+                post.getModifiedAt(),
                 post.getTitle(),
                 post.getContent(),
                 post.getImageUrl(),
