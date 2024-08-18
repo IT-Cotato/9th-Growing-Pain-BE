@@ -5,6 +5,7 @@ import cotato.growingpain.log.domain.entity.ActivityLog;
 import cotato.growingpain.member.domain.entity.Member;
 
 public record ActivityLogRequestDTO(
+        Long id,
         ActivityCategory activityCategory,
         String activityName,
         String role,
