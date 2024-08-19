@@ -1,6 +1,7 @@
 package cotato.growingpain.auth.service;
 
 import cotato.growingpain.auth.domain.BlackList;
+import cotato.growingpain.auth.dto.LoginResponse;
 import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
 import cotato.growingpain.auth.dto.request.LoginRequest;
@@ -42,7 +43,7 @@ public class AuthService {
     private final BlackListRepository blackListRepository;
 
     @Transactional
-    public Token createLoginInfo(AuthProvider authProvider, LoginRequest request) {
+    public LoginResponse createLoginInfo(AuthProvider authProvider, LoginRequest request) {
 
         Optional<Member> existingMember = memberRepository.findByEmail(request.email());
 
@@ -54,6 +55,8 @@ public class AuthService {
                 throw new AppException(ErrorCode.WRONG_PASSWORD);
             }
 
+            log.info("[회원가입 서비스] 로그인: {}", request.email());
+
             String role = (member.getMemberRole() == MemberRole.PENDING)
                     ? MemberRole.PENDING.getDescription()
                     : MemberRole.MEMBER.getDescription();
@@ -63,14 +66,14 @@ public class AuthService {
             // RefreshTokenEntity 저장 또는 업데이트
             saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
 
-            return token;
+            return new LoginResponse(token, member.getId(), member.getName(), member.getField(), member.getProfileImageUrl());
         }
         else {
             // 신규 회원일 경우 회원가입 처리
             validateService.checkPasswordPattern(request.password());
             validateService.checkDuplicateEmail(request.email());
 
-            log.info("[회원 가입 서비스]: {}", request.email());
+            log.info("[회원가입 서비스] 회원가입: {}", request.email());
 
             Member member = registerMember(authProvider, request.email(), request.password());
 
@@ -79,7 +82,7 @@ public class AuthService {
 
             saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
 
-            return token;
+            return new LoginResponse(token, null, null, null, null);
         }
     }
 

@@ -1,5 +1,6 @@
 package cotato.growingpain.auth.controller;
 
+import cotato.growingpain.auth.dto.LoginResponse;
 import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
 import cotato.growingpain.auth.dto.request.DuplicateCheckRequest;
@@ -11,7 +12,6 @@ import cotato.growingpain.auth.dto.response.ResetPasswordResponse;
 import cotato.growingpain.auth.service.AuthService;
 import cotato.growingpain.auth.service.ValidateService;
 import cotato.growingpain.common.Response;
-import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.security.oauth.AuthProvider;
@@ -45,10 +45,10 @@ public class AuthController {
     private final ValidateService validateService;
 
     @Operation(summary = "일반 로그인", description = "회원가입 및 로그인을 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Token.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/login/general")
     @ResponseStatus(HttpStatus.OK )
-    public Response<Token> joinAuth(@RequestBody @Valid LoginRequest request) {
+    public Response<LoginResponse> joinAuth(@RequestBody @Valid LoginRequest request) {
         log.info("[일반 로그인 컨트롤러]: {}", request.email());
         return Response.createSuccess("회원가입 및 로그인 완료", authService.createLoginInfo(AuthProvider.GENERAL, request));
     }
