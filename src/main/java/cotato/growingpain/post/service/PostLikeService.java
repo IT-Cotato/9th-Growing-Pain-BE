@@ -8,6 +8,8 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
 import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,15 @@ public class PostLikeService {
 
         postLike.decreasePostLikeCount(member, post);
         postLikeRepository.delete(postLike);
+    }
+
+    @Transactional
+    public List<Post> getLikedPosts(Long memberId) {
+        List<PostLike> postLikes = postLikeRepository.findByMemberId(memberId);
+
+        return postLikes.stream()
+                .map(PostLike::getPost)
+                .collect(Collectors.toList());
     }
 
     private Post findPostId(Long postId) {

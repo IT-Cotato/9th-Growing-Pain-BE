@@ -3,6 +3,7 @@ package cotato.growingpain.post.repository;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.domain.entity.PostLike;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,4 +17,6 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     void deleteByPostId(Long postId);
 
     Optional<PostLike> findByMemberAndPost(Member member, Post post);
+
+    List<PostLike> findByMemberId(Long memberId);
 }
