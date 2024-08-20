@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "답글 좋아요", description = "답글 좋아요 관련된 api")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reply-comment/{replyCommentId}/likes")
+@RequestMapping("/api/reply-comment/likes/{replyCommentId}")
 @Slf4j
 public class ReplyCommentLikeController {
 
@@ -41,13 +41,12 @@ public class ReplyCommentLikeController {
 
     @Operation(summary = "답글 좋아요 취소", description = "답글 좋아요 취소를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @DeleteMapping("/{replyCommentLikeId}")
+    @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> deleteLike(@PathVariable Long replyCommentId,
-                                  @PathVariable Long replyCommentLikeId,
                                   @AuthenticationPrincipal Long memberId) {
 
-        replyCommentLikeService.deleteLike(replyCommentId, replyCommentLikeId, memberId);
+        replyCommentLikeService.deleteLike(replyCommentId, memberId);
         return Response.createSuccessWithNoData("답글 좋아요 취소 완료");
     }
 }
