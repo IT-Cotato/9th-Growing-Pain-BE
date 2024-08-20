@@ -41,13 +41,12 @@ public class PostLikeController {
 
     @Operation(summary = "게시글 좋아요 취소", description = "게시글 좋아요 취소를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @DeleteMapping("/{postLikeId}")
+    @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> deleteLike(@PathVariable Long postId,
-                                  @PathVariable Long postLikeId,
                                   @AuthenticationPrincipal Long memberId) {
 
-        postLikeService.deleteLike(postId, postLikeId, memberId);
+        postLikeService.deleteLike(postId, memberId);
         return Response.createSuccessWithNoData("포스트 좋아요 취소 완료");
     }
 }

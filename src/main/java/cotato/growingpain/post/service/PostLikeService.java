@@ -41,15 +41,16 @@ public class PostLikeService {
     }
 
     @Transactional
-    public void deleteLike(Long postId, Long postLikeId, Long memberId) {
+    public void deleteLike(Long postId, Long memberId) {
 
         Post post = findPostId(postId);
-        PostLike postLike = postLikeRepository.findById(postLikeId)
-                .orElseThrow(() -> new AppException(ErrorCode.POST_LIKE_NOT_FOUND));
         Member member = findMemberById(memberId);
 
+        PostLike postLike = postLikeRepository.findByMemberAndPost(member, post)
+                .orElseThrow(() -> new AppException(ErrorCode.POST_LIKE_NOT_FOUND));
+
         postLike.decreasePostLikeCount(member, post);
-        postLikeRepository.save(postLike);
+        postLikeRepository.delete(postLike);
     }
 
     private Post findPostId(Long postId) {
