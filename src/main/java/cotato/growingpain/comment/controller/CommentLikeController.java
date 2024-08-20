@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "댓글 좋아요", description = "댓글 좋아요 관련된 api")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comment/{commentId}/likes")
+@RequestMapping("/api/comment/likes/{commentId}")
 @Slf4j
 public class CommentLikeController {
 
