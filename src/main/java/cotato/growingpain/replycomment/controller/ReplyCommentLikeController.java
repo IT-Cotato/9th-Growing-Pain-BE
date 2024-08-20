@@ -41,13 +41,12 @@ public class ReplyCommentLikeController {
 
     @Operation(summary = "답글 좋아요 취소", description = "답글 좋아요 취소를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @DeleteMapping("/{replyCommentLikeId}")
+    @DeleteMapping("")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> deleteLike(@PathVariable Long replyCommentId,
-                                  @PathVariable Long replyCommentLikeId,
                                   @AuthenticationPrincipal Long memberId) {
 
-        replyCommentLikeService.deleteLike(replyCommentId, replyCommentLikeId, memberId);
+        replyCommentLikeService.deleteLike(replyCommentId, memberId);
         return Response.createSuccessWithNoData("답글 좋아요 취소 완료");
     }
 }

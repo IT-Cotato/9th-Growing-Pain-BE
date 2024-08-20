@@ -41,24 +41,20 @@ public class ReplyCommentLikeService {
     }
 
     @Transactional
-    public void deleteLike(Long replyCommentId, Long replyCommentLikeId, Long memberId) {
+    public void deleteLike(Long replyCommentId,  Long memberId) {
 
         ReplyComment replyComment = findReplyCommentById(replyCommentId);
-        ReplyCommentLike replyCommentLike = findReplyCommentLikeById(replyCommentLikeId);
         Member member = findMemberById(memberId);
+        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findByMemberAndReplyComment(member, replyComment)
+                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
 
         replyCommentLike.decreaseReplyCommentLikeCount(member, replyComment);
-        replyCommentLikeRepository.save(replyCommentLike);
+        replyCommentLikeRepository.delete(replyCommentLike);
     }
 
     private ReplyComment findReplyCommentById(Long replyCommentId) {
         return replyCommentRepository.findById(replyCommentId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
-    }
-
-    private ReplyCommentLike findReplyCommentLikeById(Long replyCommentLikeId) {
-        return replyCommentLikeRepository.findById(replyCommentLikeId)
-                .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
     }
 
     private Member findMemberById(Long memberId) {
