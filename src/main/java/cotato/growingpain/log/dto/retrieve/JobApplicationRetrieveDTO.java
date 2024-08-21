@@ -28,9 +28,9 @@ public record JobApplicationRetrieveDTO(
 
         return JobApplicationRetrieveDTO.builder()
                 .id(jobApplication.getId())
-                .applicationType(jobApplication.getApplicationType().getDescription())
+                .applicationType(String.valueOf(jobApplication.getApplicationType()))
                 .place(jobApplication.getPlace())
-                .result(jobApplication.getResult().getDescription())
+                .result(String.valueOf(jobApplication.getResult()))
                 .submissionStatus(String.valueOf(jobApplication.isSubmissionStatus()))
                 .resultStatus(String.valueOf(jobApplication.isResultStatus()))
                 .applicationStartDate(jobApplication.getApplicationStartDate())
