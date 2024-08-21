@@ -47,25 +47,25 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public CommentListResponse getCommentsByMemberId(Long memberId) {
-        List<CommentResponse> commentList = commentRepository.findByMemberId(memberId);
+        List<CommentResponse> commentList = commentRepository.findByMemberIdAndIsDeletedFalse(memberId);
         return new CommentListResponse(commentList);
     }
 
     @Transactional(readOnly = true)
     public CommentListResponse getCommentsByPostId(Long postId) {
-        List<CommentResponse> commentList = commentRepository.findByPostId(postId);
+        List<CommentResponse> commentList = commentRepository.findByPostIdAndIsDeletedFalse(postId);
         return new CommentListResponse(commentList);
     }
 
     @Transactional(readOnly = true)
     public CommentListResponse getAllPostsAndCommentsByMemberId(Long memberId) {
         // 사용자가 작성한 모든 포스트 조회
-        List<Post> posts = postRepository.findByMemberId(memberId);
+        List<Post> posts = postRepository.findByMemberIdAndIsDeletedFalse(memberId);
         List<CommentResponse> commentList = new ArrayList<>();
 
         // 각 포스트의 댓글 조회
         for (Post post : posts) {
-            List<CommentResponse> comments = commentRepository.findByPostId(post.getId());
+            List<CommentResponse> comments = commentRepository.findByPostIdAndIsDeletedFalse(post.getId());
             commentList.addAll(comments);
         }
         return new CommentListResponse(commentList);
@@ -73,14 +73,14 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long commentId, Long memberId) {
-        Comment comment = commentRepository.findByIdAndMemberId(commentId, memberId)
+        Comment comment = commentRepository.findByIdAndMemberIdAndIsDeletedFalse(commentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
         if(comment.isDeleted()) {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        List<ReplyComment> replyComments = replyCommentRepository.findByCommentId(commentId);
+        List<ReplyComment> replyComments = replyCommentRepository.findReplyCommentByCommentIdAndIsDeletedFalse(commentId);
         replyCommentRepository.deleteAll(replyComments);
 
         commentLikeRepository.deleteByCommentId(commentId);

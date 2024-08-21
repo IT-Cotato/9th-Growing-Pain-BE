@@ -1,8 +1,8 @@
 package cotato.growingpain.auth.controller;
 
+import cotato.growingpain.auth.dto.LoginResponse;
 import cotato.growingpain.auth.dto.request.ChangePasswordRequest;
 import cotato.growingpain.auth.dto.request.CompleteSignupRequest;
-import cotato.growingpain.auth.dto.request.DuplicateCheckRequest;
 import cotato.growingpain.auth.dto.request.LoginRequest;
 import cotato.growingpain.auth.dto.request.LogoutRequest;
 import cotato.growingpain.auth.dto.request.ResetPasswordRequest;
@@ -11,11 +11,11 @@ import cotato.growingpain.auth.dto.response.ResetPasswordResponse;
 import cotato.growingpain.auth.service.AuthService;
 import cotato.growingpain.auth.service.ValidateService;
 import cotato.growingpain.common.Response;
-import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.security.oauth.AuthProvider;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,10 +45,10 @@ public class AuthController {
     private final ValidateService validateService;
 
     @Operation(summary = "일반 로그인", description = "회원가입 및 로그인을 위한 메소드")
-    @ApiResponse(content = @Content(schema = @Schema(implementation = Token.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/login/general")
     @ResponseStatus(HttpStatus.OK )
-    public Response<Token> joinAuth(@RequestBody @Valid LoginRequest request) {
+    public Response<LoginResponse> joinAuth(@RequestBody @Valid LoginRequest request) {
         log.info("[일반 로그인 컨트롤러]: {}", request.email());
         return Response.createSuccess("회원가입 및 로그인 완료", authService.createLoginInfo(AuthProvider.GENERAL, request));
     }
@@ -104,9 +104,9 @@ public class AuthController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = DuplicateCheckResponse.class)))
     @GetMapping("/validate/email")
     @ResponseStatus(HttpStatus.OK)
-    public Response<DuplicateCheckResponse> checkDuplicateEmail(@RequestBody DuplicateCheckRequest request) {
+    public Response<DuplicateCheckResponse> checkDuplicateEmail(@Parameter String email) {
 
-        boolean isDuplicate = validateService.isDuplicateEmail(request.value());
+        boolean isDuplicate = validateService.isDuplicateEmail(email);
         DuplicateCheckResponse response = new DuplicateCheckResponse(isDuplicate);
         if (isDuplicate) {
             return Response.createSuccess("이미 사용 중인 이메일입니다.", response);
@@ -119,8 +119,8 @@ public class AuthController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = DuplicateCheckResponse.class)))
     @GetMapping("/validate/nickname")
     @ResponseStatus(HttpStatus.OK)
-    public Response<DuplicateCheckResponse> checkDuplicateNickname(@RequestBody DuplicateCheckRequest request) {
-        boolean isDuplicate = validateService.isDuplicateNickname(request.value());
+    public Response<DuplicateCheckResponse> checkDuplicateNickname(@Parameter String nickName) {
+        boolean isDuplicate = validateService.isDuplicateNickname(nickName);
         DuplicateCheckResponse response = new DuplicateCheckResponse(isDuplicate);
 
         if (isDuplicate) {

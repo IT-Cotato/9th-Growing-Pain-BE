@@ -16,7 +16,7 @@ public record PostResponse(
         Integer likeCount,
         Boolean isDeleted,
         String memberNickname,
-        String ProfileImage,
+        String profileImageUrl,
         String memberField
 ) {
     public static PostResponse from(Post post) {

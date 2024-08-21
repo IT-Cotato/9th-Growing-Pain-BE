@@ -10,6 +10,8 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.dto.request.ReplyCommentRegisterRequest;
+import cotato.growingpain.replycomment.dto.response.ReplyCommentListResponse;
+import cotato.growingpain.replycomment.dto.response.ReplyCommentResponse;
 import cotato.growingpain.replycomment.repository.ReplyCommentLikeRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
@@ -45,13 +47,14 @@ public class ReplyCommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReplyComment> getReplyCommentsByCommentId(Long commentId) {
-        return replyCommentRepository.findByCommentId(commentId);
+    public ReplyCommentListResponse getReplyCommentsByCommentId(Long commentId) {
+        List<ReplyCommentResponse> replyCommentList = replyCommentRepository.findByCommentIdAndIsDeletedFalse(commentId);
+        return new ReplyCommentListResponse(replyCommentList);
     }
 
     @Transactional
     public void deleteReplyComment(Long replyCommentId, Long memberId) {
-        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberId(replyCommentId, memberId)
+        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberIdAndIsDeletedFalse(replyCommentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
 
         if(replyComment.isDeleted()) {

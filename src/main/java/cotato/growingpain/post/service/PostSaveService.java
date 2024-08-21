@@ -40,7 +40,7 @@ public class PostSaveService {
     @Transactional
     public void deleteSavePost(Long postId, Long memberId) {
 
-        if (!postSaveRepository.existsByMemberIdAndPostId(postId, memberId)) {
+        if (!postSaveRepository.existsByMemberIdAndPostId(memberId, postId)) {
             throw new AppException(ErrorCode.POST_NOT_FOUND);
         }
 

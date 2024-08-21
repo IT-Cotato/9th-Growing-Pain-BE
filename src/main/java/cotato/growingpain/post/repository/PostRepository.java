@@ -10,10 +10,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    List<Post> findByMemberId(Long memberId);
+    List<Post> findByMemberIdAndIsDeletedFalse(Long memberId);
 
-    @Query("SELECT p FROM Post p WHERE p.parentCategory = :category OR p.subCategory = :category")
-    List<Post> findByCategory(@Param("category") PostCategory category);
+    @Query("SELECT p FROM Post p WHERE p.isDeleted = false AND (p.parentCategory = :category OR p.subCategory = :category)")
+    List<Post> findByCategoryAndIsDeletedFalse(@Param("category") PostCategory category);
 
-    Optional<Post> findByIdAndMemberId(Long postId, Long memberId);
+    @Query("SELECT p FROM Post p WHERE p.isDeleted = false")
+    List<Post> findAllByIsDeletedFalse();
+
+    Optional<Post> findByIdAndMemberIdAndIsDeletedFalse(Long postId, Long memberId);
 }
