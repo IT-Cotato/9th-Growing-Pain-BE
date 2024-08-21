@@ -4,6 +4,7 @@ import cotato.growingpain.member.domain.MemberJob;
 import cotato.growingpain.member.domain.entity.Member;
 
 public record MemberInfoResponse(
+        String name,
         String field,
         String belong,
         MemberJob job,
@@ -17,6 +18,7 @@ public record MemberInfoResponse(
 ) {
     public static MemberInfoResponse fromMember(Member member) {
         return new MemberInfoResponse(
+                member.getName(),
                 member.getField(),
                 member.getBelong(),
                 member.getJob(),
@@ -32,6 +34,7 @@ public record MemberInfoResponse(
 
     public static MemberInfoResponse defaultInfoFromMember(Member member) {
         return new MemberInfoResponse(
+                member.getName(),
                 member.getField(),
                 member.getBelong(),
                 member.getJob(),
