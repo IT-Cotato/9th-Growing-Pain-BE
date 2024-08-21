@@ -47,8 +47,8 @@ public class PostService {
         return postRepository.findByCategoryAndIsDeletedFalse(category);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<Post> getAllPostsByCategory() {
+        return postRepository.findAllByIsDeletedFalse();
     }
 
     @Transactional

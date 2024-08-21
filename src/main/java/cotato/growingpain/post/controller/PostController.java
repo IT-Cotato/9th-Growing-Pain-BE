@@ -66,7 +66,7 @@ public class PostController {
         List<Post> posts;
         log.info("카테고리별 게시글 목록 요청: {}", category);
         if (category == PostCategory.ALL) {
-            posts = postService.getAllPosts();
+            posts = postService.getAllPostsByCategory();
         } else {
             posts = postService.getPostsByCategory(category);
         }
