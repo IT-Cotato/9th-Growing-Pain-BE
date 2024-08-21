@@ -23,10 +23,6 @@ public record UpdateDefaultInfoRequest (
 
         String award,
 
-        String languageScore,
-
-        String career,
-
-        String aboutMe
+        String languageScore
 ) {
 }
