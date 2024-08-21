@@ -1,7 +1,6 @@
 package cotato.growingpain.replycomment.controller;
 
 import cotato.growingpain.common.Response;
-import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.dto.request.ReplyCommentRegisterRequest;
 import cotato.growingpain.replycomment.dto.response.ReplyCommentListResponse;
 import cotato.growingpain.replycomment.service.ReplyCommentService;
@@ -11,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -54,8 +52,7 @@ public class ReplyCommentController {
     @ApiResponse(content = @Content(schema = @Schema(implementation = ReplyCommentListResponse.class)))
     @GetMapping("/{commentId}")@ResponseStatus(HttpStatus.OK)
     public Response<ReplyCommentListResponse> getCommentsByPostId(@PathVariable Long commentId) {
-        List<ReplyComment> replyComments = replyCommentService.getReplyCommentsByCommentId(commentId);
-        ReplyCommentListResponse replyCommentListResponse = new ReplyCommentListResponse(replyComments);
+        ReplyCommentListResponse replyCommentListResponse = replyCommentService.getReplyCommentsByCommentId(commentId);
         return Response.createSuccess("댓글별 답글 목록 조회 완료", replyCommentListResponse);
     }
 

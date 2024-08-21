@@ -10,10 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT new cotato.growingpain.comment.dto.response.CommentResponse(c.post.id, c.member.id, c.member.profileImageUrl, c.createdAt, c.content) FROM Comment c WHERE c.member.id = :memberId")
+    @Query("SELECT new cotato.growingpain.comment.dto.response.CommentResponse(c.post.id, c.id, c.createdAt, c.modifiedAt, c.content, c.likeCount, c.isDeleted, c.member.id, c.member.profileImageUrl, c.member.name, c.member.field) FROM Comment c WHERE c.member.id = :memberId")
     List<CommentResponse> findByMemberId(@Param("memberId") Long memberId);
 
-    @Query("SELECT new cotato.growingpain.comment.dto.response.CommentResponse(c.post.id, c.member.id, c.member.profileImageUrl, c.createdAt, c.content) FROM Comment c WHERE c.post.id = :postId")
+    @Query("SELECT new cotato.growingpain.comment.dto.response.CommentResponse(c.post.id, c.id, c.createdAt, c.modifiedAt, c.content, c.likeCount, c.isDeleted, c.member.id, c.member.profileImageUrl, c.member.name, c.member.field) FROM Comment c WHERE c.post.id = :postId")
     List<CommentResponse> findByPostId(@Param("postId") Long postId);
 
     List<Comment> findCommentsByPostId(Long postId);
