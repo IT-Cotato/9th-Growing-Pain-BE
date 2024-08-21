@@ -40,11 +40,11 @@ public class PostService {
     }
 
     public List<Post> getPostsByMemberId(Long memberId) {
-        return postRepository.findByMemberId(memberId);
+        return postRepository.findByMemberIdAndIsDeletedFalse(memberId);
     }
 
     public List<Post> getPostsByCategory(PostCategory category){
-        return postRepository.findByCategory(category);
+        return postRepository.findByCategoryAndIsDeletedFalse(category);
     }
 
     public List<Post> getAllPosts() {
@@ -59,7 +59,7 @@ public class PostService {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        List<Comment> comments = commentRepository.findCommentsByPostId(postId);
+        List<Comment> comments = commentRepository.findCommentsByPostIdAndIsDeletedFalse(postId);
         for (Comment comment : comments) {
             replyCommentRepository.deleteAllByCommentId(comment.getId());
             commentRepository.delete(comment);
@@ -84,7 +84,7 @@ public class PostService {
     }
 
     private Post findByPostIdAndMemberId(Long postId, Long memberId) {
-        return postRepository.findByIdAndMemberId(postId, memberId)
+        return postRepository.findByIdAndMemberIdAndIsDeletedFalse(postId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
     }
 }

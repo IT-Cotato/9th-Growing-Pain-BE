@@ -48,13 +48,13 @@ public class ReplyCommentService {
 
     @Transactional(readOnly = true)
     public ReplyCommentListResponse getReplyCommentsByCommentId(Long commentId) {
-        List<ReplyCommentResponse> replyCommentList = replyCommentRepository.findByCommentId(commentId);
+        List<ReplyCommentResponse> replyCommentList = replyCommentRepository.findByCommentIdAndIsDeletedFalse(commentId);
         return new ReplyCommentListResponse(replyCommentList);
     }
 
     @Transactional
     public void deleteReplyComment(Long replyCommentId, Long memberId) {
-        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberId(replyCommentId, memberId)
+        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberIdAndIsDeletedFalse(replyCommentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
 
         if(replyComment.isDeleted()) {

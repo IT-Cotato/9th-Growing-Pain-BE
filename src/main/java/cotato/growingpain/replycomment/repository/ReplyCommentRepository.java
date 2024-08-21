@@ -10,14 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Long> {
 
-    @Query("SELECT new cotato.growingpain.replycomment.dto.response.ReplyCommentResponse(r.comment.id, r.id, r.createdAt, r.modifiedAt, r.content, r.likeCount, r.isDeleted, r.member.id, r.member.profileImageUrl, r.member.name, r.member.field) FROM ReplyComment r WHERE r.comment.id = :commentId")
-    List<ReplyCommentResponse> findByCommentId(Long commentId);
+    @Query("SELECT new cotato.growingpain.replycomment.dto.response.ReplyCommentResponse(r.comment.id, r.id, r.createdAt, r.modifiedAt, r.content, r.likeCount, r.isDeleted, r.member.id, r.member.profileImageUrl, r.member.name, r.member.field) FROM ReplyComment r WHERE r.comment.id = :commentId AND r.isDeleted = false")
+    List<ReplyCommentResponse> findByCommentIdAndIsDeletedFalse(Long commentId);
 
-    List<ReplyComment> findReplyCommentByCommentId(Long commentId);
+    List<ReplyComment> findReplyCommentByCommentIdAndIsDeletedFalse(Long commentId);
 
     @Modifying
     @Query("delete from ReplyComment r where r.comment.id = :commentId")
     void deleteAllByCommentId(Long commentId);
 
-    Optional<ReplyComment> findByIdAndMemberId(Long replyCommentId, Long memberId);
+    Optional<ReplyComment> findByIdAndMemberIdAndIsDeletedFalse(Long replyCommentId, Long memberId);
 }
