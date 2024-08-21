@@ -80,7 +80,7 @@ public class CommentService {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        List<ReplyComment> replyComments = replyCommentRepository.findByCommentId(commentId);
+        List<ReplyComment> replyComments = replyCommentRepository.findReplyCommentByCommentId(commentId);
         replyCommentRepository.deleteAll(replyComments);
 
         commentLikeRepository.deleteByCommentId(commentId);

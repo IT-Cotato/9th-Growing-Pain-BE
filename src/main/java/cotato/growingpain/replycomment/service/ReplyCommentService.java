@@ -10,6 +10,8 @@ import cotato.growingpain.post.domain.entity.Post;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.dto.request.ReplyCommentRegisterRequest;
+import cotato.growingpain.replycomment.dto.response.ReplyCommentListResponse;
+import cotato.growingpain.replycomment.dto.response.ReplyCommentResponse;
 import cotato.growingpain.replycomment.repository.ReplyCommentLikeRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import java.util.List;
@@ -45,8 +47,9 @@ public class ReplyCommentService {
     }
 
     @Transactional(readOnly = true)
-    public List<ReplyComment> getReplyCommentsByCommentId(Long commentId) {
-        return replyCommentRepository.findByCommentId(commentId);
+    public ReplyCommentListResponse getReplyCommentsByCommentId(Long commentId) {
+        List<ReplyCommentResponse> replyCommentList = replyCommentRepository.findByCommentId(commentId);
+        return new ReplyCommentListResponse(replyCommentList);
     }
 
     @Transactional
