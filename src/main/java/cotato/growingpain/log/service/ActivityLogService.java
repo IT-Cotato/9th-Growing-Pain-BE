@@ -54,7 +54,7 @@ public class ActivityLogService {
 
     @Transactional
     public void deleteActivityLog(Long activityLogId, Long memberId) {
-        ActivityLog existingActivityLog = activityLogRepository.findByMemberIdAndId(activityLogId, memberId)
+        ActivityLog existingActivityLog = activityLogRepository.findById(activityLogId)
                 .orElseThrow(() -> new NoSuchElementException("ActivityLog not found with ID: " + activityLogId));
         activityLogRepository.delete(existingActivityLog);
     }
