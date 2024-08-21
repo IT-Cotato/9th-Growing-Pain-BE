@@ -25,7 +25,16 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
-        member.updateDefaultInfo(request.field(), request.belong(), request.job());
+        member.updateDefaultInfo(
+                request.field(),
+                request.belong(),
+                request.job(),
+                request.educationBackground(),
+                request.skill(),
+                request.activityHistory(),
+                request.award(),
+                request.languageScore()
+        );
         memberRepository.save(member);
     }
 
@@ -35,11 +44,6 @@ public class MemberService {
                 .orElseThrow(()->new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.updateAdditionalInfo(
-                request.educationBackground(),
-                request.skill(),
-                request.activityHistory(),
-                request.award(),
-                request.languageScore(),
                 request.career(),
                 request.aboutMe()
         );

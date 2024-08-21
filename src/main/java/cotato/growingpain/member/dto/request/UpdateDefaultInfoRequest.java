@@ -13,6 +13,20 @@ public record UpdateDefaultInfoRequest (
         String belong,
 
         @NotNull
-        MemberJob job
+        MemberJob job,
+
+        String educationBackground,
+
+        String skill,
+
+        String activityHistory,
+
+        String award,
+
+        String languageScore,
+
+        String career,
+
+        String aboutMe
 ) {
 }

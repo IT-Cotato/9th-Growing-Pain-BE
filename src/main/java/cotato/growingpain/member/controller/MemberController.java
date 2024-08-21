@@ -33,9 +33,9 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "기본 정보 수정", description = "정보 업데이트 중 기본 정보 수정을 위한 메소드")
+    @Operation(summary = "기본 정보 (소속, 직업, 학력, 스킬, 이력 및 활동, 수상내역, 어학성적) 등록 및 수정", description = "정보 업데이트 중 기본 정보 (소속, 직업, 학력, 스킬, 이력 및 활동, 수상내역, 어학성적) 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PatchMapping("/update-default-info")
+    @PostMapping("/default-info")
     @ResponseStatus(HttpStatus.OK)
     public Response<?> registerPost(@Valid @RequestBody UpdateDefaultInfoRequest request,
                                     @AuthenticationPrincipal Long memberId) {
@@ -55,7 +55,7 @@ public class MemberController {
         return Response.createSuccessWithNoData("[마이페이지] 프로필 공개 여부 설정");
     }
 
-    @Operation(summary = "추가 정보 등록", description = "정보 업데이트 중 추가 정보 등록을 위한 메소드")
+    @Operation(summary = "추가 정보 (경력, 수상 내역) 등록 및 수정", description = "정보 업데이트 중 추가 정보 등록을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @PostMapping("/additional-info")
     @ResponseStatus(HttpStatus.OK)

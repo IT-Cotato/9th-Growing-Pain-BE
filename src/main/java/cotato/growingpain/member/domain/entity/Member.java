@@ -170,14 +170,19 @@ public class Member extends BaseTimeEntity {
         this.memberRole = memberRole;
     }
 
-    public void updateDefaultInfo(String field, String belong, MemberJob job) {
+    public void updateDefaultInfo(String field, String belong, MemberJob job, String educationBackground, String skill, String activityHistory, String award,
+                                  String languageScore) {
         this.field = field;
         this.belong = belong;
         this.job = job;
+        this.educationBackground = educationBackground;
+        this.skill = skill;
+        this.activityHistory = activityHistory;
+        this.award = award;
+        this.languageScore = languageScore;
     }
 
-    public void updateAdditionalInfo(String educationBackground, String skill, String activityHistory, String award,
-                                     String languageScore, String career, String aboutMe) {
+    public void updateAdditionalInfo(String career, String aboutMe) {
         this.educationBackground = educationBackground;
         this.skill = skill;
         this.activityHistory = activityHistory;
