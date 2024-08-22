@@ -4,6 +4,7 @@ import cotato.growingpain.common.Response;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.dto.request.JobPostRequestDTO;
 import cotato.growingpain.log.dto.request.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.response.JobApplicationListResponse;
 import cotato.growingpain.log.dto.retrieve.JobPostListRetrieveDTO;
 import cotato.growingpain.log.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,4 +90,13 @@ public class JobPostController {
         return Response.createSuccess("지원 현황 삭제 완료", null);
     }
 
+    @Operation(summary = "일정 기간이 남은 지원 현황 조회", description = "일정 기간이 남은 지원 현황을 조회하여 반환하는 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = JobApplicationListResponse.class)))
+    @GetMapping("/days-left/{days}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<JobApplicationListResponse> getJobApplicationsByDaysLeft( @AuthenticationPrincipal Long memberId,
+                                                                              @PathVariable int days) {
+        JobApplicationListResponse jobApplications = jobService.getJobApplicationsByDaysLeft(memberId, days);
+        return Response.createSuccess(days + "일 남은 지원 현황 조회 완료", jobApplications);
+    }
 }

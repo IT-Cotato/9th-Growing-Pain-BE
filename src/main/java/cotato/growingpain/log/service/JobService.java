@@ -4,12 +4,16 @@ import cotato.growingpain.log.domain.entity.JobApplication;
 import cotato.growingpain.log.domain.entity.JobPost;
 import cotato.growingpain.log.dto.request.JobPostRequestDTO;
 import cotato.growingpain.log.dto.request.JobPostRetrieveDTO;
+import cotato.growingpain.log.dto.response.JobApplicationListResponse;
+import cotato.growingpain.log.dto.response.JobApplicationResponse;
 import cotato.growingpain.log.dto.retrieve.JobPostListRetrieveDTO;
 import cotato.growingpain.log.repository.ApplicationDetailRepository;
 import cotato.growingpain.log.repository.JobApplicationRepository;
 import cotato.growingpain.log.repository.JobPostRepository;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -88,4 +92,18 @@ public class JobService {
         jobPostRepository.delete(jobPost);
     }
 
+    public JobApplicationListResponse getJobApplicationsByDaysLeft(Long memberId, int daysLeft) {
+        // 현재 날짜에서 daysLeft를 더한 날짜 계산
+        LocalDate targetDate = LocalDate.now().plusDays(daysLeft);
+        String formattedDate = targetDate.format(DateTimeFormatter.ISO_DATE);
+
+        // 해당 날짜에 해당하는 JobApplication을 조회
+        List<JobApplicationResponse> applications = jobApplicationRepository.findByMemberIdAndApplicationCloseDate(memberId, formattedDate)
+                .stream()
+                .map(JobApplicationResponse::new)  // 매핑 로직 간소화
+                .collect(Collectors.toList());
+
+        // JobApplicationListResponse로 반환
+        return new JobApplicationListResponse(applications);
+    }
 }
