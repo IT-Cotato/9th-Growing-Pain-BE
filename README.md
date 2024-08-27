@@ -1,9 +1,12 @@
+![썸네일](https://github.com/user-attachments/assets/b8cb030a-14cc-4a11-b49a-a06fd2f59971)
+
 # Growing-Pain (성장통)
-## IT업계 취준생을 위한 취준 기록 서비스
+### IT업계 취준생을 위한 취준 기록 서비스
 
 > 대학생 IT 연합동아리 코테이토 9기 프로젝트 </br>
 > 개발 기간 : 2024.06 ~ 2024.08 </br>
 
+## Key Features
 ![9](https://github.com/user-attachments/assets/de440534-47a2-4d09-8af7-ce21e8385085)
 ![10](https://github.com/user-attachments/assets/3d784868-25b7-4830-b8db-b41344fe4c7e)
 ![11](https://github.com/user-attachments/assets/c5193bad-cd87-44ae-8bb6-e6ddcdd92e96)
