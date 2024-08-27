@@ -6,17 +6,6 @@
 > 대학생 IT 연합동아리 코테이토 9기 프로젝트 </br>
 > 개발 기간 : 2024.06 ~ 2024.08 </br>
 
-## Key Features
-![9](https://github.com/user-attachments/assets/de440534-47a2-4d09-8af7-ce21e8385085)
-![10](https://github.com/user-attachments/assets/3d784868-25b7-4830-b8db-b41344fe4c7e)
-![11](https://github.com/user-attachments/assets/c5193bad-cd87-44ae-8bb6-e6ddcdd92e96)
-![12](https://github.com/user-attachments/assets/8b19d100-c8a8-46d5-8ba0-1a94fc99c7fd)
-![13](https://github.com/user-attachments/assets/46c690aa-c79c-417e-9dde-87b95f324a68)
-![14](https://github.com/user-attachments/assets/5ba532ec-b66a-4086-960c-e8d00c44b919)
-![15](https://github.com/user-attachments/assets/66f43e3a-b6ab-4897-ba0c-5740c5db59d2)
-![16](https://github.com/user-attachments/assets/e557766f-d4f2-4ed3-b4a2-5f95dae77a0a)
-![17](https://github.com/user-attachments/assets/f337b015-8a5d-4877-8ffd-7cf2a9f48ef5)
-
 ---
 
 ## 👋 introduce team member
@@ -31,6 +20,17 @@
 | 고지영                               | 숭실대학교     | 기획 | kjyf7540@gmail.com |
 | 김현중                                 | 연세대학교    | 디자인 | noaharksun@gmail.com |
 
+---
+## 👨🏻‍💻 Key Features
+![9](https://github.com/user-attachments/assets/de440534-47a2-4d09-8af7-ce21e8385085)
+![10](https://github.com/user-attachments/assets/3d784868-25b7-4830-b8db-b41344fe4c7e)
+![11](https://github.com/user-attachments/assets/c5193bad-cd87-44ae-8bb6-e6ddcdd92e96)
+![12](https://github.com/user-attachments/assets/8b19d100-c8a8-46d5-8ba0-1a94fc99c7fd)
+![13](https://github.com/user-attachments/assets/46c690aa-c79c-417e-9dde-87b95f324a68)
+![14](https://github.com/user-attachments/assets/5ba532ec-b66a-4086-960c-e8d00c44b919)
+![15](https://github.com/user-attachments/assets/66f43e3a-b6ab-4897-ba0c-5740c5db59d2)
+![16](https://github.com/user-attachments/assets/e557766f-d4f2-4ed3-b4a2-5f95dae77a0a)
+![17](https://github.com/user-attachments/assets/f337b015-8a5d-4877-8ffd-7cf2a9f48ef5)
 
 ---
 
