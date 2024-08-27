@@ -78,7 +78,7 @@
 
 ---
 
-## Architecture
+## 📊 Architecture
 ![아키텍쳐](https://github.com/user-attachments/assets/83a6a6fa-b07a-4090-a5c4-5725bd5fd4c8)
 
 ---
