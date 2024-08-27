@@ -16,7 +16,7 @@
 
 ---
 
-# 👋 introduce team member
+## 👋 introduce team member
 
 | 이름                                  |대학교        |역할  | 이메일                |
 |-------------------------------------| -------------- | ------ | -------------------- |
@@ -31,9 +31,9 @@
 
 ---
 
-# 🛠️ Tech
+## 🛠️ Tech
 
-## Tools
+### Tools
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![Github](https://img.shields.io/badge/Github-F05032?style=for-the-badge&logo=github&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-24E1E?style=for-the-badge&logo=figma&logoColor=white)
@@ -43,7 +43,7 @@
 ![VSCode](https://img.shields.io/badge/VSCode-2C2C32?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
 
-## Frontend
+### Frontend
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
@@ -51,7 +51,7 @@
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
 
-## Backend
+### Backend
 ![Java](https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
@@ -59,18 +59,18 @@
 ![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 
 
-## Database
+### Database
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![Amazon RDS](https://img.shields.io/badge/Amazon_RDS-527FFF?style=for-the-badge&logo=amazon-rds&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 
-## Storage
+### Storage
 ![Amazon S3](https://img.shields.io/badge/Amazon_S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white)
 
-## Infrastructure
+### Infrastructure
 ![Amazon EC2](https://img.shields.io/badge/Amazon_EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
 
-## Dev/Ops
+### Dev/Ops
 ![Github Actions](https://img.shields.io/badge/githubactions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
 ---
@@ -80,7 +80,7 @@
 
 ---
 
-# 🎯 Commit Convention
+## 🎯 Commit Convention
 
 - feat: 새로운 기능 추가
 - fix: 버그 수정
@@ -89,4 +89,3 @@
 - refactor: 코드 리팩토링
 - test: 테스트 코드, 리펙토링 테스트 코드 추가
 - chore: 빌드 업무 수정, 패키지 매니저 수정
-
