@@ -76,7 +76,7 @@ public class JobService {
                 .orElseThrow(() -> new RuntimeException("JobPost not found with ID: " + jobPostId));
 
         if (!jobPost.getMember().getId().equals(memberId)) {
-            throw new RuntimeException("Member not authoriuzed to update this JobPost");
+            throw new RuntimeException("Member not authorized to update this JobPost");
         }
 
         jobPost.update(request, jobApplicationRepository, applicationDetailRepository);
