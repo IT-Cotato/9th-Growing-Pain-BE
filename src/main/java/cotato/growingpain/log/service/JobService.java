@@ -14,6 +14,7 @@ import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -92,16 +93,24 @@ public class JobService {
         jobPostRepository.delete(jobPost);
     }
 
-    public JobApplicationListResponse getJobApplicationsByDaysLeft(Long memberId, int daysLeft) {
-        // 현재 날짜에서 daysLeft를 더한 날짜 계산
-        LocalDate targetDate = LocalDate.now().plusDays(daysLeft);
-        String formattedDate = targetDate.format(DateTimeFormatter.ISO_DATE);
+    public JobApplicationListResponse getJobApplicationsByDaysLeft(Long memberId) {
 
-        // 해당 날짜에 해당하는 JobApplication을 조회
-        List<JobApplicationResponse> applications = jobApplicationRepository.findByMemberIdAndApplicationCloseDate(memberId, formattedDate)
-                .stream()
-                .map(JobApplicationResponse::new)  // 매핑 로직 간소화
-                .collect(Collectors.toList());
+        List<JobApplicationResponse> applications = new ArrayList<>();
+
+        // 현재 날짜에서 daysLeft를 더한 날짜 계산
+        int[] daysArray = {1, 3, 7};
+        for (int daysLeft : daysArray) {
+            LocalDate targetDate = LocalDate.now().plusDays(daysLeft);
+            String formattedDate = targetDate.format(DateTimeFormatter.ISO_DATE);
+
+            // 해당 날짜에 해당하는 JobApplication을 조회
+            List<JobApplicationResponse> dayApplications = jobApplicationRepository.findByMemberIdAndApplicationCloseDate(
+                            memberId, formattedDate)
+                    .stream()
+                    .map(JobApplicationResponse::new)  // 매핑 로직 간소화
+                    .toList();
+            applications.addAll(dayApplications);
+        }
 
         // JobApplicationListResponse로 반환
         return new JobApplicationListResponse(applications);
