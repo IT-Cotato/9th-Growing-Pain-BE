@@ -12,7 +12,7 @@
 
 | 이름                                  |대학교        |역할  | 이메일                |
 |-------------------------------------| -------------- | ------ | -------------------- |
-| [강다형](https://github.com/yongaricode)   | 이화여자대학교 | 프론트엔드 | 이메일 주소 |
+| [강다형](https://github.com/yongaricode)   | 이화여자대학교 | 프론트엔드 | kang061313@gmail.com |
 | [조은솔](https://github.com/haydenCho) | 덕성여자대학교     | 프론트엔드 | greatsounds613@gmail.com |
 | [김나령](https://github.com//nar0ng)    | 덕성여자대학교     | 백엔드 | criticalpxint@naver.com |
 | [박윤하](https://github.com/yunhacandy)   | 홍익대학교    | 백엔드 | yunhacandy@gmail.com |
