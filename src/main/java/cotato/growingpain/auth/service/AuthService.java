@@ -21,7 +21,6 @@ import cotato.growingpain.security.jwt.Token;
 import cotato.growingpain.security.jwt.dto.request.ReissueRequest;
 import cotato.growingpain.security.jwt.dto.response.ReissueResponse;
 import cotato.growingpain.security.oauth.AuthProvider;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -43,47 +42,45 @@ public class AuthService {
     private final BlackListRepository blackListRepository;
 
     @Transactional
-    public LoginResponse createLoginInfo(AuthProvider authProvider, LoginRequest request) {
+    public LoginResponse joinAuth(AuthProvider authProvider, LoginRequest request){
+        // 신규 회원일 경우 회원가입 처리
+        validateService.checkPasswordPattern(request.password());
+        validateService.checkDuplicateEmail(request.email());
 
-        Optional<Member> existingMember = memberRepository.findByEmail(request.email());
+        log.info("[회원가입 서비스] 회원가입: {}", request.email());
 
-        if (existingMember.isPresent()) {
+        Member member = registerMember(authProvider, request.email(), request.password());
 
-            // 기존 회원이 존재하면 로그인 처리
-            Member member = existingMember.get();
-            if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
-                throw new AppException(ErrorCode.WRONG_PASSWORD);
-            }
+        // 회원가입 성공 후 토큰 생성 및 반환
+        Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.PENDING.getDescription());
 
-            log.info("[회원가입 서비스] 로그인: {}", request.email());
+        saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
 
-            String role = (member.getMemberRole() == MemberRole.PENDING)
-                    ? MemberRole.PENDING.getDescription()
-                    : MemberRole.MEMBER.getDescription();
+        return new LoginResponse(token, member.getId(), null, null, null);
+    }
 
-            Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), role);
+    @Transactional
+    public LoginResponse createLoginInfo(LoginRequest request) {
 
-            // RefreshTokenEntity 저장 또는 업데이트
-            saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
+        Member member = memberRepository.findByEmail(request.email())
+                .orElseThrow(() -> new AppException(ErrorCode.MEMBER_NOT_FOUND));
 
-            return new LoginResponse(token, member.getId(), member.getName(), member.getField(), member.getProfileImageUrl());
+        if (!bCryptPasswordEncoder.matches(request.password(), member.getPassword())) {
+            throw new AppException(ErrorCode.WRONG_PASSWORD);
         }
-        else {
-            // 신규 회원일 경우 회원가입 처리
-            validateService.checkPasswordPattern(request.password());
-            validateService.checkDuplicateEmail(request.email());
 
-            log.info("[회원가입 서비스] 회원가입: {}", request.email());
+        log.info("[로그인 서비스] 로그인: {}", request.email());
 
-            Member member = registerMember(authProvider, request.email(), request.password());
+        String role = (member.getMemberRole() == MemberRole.PENDING)
+                ? MemberRole.PENDING.getDescription()
+                : MemberRole.MEMBER.getDescription();
 
-            // 회원가입 성공 후 토큰 생성 및 반환
-            Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), MemberRole.PENDING.getDescription());
+        Token token = jwtTokenProvider.createToken(member.getId(), member.getEmail(), role);
 
-            saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
+        // RefreshTokenEntity 저장 또는 업데이트
+        saveOrUpdateRefreshToken(member.getEmail(), token.getRefreshToken());
 
-            return new LoginResponse(token, null, null, null, null);
-        }
+        return new LoginResponse(token, member.getId(), member.getName(), member.getField(), member.getProfileImageUrl());
     }
 
     private Member registerMember(AuthProvider authProvider, String email, String password) {
