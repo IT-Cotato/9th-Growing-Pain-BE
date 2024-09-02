@@ -44,13 +44,22 @@ public class AuthController {
     private final AuthService authService;
     private final ValidateService validateService;
 
-    @Operation(summary = "일반 로그인", description = "회원가입 및 로그인을 위한 메소드")
+    @Operation(summary = "회원가입", description = "회원가입을 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
+    @PostMapping("/join")
+    @ResponseStatus(HttpStatus.OK )
+    public Response<LoginResponse> joinAuth(@RequestBody @Valid LoginRequest request) {
+        log.info("[회원가입 컨트롤러]: {}", request.email());
+        return Response.createSuccess("회원가입 완료", authService.joinAuth(AuthProvider.GENERAL, request));
+    }
+
+    @Operation(summary = "일반 로그인", description = "일반 로그인을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/login/general")
     @ResponseStatus(HttpStatus.OK )
-    public Response<LoginResponse> joinAuth(@RequestBody @Valid LoginRequest request) {
+    public Response<LoginResponse> createLoginInfo(@RequestBody @Valid LoginRequest request) {
         log.info("[일반 로그인 컨트롤러]: {}", request.email());
-        return Response.createSuccess("회원가입 및 로그인 완료", authService.createLoginInfo(AuthProvider.GENERAL, request));
+        return Response.createSuccess("일반 로그인 완료", authService.createLoginInfo(request));
     }
 
     @Operation(summary = "추가 정보 입력", description = "최초 로그인 (회원가입) 시 추가 정보를 입력하는 메소드")
