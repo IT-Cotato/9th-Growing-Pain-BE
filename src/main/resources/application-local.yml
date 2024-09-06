@@ -36,3 +36,13 @@ jwt:
 #  discord:
 #    webhook-uri: ${DISCORD_WEBHOOK_URI}
 #  config: classpath:logback-test.xml
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_ACCESS_PASSWORD}
