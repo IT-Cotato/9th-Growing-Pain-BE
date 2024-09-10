@@ -43,6 +43,10 @@ dependencies {
 
     // discord-error-log-system
     implementation 'com.github.napstr:logback-discord-appender:1.0.0'
+    
+    //S3 관련 의존성 부여
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {

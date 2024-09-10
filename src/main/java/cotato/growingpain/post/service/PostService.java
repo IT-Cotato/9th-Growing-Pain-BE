@@ -12,11 +12,14 @@ import cotato.growingpain.post.dto.request.PostRequest;
 import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
+import cotato.growingpain.s3.S3Uploader;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -28,13 +31,21 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final CommentRepository commentRepository;
     private final ReplyCommentRepository replyCommentRepository;
+    private final S3Uploader s3Uploader;
 
     @Transactional
-    public void registerPost(PostRequest request, Long memberId) {
+    public void registerPost(PostRequest request, Long memberId) throws IOException {
         Member member = memberRepository.getReferenceById(memberId);
         PostCategory parentCategory = request.category().getParent();
+
+        String imageUrl = null;
+        MultipartFile imageFile = request.postImage();  // postImage를 가져옴
+        if (imageFile != null && !imageFile.isEmpty()) {  // null 체크 추가
+            imageUrl = s3Uploader.uploadFileToS3(imageFile, "post");
+        }
+
         postRepository.save(
-                Post.of(member, request.title(), request.content(), request.imageUrl(), parentCategory,
+                Post.of(member, request.title(), request.content(), imageUrl, parentCategory,
                         request.category())
         );
     }
@@ -72,14 +83,20 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long postId, PostRequest request, Long memberId) {
+    public void updatePost(Long postId, PostRequest request, Long memberId) throws IOException {
         Post post = findByPostIdAndMemberId(postId, memberId);
 
         if (post.isDeleted()) {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        post.updatePost(request.title(), request.content(), request.imageUrl(), request.category());
+        String imageUrl = null;
+        MultipartFile imageFile = request.postImage();  // postImage를 가져옴
+        if (imageFile != null && !imageFile.isEmpty()) {  // null 체크 추가
+            imageUrl = s3Uploader.uploadFileToS3(imageFile, "post");
+        }
+
+        post.updatePost(request.title(), request.content(), imageUrl, request.category());
         postRepository.save(post);
     }
 
