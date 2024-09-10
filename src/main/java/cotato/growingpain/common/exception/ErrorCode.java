@@ -36,7 +36,12 @@ public enum ErrorCode {
     CANNOT_LIKE_OWN_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 댓글은 좋아요를 누를 수 없습니다."),
     CANNOT_LIKE_OWN_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "본인이 작성한 답글은 좋아요를 누를 수 없습니다."),
     ALREADY_DELETED(HttpStatus.CONFLICT, "이미 삭제되었습니다."),
-    ALREADY_SAVED(HttpStatus.CONFLICT, "이미 저장되었습니다.");
+    ALREADY_SAVED(HttpStatus.CONFLICT, "이미 저장되었습니다."),
+
+    //S3
+    IMAGE_PROCESSING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR,"이미지 처리에 실패했습니다.");
+
+
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -3,6 +3,8 @@ package cotato.growingpain.s3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import cotato.growingpain.common.exception.ErrorCode;
+import cotato.growingpain.common.exception.ImageException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,11 +30,11 @@ public class S3Uploader {
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     public String uploadFileToS3(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
-                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-        return uploadFileToS3(uploadFile, dirName);
+                .orElseThrow(() -> new ImageException(ErrorCode.IMAGE_PROCESSING_FAIL));
+        return upload(uploadFile, dirName);
     }
 
-    private String uploadFileToS3(File uploadFile, String dirName) {
+    private String upload(File uploadFile, String dirName) {
         String fileName = dirName + "/" + uploadFile.getName();
         String uploadImageUrl = putS3(uploadFile, fileName);
 
@@ -41,6 +43,7 @@ public class S3Uploader {
         return uploadImageUrl;      // 업로드된 파일의 S3 URL 주소 반환
     }
 
+    //S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket, fileName, uploadFile)
@@ -49,6 +52,7 @@ public class S3Uploader {
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
+    //로컬에 저장된 이미지 지우기
     private void removeNewFile(File targetFile) {
         if(targetFile.delete()) {
             log.info("파일이 삭제되었습니다.");
@@ -58,12 +62,16 @@ public class S3Uploader {
     }
 
     private Optional<File> convert(MultipartFile file) throws  IOException {
-        File convertFile = new File(file.getOriginalFilename());
-        if(convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+        File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
+        try {
+            if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
+                FileOutputStream fos = new FileOutputStream(convertFile); // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(file.getBytes());
+                fos.close();
+                return Optional.of(convertFile);
             }
-            return Optional.of(convertFile);
+        } catch (IOException e) {
+            throw new ImageException(ErrorCode.IMAGE_PROCESSING_FAIL);
         }
         return Optional.empty();
     }
