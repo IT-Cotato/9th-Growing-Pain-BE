@@ -3,6 +3,7 @@ package cotato.growingpain.post.dto.request;
 import cotato.growingpain.post.PostCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
 
 public record PostRequest(
 
@@ -14,7 +15,7 @@ public record PostRequest(
         @Size(max = 3000)
         String content,
 
-        String imageUrl,
+        MultipartFile postImage,
 
         PostCategory category
 ){
