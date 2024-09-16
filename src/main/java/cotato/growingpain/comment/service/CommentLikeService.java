@@ -46,7 +46,7 @@ public class CommentLikeService {
 
         Comment comment = findCommentId(commentId);
         Member member = findMemberById(memberId);
-        CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment)
+        CommentLike commentLike = commentLikeRepository.findAllByMemberAndComment(member, comment)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_LIKE_NOT_FOUND));
 
         commentLike.decreaseCommentLikeCount(member, comment);
@@ -55,7 +55,7 @@ public class CommentLikeService {
 
     @Transactional
     public List<Comment> getLikedComments(Long memberId) {
-        List<CommentLike> commentLikes = commentLikeRepository.findByMemberId(memberId);
+        List<CommentLike> commentLikes = commentLikeRepository.findAllByMemberId(memberId);
 
         return commentLikes.stream()
                 .map(CommentLike::getComment)

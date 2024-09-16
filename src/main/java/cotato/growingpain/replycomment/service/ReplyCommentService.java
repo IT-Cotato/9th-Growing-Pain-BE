@@ -54,7 +54,7 @@ public class ReplyCommentService {
 
     @Transactional
     public void deleteReplyComment(Long replyCommentId, Long memberId) {
-        ReplyComment replyComment = replyCommentRepository.findByIdAndMemberIdAndIsDeletedFalse(replyCommentId, memberId)
+        ReplyComment replyComment = replyCommentRepository.findAllByIdAndMemberIdAndIsDeletedFalse(replyCommentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_NOT_FOUND));
 
         if(replyComment.isDeleted()) {

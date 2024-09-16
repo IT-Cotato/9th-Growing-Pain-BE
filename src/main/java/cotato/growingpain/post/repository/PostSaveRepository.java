@@ -10,5 +10,5 @@ public interface PostSaveRepository extends JpaRepository<PostSave, Long> {
     boolean existsByMemberIdAndPostId(Long memberId, Long postId);
     void deleteByMemberIdAndPostId(Long memberId, Long postId);
 
-    List<PostSave> findByMemberId(Long memberId);
+    List<PostSave> findAllByMemberId(Long memberId);
 }

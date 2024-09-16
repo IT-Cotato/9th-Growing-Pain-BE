@@ -52,12 +52,12 @@ public class PostService {
 
     @Transactional
     public List<Post> getPostsByMemberId(Long memberId) {
-        return postRepository.findByMemberIdAndIsDeletedFalse(memberId);
+        return postRepository.findAllByMemberIdAndIsDeletedFalse(memberId);
     }
 
     @Transactional
     public List<Post> getPostsByCategory(PostCategory category) {
-        return postRepository.findByCategoryAndIsDeletedFalse(category);
+        return postRepository.findAllByCategoryAndIsDeletedFalse(category);
     }
 
     @Transactional
@@ -73,13 +73,13 @@ public class PostService {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
-        List<Comment> comments = commentRepository.findCommentsByPostIdAndIsDeletedFalse(postId);
+        List<Comment> comments = commentRepository.findAllByPostIdAndIsDeletedFalse(postId);
         for (Comment comment : comments) {
             replyCommentRepository.deleteAllByCommentId(comment.getId());
             commentRepository.delete(comment);
         }
 
-        postLikeRepository.deleteByPostId(postId);
+        postLikeRepository.deleteAllByPostId(postId);
 
         post.deletePost();
         postRepository.save(post);
@@ -104,7 +104,7 @@ public class PostService {
     }
 
     private Post findByPostIdAndMemberId(Long postId, Long memberId) {
-        return postRepository.findByIdAndMemberIdAndIsDeletedFalse(postId, memberId)
+        return postRepository.findAllByIdAndMemberIdAndIsDeletedFalse(postId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
     }
 }

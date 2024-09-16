@@ -45,7 +45,7 @@ public class ReplyCommentLikeService {
 
         ReplyComment replyComment = findReplyCommentById(replyCommentId);
         Member member = findMemberById(memberId);
-        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findByMemberAndReplyComment(member, replyComment)
+        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findAllByMemberAndReplyComment(member, replyComment)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
 
         replyCommentLike.decreaseReplyCommentLikeCount(member, replyComment);
