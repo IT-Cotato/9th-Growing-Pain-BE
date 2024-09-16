@@ -50,7 +50,8 @@ public class ReplyCommentController {
 
     @Operation(summary = "댓글별 답글 목록 조회", description = "한 댓글내의 답글 목록 조회를 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = ReplyCommentListResponse.class)))
-    @GetMapping("/{commentId}")@ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
     public Response<ReplyCommentListResponse> getCommentsByPostId(@PathVariable Long commentId) {
         ReplyCommentListResponse replyCommentListResponse = replyCommentService.getReplyCommentsByCommentId(commentId);
         return Response.createSuccess("댓글별 답글 목록 조회 완료", replyCommentListResponse);

@@ -51,14 +51,17 @@ public class PostService {
         );
     }
 
+    @Transactional
     public List<Post> getPostsByMemberId(Long memberId) {
         return postRepository.findByMemberIdAndIsDeletedFalse(memberId);
     }
 
+    @Transactional
     public List<Post> getPostsByCategory(PostCategory category){
         return postRepository.findByCategoryAndIsDeletedFalse(category);
     }
 
+    @Transactional
     public List<Post> getAllPostsByCategory() {
         return postRepository.findAllByIsDeletedFalse();
     }
