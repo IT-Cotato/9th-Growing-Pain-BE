@@ -21,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,9 +89,9 @@ public class PostController {
 
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping(value = "/{postId}/update")
+    @PatchMapping(value = "/{postId}/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> registerPost(@PathVariable Long postId,
+    public Response<?> updatePost(@PathVariable Long postId,
                                     @ModelAttribute @Valid PostRequest request,
                                     @AuthenticationPrincipal Long memberId) throws IOException {
         log.info("게시글 {} 수정한 memberId: {}", postId, memberId);
