@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,10 +39,10 @@ public class PostController {
 
     @Operation(summary = "게시글 등록", description = "게시글 등록을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> registerPost(@Valid @RequestBody PostRequest request,
-                                    @AuthenticationPrincipal Long memberId) {
+    public Response<?> registerPost(@ModelAttribute @Valid PostRequest request,
+                                    @AuthenticationPrincipal Long memberId) throws IOException {
         log.info("게시글 등록한 memberId: {}", memberId);
         postService.registerPost(request, memberId);
         return Response.createSuccessWithNoData("포스트 생성 완료");
@@ -87,11 +88,11 @@ public class PostController {
 
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping("/{postId}/update")
+    @PostMapping(value = "/{postId}/update")
     @ResponseStatus(HttpStatus.CREATED)
     public Response<?> registerPost(@PathVariable Long postId,
-                                    @RequestBody PostRequest request,
-                                    @AuthenticationPrincipal Long memberId) {
+                                    @ModelAttribute @Valid PostRequest request,
+                                    @AuthenticationPrincipal Long memberId) throws IOException {
         log.info("게시글 {} 수정한 memberId: {}", postId, memberId);
         postService.updatePost(postId, request,memberId);
         return Response.createSuccessWithNoData("포스트 수정 완료");
