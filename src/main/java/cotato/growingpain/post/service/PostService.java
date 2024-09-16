@@ -14,7 +14,6 @@ import cotato.growingpain.post.repository.PostLikeRepository;
 import cotato.growingpain.post.repository.PostRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
 import cotato.growingpain.s3.S3Uploader;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +56,7 @@ public class PostService {
     }
 
     @Transactional
-    public List<Post> getPostsByCategory(PostCategory category){
+    public List<Post> getPostsByCategory(PostCategory category) {
         return postRepository.findByCategoryAndIsDeletedFalse(category);
     }
 
@@ -70,7 +69,7 @@ public class PostService {
     public void deletePost(Long postId, Long memberId) {
         Post post = findByPostIdAndMemberId(postId, memberId);
 
-        if(post.isDeleted()) {
+        if (post.isDeleted()) {
             throw new AppException(ErrorCode.ALREADY_DELETED);
         }
 
@@ -87,7 +86,7 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long postId, PostRequest request, Long memberId) throws IOException {
+    public void updatePost(Long postId, PostRequest request, Long memberId) throws ImageException {
         Post post = findByPostIdAndMemberId(postId, memberId);
 
         if (post.isDeleted()) {
