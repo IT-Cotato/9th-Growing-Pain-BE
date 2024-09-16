@@ -29,7 +29,8 @@ public class S3Uploader {
     private String bucket;
 
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-    public String uploadFileToS3(MultipartFile multipartFile, String dirName) throws IOException {
+    public String uploadFileToS3(MultipartFile multipartFile, String dirName) throws ImageException {
+        log.info("{} 사진 업로드", multipartFile.getOriginalFilename());
         File uploadFile = convert(multipartFile)
                 .orElseThrow(() -> new ImageException(ErrorCode.IMAGE_PROCESSING_FAIL));
         return upload(uploadFile, dirName);

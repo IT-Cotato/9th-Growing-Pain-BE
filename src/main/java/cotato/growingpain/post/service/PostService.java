@@ -4,6 +4,7 @@ import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.repository.CommentRepository;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
+import cotato.growingpain.common.exception.ImageException;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
 import cotato.growingpain.post.PostCategory;
@@ -34,7 +35,7 @@ public class PostService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public void registerPost(PostRequest request, Long memberId) throws IOException {
+    public void registerPost(PostRequest request, Long memberId) throws ImageException {
         Member member = memberRepository.getReferenceById(memberId);
         PostCategory parentCategory = request.category().getParent();
 
