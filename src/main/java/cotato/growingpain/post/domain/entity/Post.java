@@ -2,6 +2,7 @@ package cotato.growingpain.post.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.common.domain.BaseTimeEntity;
 import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
@@ -69,6 +70,10 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     @JsonIgnore
     private List<PostSave> postSaves = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 
     private Post(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
         this.member = member;
