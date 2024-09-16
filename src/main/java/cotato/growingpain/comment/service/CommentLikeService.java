@@ -8,6 +8,8 @@ import cotato.growingpain.common.exception.AppException;
 import cotato.growingpain.common.exception.ErrorCode;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.member.repository.MemberRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,16 @@ public class CommentLikeService {
         commentLike.decreaseCommentLikeCount(member, comment);
         commentLikeRepository.delete(commentLike);
     }
+
+    @Transactional
+    public List<Comment> getLikedComments(Long memberId) {
+        List<CommentLike> commentLikes = commentLikeRepository.findByMemberId(memberId);
+
+        return commentLikes.stream()
+                .map(CommentLike::getComment)
+                .collect(Collectors.toList());
+    }
+
 
     private Comment findCommentId(Long commentId) {
         return commentRepository.findById(commentId)
