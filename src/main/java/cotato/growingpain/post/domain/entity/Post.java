@@ -43,9 +43,6 @@ public class Post extends BaseTimeEntity {
 
     private String content;
 
-    @Column(name = "post_image_url")
-    private String imageUrl;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "parent_post_category")
     private PostCategory parentCategory;
@@ -75,17 +72,16 @@ public class Post extends BaseTimeEntity {
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
-    private Post(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
+    private Post(Member member, String title, String content, PostCategory parentCategory, PostCategory subCategory) {
         this.member = member;
         this.title = title;
         this.content = content;
-        this.imageUrl = imageUrl;
         this.parentCategory = parentCategory;
         this.subCategory = subCategory;
     }
 
-    public static Post of(Member member, String title, String content, String imageUrl, PostCategory parentCategory, PostCategory subCategory) {
-        return new Post(member, title, content, imageUrl, parentCategory, subCategory);
+    public static Post of(Member member, String title, String content, PostCategory parentCategory, PostCategory subCategory) {
+        return new Post(member, title, content, parentCategory, subCategory);
     }
 
     public void increaseLikeCount(){
@@ -109,10 +105,9 @@ public class Post extends BaseTimeEntity {
         likeCount = 0;
     }
 
-    public void updatePost(String title, String content, String imageUrl, PostCategory category) {
+    public void updatePost(String title, String content, PostCategory category) {
         this.title = title;
         this.content = content;
-        this.imageUrl = imageUrl;
         this.subCategory = category;
         this.parentCategory = category.getParent();
         this.modifiedAt = LocalDateTime.now();
