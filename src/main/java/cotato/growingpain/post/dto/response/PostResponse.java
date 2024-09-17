@@ -14,7 +14,7 @@ public record PostResponse(
         String parentCategory,
         String subCategory,
         int likeCount,
-        int commnetCount,
+        int commentCount,
         Boolean isDeleted,
         String memberNickname,
         String profileImageUrl,
