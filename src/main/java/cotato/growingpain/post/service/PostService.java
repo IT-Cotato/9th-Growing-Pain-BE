@@ -99,6 +99,12 @@ public class PostService {
         postRepository.save(post);
     }
 
+    @Transactional
+    public List<PostImage> getPostImageByPostId(Long postId) {
+        return postImageRepository.findAllByPostId(postId);
+
+    }
+
     private Post findByPostIdAndMemberId(Long postId, Long memberId) {
         return postRepository.findAllByIdAndMemberIdAndIsDeletedFalse(postId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
