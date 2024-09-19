@@ -16,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT new cotato.growingpain.comment.dto.response.CommentResponse(c.post.id, c.id, c.createdAt, c.modifiedAt, c.content, c.likeCount, c.isDeleted, c.member.id, c.member.profileImageUrl, c.member.name, c.member.field) FROM Comment c WHERE c.post.id = :postId AND c.isDeleted = false")
     List<CommentResponse> findByPostIdAndIsDeletedFalse(@Param("postId") Long postId);
 
-    List<Comment> findCommentsByPostIdAndIsDeletedFalse(Long postId);
+    List<Comment> findAllByPostIdAndIsDeletedFalse(Long postId);
 
-    Optional<Comment> findByIdAndMemberIdAndIsDeletedFalse(Long commentId, Long memberId);
+    Optional<Comment> findAllByIdAndMemberIdAndIsDeletedFalse(Long commentId, Long memberId);
 }

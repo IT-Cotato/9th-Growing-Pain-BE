@@ -3,7 +3,9 @@ package cotato.growingpain.post.controller;
 import cotato.growingpain.common.Response;
 import cotato.growingpain.post.PostCategory;
 import cotato.growingpain.post.domain.entity.Post;
+import cotato.growingpain.post.domain.entity.PostImage;
 import cotato.growingpain.post.dto.request.PostRequest;
+import cotato.growingpain.post.dto.response.PostImageListResponse;
 import cotato.growingpain.post.dto.response.PostListResponse;
 import cotato.growingpain.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,13 +91,24 @@ public class PostController {
 
     @Operation(summary = "게시글 수정", description = "게시글 수정을 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
-    @PostMapping(value = "/{postId}/update")
+    @PatchMapping(value = "/{postId}/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response<?> registerPost(@PathVariable Long postId,
+    public Response<?> updatePost(@PathVariable Long postId,
                                     @ModelAttribute @Valid PostRequest request,
                                     @AuthenticationPrincipal Long memberId) throws IOException {
         log.info("게시글 {} 수정한 memberId: {}", postId, memberId);
         postService.updatePost(postId, request,memberId);
         return Response.createSuccessWithNoData("포스트 수정 완료");
+    }
+
+    @Operation(summary = "게시글별 이미지 목록 조회", description = "게시글별로 이미지 목록 조회 위한 메소드")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = PostImageListResponse.class)))
+    @GetMapping("/{postId}/image")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<PostImageListResponse> getPostImageByPostId(@PathVariable Long postId) {
+        List<PostImage> postImages = postService.getPostImageByPostId(postId);
+        log.info("{}에 있는 이미지 목록", postId);
+        PostImageListResponse postImageListResponse = PostImageListResponse.from(postImages);
+        return Response.createSuccess("게시글의 이미지 목록 조회 완료", postImageListResponse);
     }
 }

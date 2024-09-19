@@ -49,7 +49,7 @@ public class PostSaveService {
 
     @Transactional
     public List<Post> getSavedPosts(Long memberId) {
-        List<PostSave> postSaves = postSaveRepository.findByMemberId(memberId);
+        List<PostSave> postSaves = postSaveRepository.findAllByMemberId(memberId);
 
         return postSaves.stream()
                 .map(PostSave::getPost)

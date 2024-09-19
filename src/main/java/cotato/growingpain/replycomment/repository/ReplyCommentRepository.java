@@ -19,5 +19,5 @@ public interface ReplyCommentRepository extends JpaRepository<ReplyComment, Long
     @Query("delete from ReplyComment r where r.comment.id = :commentId")
     void deleteAllByCommentId(Long commentId);
 
-    Optional<ReplyComment> findByIdAndMemberIdAndIsDeletedFalse(Long replyCommentId, Long memberId);
+    Optional<ReplyComment> findAllByIdAndMemberIdAndIsDeletedFalse(Long replyCommentId, Long memberId);
 }
