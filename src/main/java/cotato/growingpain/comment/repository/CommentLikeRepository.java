@@ -3,6 +3,7 @@ package cotato.growingpain.comment.repository;
 import cotato.growingpain.comment.domain.entity.Comment;
 import cotato.growingpain.comment.domain.entity.CommentLike;
 import cotato.growingpain.member.domain.entity.Member;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,5 +16,6 @@ public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> 
     @Query(value = "delete from CommentLike c where c.comment.id=:commentId")
     void deleteByCommentId(Long commentId);
 
-    Optional<CommentLike> findByMemberAndComment(Member member, Comment comment);
+    Optional<CommentLike> findAllByMemberAndComment(Member member, Comment comment);
+    List<CommentLike> findAllByMemberId(Long memberId);
 }

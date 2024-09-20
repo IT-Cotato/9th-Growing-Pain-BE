@@ -48,7 +48,7 @@ public class PostLikeService {
         Post post = findPostId(postId);
         Member member = findMemberById(memberId);
 
-        PostLike postLike = postLikeRepository.findByMemberAndPost(member, post)
+        PostLike postLike = postLikeRepository.findAllByMemberAndPost(member, post)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_LIKE_NOT_FOUND));
 
         postLike.decreasePostLikeCount(member, post);
@@ -57,7 +57,7 @@ public class PostLikeService {
 
     @Transactional
     public List<Post> getLikedPosts(Long memberId) {
-        List<PostLike> postLikes = postLikeRepository.findByMemberId(memberId);
+        List<PostLike> postLikes = postLikeRepository.findAllByMemberId(memberId);
 
         return postLikes.stream()
                 .map(PostLike::getPost)

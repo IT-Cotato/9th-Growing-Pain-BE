@@ -60,7 +60,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CommentListResponse getAllPostsAndCommentsByMemberId(Long memberId) {
         // 사용자가 작성한 모든 포스트 조회
-        List<Post> posts = postRepository.findByMemberIdAndIsDeletedFalse(memberId);
+        List<Post> posts = postRepository.findAllByMemberIdAndIsDeletedFalse(memberId);
         List<CommentResponse> commentList = new ArrayList<>();
 
         // 각 포스트의 댓글 조회
@@ -73,7 +73,7 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long commentId, Long memberId) {
-        Comment comment = commentRepository.findByIdAndMemberIdAndIsDeletedFalse(commentId, memberId)
+        Comment comment = commentRepository.findAllByIdAndMemberIdAndIsDeletedFalse(commentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
 
         if(comment.isDeleted()) {
