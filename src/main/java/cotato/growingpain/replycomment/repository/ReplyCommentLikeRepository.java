@@ -3,6 +3,7 @@ package cotato.growingpain.replycomment.repository;
 import cotato.growingpain.member.domain.entity.Member;
 import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.domain.entity.ReplyCommentLike;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,4 +18,5 @@ public interface ReplyCommentLikeRepository extends JpaRepository<ReplyCommentLi
 
 
     Optional<ReplyCommentLike> findAllByMemberAndReplyComment(Member member, ReplyComment replyComment);
+    List<ReplyCommentLike> findAllByMemberId(Long memberId);
 }
