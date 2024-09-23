@@ -183,16 +183,15 @@ public class Member extends BaseTimeEntity {
     }
 
     public void updateAdditionalInfo(String career, String aboutMe) {
-        this.educationBackground = educationBackground;
-        this.skill = skill;
-        this.activityHistory = activityHistory;
-        this.award = award;
-        this.languageScore = languageScore;
         this.career = career;
         this.aboutMe = aboutMe;
     }
 
     public void updateProfilePublic(MemberProfileShowing memberProfileShowing) {
         this.memberProfileShowing = memberProfileShowing;
+    }
+
+    public void updateProfileImage(String imageUrl) {
+        this.profileImageUrl = imageUrl;
     }
 }
