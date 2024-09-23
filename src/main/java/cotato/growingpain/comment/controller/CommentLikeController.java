@@ -54,7 +54,6 @@ public class CommentLikeController {
         return Response.createSuccessWithNoData("댓글 좋아요 취소 완료");
     }
 
-
     @Operation(summary = "좋아요 누른 댓글 목록 조회", description = "사용자가 좋아요를 누른 댓글의 목록을 조회하기 위한 메소드")
     @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
     @GetMapping("/{memberId}/list")

@@ -62,7 +62,6 @@ public class CommentLikeService {
                 .collect(Collectors.toList());
     }
 
-
     private Comment findCommentId(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
