@@ -8,6 +8,7 @@ import cotato.growingpain.replycomment.domain.entity.ReplyComment;
 import cotato.growingpain.replycomment.domain.entity.ReplyCommentLike;
 import cotato.growingpain.replycomment.repository.ReplyCommentLikeRepository;
 import cotato.growingpain.replycomment.repository.ReplyCommentRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,11 +42,12 @@ public class ReplyCommentLikeService {
     }
 
     @Transactional
-    public void deleteLike(Long replyCommentId,  Long memberId) {
+    public void deleteLike(Long replyCommentId, Long memberId) {
 
         ReplyComment replyComment = findReplyCommentById(replyCommentId);
         Member member = findMemberById(memberId);
-        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findAllByMemberAndReplyComment(member, replyComment)
+        ReplyCommentLike replyCommentLike = replyCommentLikeRepository.findAllByMemberAndReplyComment(member,
+                        replyComment)
                 .orElseThrow(() -> new AppException(ErrorCode.REPLY_COMMENT_LIKE_NOT_FOUND));
 
         replyCommentLike.decreaseReplyCommentLikeCount(member, replyComment);
@@ -59,5 +61,14 @@ public class ReplyCommentLikeService {
 
     private Member findMemberById(Long memberId) {
         return memberRepository.getReferenceById(memberId);
+    }
+
+    @Transactional
+    public List<ReplyComment> getLikedReplyComments(Long memberId) {
+        List<ReplyCommentLike> replyCommentLikes = replyCommentLikeRepository.findAllByMemberId(memberId);
+
+        return replyCommentLikes.stream()
+                .map(ReplyCommentLike::getReplyComment)
+                .toList();
     }
 }
