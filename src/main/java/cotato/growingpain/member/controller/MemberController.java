@@ -1,6 +1,7 @@
 package cotato.growingpain.member.controller;
 
 import cotato.growingpain.common.Response;
+import cotato.growingpain.common.exception.ImageException;
 import cotato.growingpain.member.dto.request.AdditionalInfoRequest;
 import cotato.growingpain.member.dto.request.UpdateDefaultInfoRequest;
 import cotato.growingpain.member.dto.request.UpdateMemberProfileShowingRequest;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "마이페이지", description = "마이페이지 관련된 api")
 @RestController
@@ -73,5 +76,16 @@ public class MemberController {
     public Response<MemberInfoResponse> getMemberInfo(@AuthenticationPrincipal Long memberId) {
         MemberInfoResponse memberInfo = memberService.getMemberInfo(memberId);
         return Response.createSuccess("[마이페이지] 프로필 공개 여부에 따른 정보 반환", memberInfo);
+    }
+
+    @Operation(summary = "프로필 이미지 등록", description = "멤버 프로필 이미지 등록 및 저장")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = Response.class)))
+    @GetMapping("/profile-image")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<?> registerProfileImage(@RequestParam("profile-image") MultipartFile profileImage,
+                                            @AuthenticationPrincipal Long memberId) throws ImageException {
+        log.info("프로필 이미지를 업로드한 memberId: {}", memberId);
+        memberService.registerProfileImage(memberId, profileImage);
+        return Response.createSuccessWithNoData("[마이페이지] 프로필 이미지 업로드 완료");
     }
 }
