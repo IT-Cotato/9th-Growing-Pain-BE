@@ -38,8 +38,6 @@ public class ReplyComment extends BaseTimeEntity {
 
     private int likeCount = 0;
 
-    private boolean isDeleted = false;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonIgnore
@@ -84,10 +82,5 @@ public class ReplyComment extends BaseTimeEntity {
         if (member.getId().equals(this.member.getId())) {
             throw new AppException(ErrorCode.CANNOT_LIKE_OWN_REPLY_COMMENT);
         }
-    }
-
-    public void deleteReplyComment() {
-        isDeleted = true;
-        likeCount = 0;
     }
 }
