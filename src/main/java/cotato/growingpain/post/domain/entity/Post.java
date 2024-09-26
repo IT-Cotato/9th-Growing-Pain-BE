@@ -53,8 +53,6 @@ public class Post extends BaseTimeEntity {
 
     private int likeCount = 0;
 
-    private boolean isDeleted = false;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @JsonIgnore
@@ -98,11 +96,6 @@ public class Post extends BaseTimeEntity {
         if (member.getId().equals(this.member.getId())) {
             throw new AppException(ErrorCode.CANNOT_LIKE_OWN_POST);
         }
-    }
-
-    public void deletePost() {
-        isDeleted = true;
-        likeCount = 0;
     }
 
     public void updatePost(String title, String content, PostCategory category) {

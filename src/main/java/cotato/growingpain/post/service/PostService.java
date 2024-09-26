@@ -49,26 +49,22 @@ public class PostService {
 
     @Transactional
     public List<Post> getPostsByMemberId(Long memberId) {
-        return postRepository.findAllByMemberIdAndIsDeletedFalse(memberId);
+        return postRepository.findAllByMemberId(memberId);
     }
 
     @Transactional
     public List<Post> getPostsByCategory(PostCategory category) {
-        return postRepository.findAllByCategoryAndIsDeletedFalse(category);
+        return postRepository.findAllByCategory(category);
     }
 
     @Transactional
     public List<Post> getAllPostsByCategory() {
-        return postRepository.findAllByIsDeletedFalse();
+        return postRepository.findAll();
     }
 
     @Transactional
     public void deletePost(Long postId, Long memberId) {
         Post post = findByPostIdAndMemberId(postId, memberId);
-
-        if (post.isDeleted()) {
-            throw new AppException(ErrorCode.ALREADY_DELETED);
-        }
 
         List<Comment> comments = commentRepository.findAllByPostIdAndIsDeletedFalse(postId);
         for (Comment comment : comments) {
@@ -79,17 +75,12 @@ public class PostService {
         postImageRepository.deleteAllByPostId(postId);
         postLikeRepository.deleteAllByPostId(postId);
 
-        post.deletePost();
-        postRepository.save(post);
+        postRepository.delete(post);
     }
 
     @Transactional
     public void updatePost(Long postId, PostRequest request, Long memberId) throws ImageException {
         Post post = findByPostIdAndMemberId(postId, memberId);
-
-        if (post.isDeleted()) {
-            throw new AppException(ErrorCode.ALREADY_DELETED);
-        }
 
         postImageRepository.deleteAllByPostId(postId);
 
@@ -106,7 +97,7 @@ public class PostService {
     }
 
     private Post findByPostIdAndMemberId(Long postId, Long memberId) {
-        return postRepository.findAllByIdAndMemberIdAndIsDeletedFalse(postId, memberId)
+        return postRepository.findAllByIdAndMemberId(postId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_FOUND));
     }
 

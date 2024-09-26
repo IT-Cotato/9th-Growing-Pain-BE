@@ -15,7 +15,6 @@ public record PostResponse(
         String subCategory,
         int likeCount,
         int commentCount,
-        Boolean isDeleted,
         String memberNickname,
         String profileImageUrl,
         String memberField
@@ -33,7 +32,6 @@ public record PostResponse(
                 post.getSubCategory() != null ? post.getSubCategory().name() : null,
                 post.getLikeCount(),
                 post.getComments().size(),
-                post.isDeleted(),
                 post.getMember().getName(),
                 post.getMember().getProfileImageUrl(),
                 post.getMember().getField()
