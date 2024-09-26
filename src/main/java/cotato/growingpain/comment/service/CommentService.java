@@ -47,13 +47,13 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public CommentListResponse getCommentsByMemberId(Long memberId) {
-        List<CommentResponse> commentList = commentRepository.findByMemberIdAndIsDeletedFalse(memberId);
+        List<CommentResponse> commentList = commentRepository.findByMemberId(memberId);
         return new CommentListResponse(commentList);
     }
 
     @Transactional(readOnly = true)
     public CommentListResponse getCommentsByPostId(Long postId) {
-        List<CommentResponse> commentList = commentRepository.findByPostIdAndIsDeletedFalse(postId);
+        List<CommentResponse> commentList = commentRepository.findByPostId(postId);
         return new CommentListResponse(commentList);
     }
 
@@ -65,7 +65,7 @@ public class CommentService {
 
         // 각 포스트의 댓글 조회
         for (Post post : posts) {
-            List<CommentResponse> comments = commentRepository.findByPostIdAndIsDeletedFalse(post.getId());
+            List<CommentResponse> comments = commentRepository.findByPostId(post.getId());
             commentList.addAll(comments);
         }
         return new CommentListResponse(commentList);
@@ -73,19 +73,13 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long commentId, Long memberId) {
-        Comment comment = commentRepository.findAllByIdAndMemberIdAndIsDeletedFalse(commentId, memberId)
+        Comment comment = commentRepository.findAllByIdAndMemberId(commentId, memberId)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMENT_NOT_FOUND));
-
-        if(comment.isDeleted()) {
-            throw new AppException(ErrorCode.ALREADY_DELETED);
-        }
 
         List<ReplyComment> replyComments = replyCommentRepository.findReplyCommentByCommentId(commentId);
         replyCommentRepository.deleteAll(replyComments);
 
         commentLikeRepository.deleteByCommentId(commentId);
-
-        comment.deleteComment();
-        commentRepository.save(comment);
+        commentRepository.delete(comment);
     }
 }

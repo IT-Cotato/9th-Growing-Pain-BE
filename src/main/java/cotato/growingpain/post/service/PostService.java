@@ -66,7 +66,7 @@ public class PostService {
     public void deletePost(Long postId, Long memberId) {
         Post post = findByPostIdAndMemberId(postId, memberId);
 
-        List<Comment> comments = commentRepository.findAllByPostIdAndIsDeletedFalse(postId);
+        List<Comment> comments = commentRepository.findAllByPostId(postId);
         for (Comment comment : comments) {
             replyCommentRepository.deleteAllByCommentId(comment.getId());
             commentRepository.delete(comment);
